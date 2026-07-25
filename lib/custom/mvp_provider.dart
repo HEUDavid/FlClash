@@ -4,11 +4,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'mvp_models.dart';
 
 // MVP 模式开关 Provider
-class CustomMvpNotifier extends StateNotifier<bool> {
+class CustomMvpNotifier extends Notifier<bool> {
   static const String _prefKey = 'custom_mvp_light_mode';
 
-  CustomMvpNotifier() : super(true) {
+  @override
+  bool build() {
     _init();
+    return true;
   }
 
   Future<void> _init() async {
@@ -40,13 +42,14 @@ class CustomMvpNotifier extends StateNotifier<bool> {
 }
 
 final customMvpProvider =
-    StateNotifierProvider<CustomMvpNotifier, bool>((ref) {
-  return CustomMvpNotifier();
-});
+    NotifierProvider<CustomMvpNotifier, bool>(CustomMvpNotifier.new);
 
 // 代理启动/停止状态 Provider
-class CustomProxyStartNotifier extends StateNotifier<bool> {
-  CustomProxyStartNotifier() : super(false);
+class CustomProxyStartNotifier extends Notifier<bool> {
+  @override
+  bool build() {
+    return false;
+  }
 
   void toggle() {
     state = !state;
@@ -58,9 +61,7 @@ class CustomProxyStartNotifier extends StateNotifier<bool> {
 }
 
 final customProxyStartProvider =
-    StateNotifierProvider<CustomProxyStartNotifier, bool>((ref) {
-  return CustomProxyStartNotifier();
-});
+    NotifierProvider<CustomProxyStartNotifier, bool>(CustomProxyStartNotifier.new);
 
 // 代理连接状态 Provider
 final customCoreStatusProvider = Provider<MvpCoreStatus>((ref) {
@@ -69,20 +70,22 @@ final customCoreStatusProvider = Provider<MvpCoreStatus>((ref) {
 });
 
 // 订阅配置列表 Provider
-class CustomProfilesNotifier extends StateNotifier<List<MvpProfileItem>> {
-  CustomProfilesNotifier()
-      : super([
-          const MvpProfileItem(
-            id: '1',
-            label: '默认高级订阅 A',
-            url: 'https://example.com/subscribe/node-a',
-          ),
-          const MvpProfileItem(
-            id: '2',
-            label: '备用专线订阅 B',
-            url: 'https://example.com/subscribe/node-b',
-          ),
-        ]);
+class CustomProfilesNotifier extends Notifier<List<MvpProfileItem>> {
+  @override
+  List<MvpProfileItem> build() {
+    return const [
+      MvpProfileItem(
+        id: '1',
+        label: '默认高级订阅 A',
+        url: 'https://example.com/subscribe/node-a',
+      ),
+      MvpProfileItem(
+        id: '2',
+        label: '备用专线订阅 B',
+        url: 'https://example.com/subscribe/node-b',
+      ),
+    ];
+  }
 
   void addProfile(String url) {
     final label = '订阅配置 ${state.length + 1}';
@@ -96,12 +99,22 @@ class CustomProfilesNotifier extends StateNotifier<List<MvpProfileItem>> {
 }
 
 final customProfilesProvider =
-    StateNotifierProvider<CustomProfilesNotifier, List<MvpProfileItem>>((ref) {
-  return CustomProfilesNotifier();
-});
+    NotifierProvider<CustomProfilesNotifier, List<MvpProfileItem>>(
+        CustomProfilesNotifier.new);
 
 // 当前选中的订阅配置 ID
-final customCurrentProfileIdProvider = StateProvider<String?>((ref) {
-  final profiles = ref.watch(customProfilesProvider);
-  return profiles.isNotEmpty ? profiles.first.id : null;
-});
+class CustomCurrentProfileIdNotifier extends Notifier<String?> {
+  @override
+  String? build() {
+    final profiles = ref.watch(customProfilesProvider);
+    return profiles.isNotEmpty ? profiles.first.id : null;
+  }
+
+  void selectId(String? id) {
+    state = id;
+  }
+}
+
+final customCurrentProfileIdProvider =
+    NotifierProvider<CustomCurrentProfileIdNotifier, String?>(
+        CustomCurrentProfileIdNotifier.new);

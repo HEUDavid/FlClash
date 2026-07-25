@@ -402,7 +402,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                             onTap: () {
                               ref
                                   .read(customCurrentProfileIdProvider.notifier)
-                                  .state = item.id;
+                                  .selectId(item.id);
                             },
                           );
                         },
