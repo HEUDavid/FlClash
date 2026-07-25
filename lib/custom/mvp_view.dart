@@ -88,7 +88,6 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     return Scaffold(
       backgroundColor: colorScheme.surface,
       appBar: AppBar(
-        scaffoldModeBanner: false,
         // 1. Title 改成 Mi Mi
         title: const Text(
           'Mi Mi',
