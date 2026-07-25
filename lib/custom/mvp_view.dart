@@ -76,7 +76,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     final profiles = ref.watch(customProfilesProvider);
     final currentProfileId = ref.watch(customCurrentProfileIdProvider);
 
-    // 获取当前唯一在用的优化配置
+    // 获取当前配置文件 (如果存在)
     final activeProfile = profiles.firstWhere(
       (element) => element.id == currentProfileId,
       orElse: () => profiles.isNotEmpty
@@ -88,13 +88,14 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     return Scaffold(
       backgroundColor: colorScheme.surface,
       appBar: AppBar(
+        // 1. 标题改成 mimi
         title: const Text(
-          '极简加速器',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+          'mimi',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
         elevation: 0,
         actions: [
-          // 模式切换 Segment/Chip (Light 极简 <-> 高级设置)
+          // 2. Mode Switch (Light / Pro)
           Padding(
             padding: const EdgeInsets.only(right: 12.0),
             child: Container(
@@ -107,9 +108,9 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
               child: Row(
                 children: [
                   Text(
-                    isLightMode ? 'Light 极简' : '高级设置',
+                    isLightMode ? 'Light' : 'Pro',
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: 13,
                       fontWeight: FontWeight.bold,
                       color: colorScheme.primary,
                     ),
@@ -135,11 +136,11 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
             children: [
               const Spacer(flex: 1),
 
-              // 1. 核心大按钮与一键连接展示 Card
+              // 3. 核心开关区域：已连接 / 未连接 开关展示
               Container(
                 width: double.infinity,
                 padding:
-                    const EdgeInsets.symmetric(vertical: 36, horizontal: 24),
+                    const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(28),
                   gradient: LinearGradient(
@@ -168,10 +169,10 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // 连接状态 Tag
+                    // 连接状态 Tag (已连接 / 未连接)
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 14, vertical: 6),
+                          horizontal: 16, vertical: 6),
                       decoration: BoxDecoration(
                         color: isStart
                             ? Colors.green.withOpacity(0.15)
@@ -196,13 +197,13 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                           const SizedBox(width: 8),
                           Text(
                             switch (coreStatus) {
-                              MvpCoreStatus.connected => '加速服务已连接',
-                              MvpCoreStatus.connecting => '正在准备连接...',
-                              MvpCoreStatus.disconnected => '未连接服务',
+                              MvpCoreStatus.connected => '已连接',
+                              MvpCoreStatus.connecting => '连接中...',
+                              MvpCoreStatus.disconnected => '未连接',
                             },
                             style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
                               color: isStart
                                   ? Colors.green.shade800
                                   : colorScheme.onSurfaceVariant,
@@ -211,9 +212,9 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 28),
+                    const SizedBox(height: 24),
 
-                    // 大电源启动/停止按钮 Icon
+                    // 大开关 Button Icon
                     GestureDetector(
                       onTap: () {
                         ref
@@ -222,8 +223,8 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                       },
                       child: AnimatedContainer(
                         duration: const Duration(milliseconds: 300),
-                        width: 120,
-                        height: 120,
+                        width: 110,
+                        height: 110,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: isStart
@@ -241,44 +242,42 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                         ),
                         child: Icon(
                           Icons.power_settings_new_rounded,
-                          size: 56,
+                          size: 52,
                           color: isStart
                               ? colorScheme.onPrimary
                               : colorScheme.onSurfaceVariant,
                         ),
                       ),
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 20),
 
-                    // 启动/停止连接按钮
-                    SizedBox(
-                      width: 180,
-                      height: 48,
-                      child: FilledButton(
-                        onPressed: () {
-                          ref
-                              .read(customProxyStartProvider.notifier)
-                              .setStart(!isStart);
-                        },
-                        style: FilledButton.styleFrom(
-                          backgroundColor: isStart
-                              ? colorScheme.errorContainer
-                              : colorScheme.primary,
-                          foregroundColor: isStart
-                              ? colorScheme.onErrorContainer
-                              : colorScheme.onPrimary,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(24),
-                          ),
-                        ),
-                        child: Text(
-                          isStart ? '停止连接' : '启动连接',
-                          style: const TextStyle(
+                    // 已连接 / 未连接 开关控件
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          isStart ? '已连接' : '未连接',
+                          style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
+                            color: isStart
+                                ? colorScheme.primary
+                                : colorScheme.onSurfaceVariant,
                           ),
                         ),
-                      ),
+                        const SizedBox(width: 12),
+                        Transform.scale(
+                          scale: 1.1,
+                          child: Switch(
+                            value: isStart,
+                            onChanged: (value) {
+                              ref
+                                  .read(customProxyStartProvider.notifier)
+                                  .setStart(value);
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -286,10 +285,11 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
 
               const Spacer(flex: 1),
 
-              // 2. 极简唯一配置文件与链接导入 Card
+              // 4 & 5. 配置文件卡片与更换/收起（固定高度 140px 防止页面抖动，去掉“专用”）
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.all(20),
+                height: 140, // 固定容器高度，解决展开/收起时的抖动问题
+                padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: colorScheme.surfaceContainerHigh,
                   borderRadius: BorderRadius.circular(24),
@@ -303,15 +303,16 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                         Row(
                           children: [
                             Icon(
-                              Icons.verified_outlined,
-                              size: 20,
+                              Icons.description_outlined,
+                              size: 18,
                               color: colorScheme.primary,
                             ),
-                            const SizedBox(width: 8),
+                            const SizedBox(width: 6),
+                            // 5. 去掉“专用”，改成“配置文件”
                             const Text(
-                              '专用配置文件',
+                              '配置文件',
                               style: TextStyle(
-                                fontSize: 15,
+                                fontSize: 14,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -319,115 +320,140 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                         ),
                         if (hasProfile)
                           TextButton(
+                            style: TextButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 4),
+                              minimumSize: Size.zero,
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            ),
                             onPressed: () {
                               setState(() {
                                 _showInputArea = !_showInputArea;
                               });
                             },
                             child: Text(
-                              _showInputArea ? '收起' : '更换链接',
+                              _showInputArea ? '收起' : '更换',
                               style: const TextStyle(fontSize: 13),
                             ),
                           ),
                       ],
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 8),
 
-                    // 展示唯一极简配置或订阅输入框
-                    if (hasProfile && !_showInputArea) ...[
-                      Container(
-                        padding: const EdgeInsets.all(14),
-                        decoration: BoxDecoration(
-                          color: colorScheme.surface,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.description_rounded,
-                              color: colorScheme.primary,
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                    // 内容展示区（固定高度放下对应内容，不触发表格尺寸跳跃抖动）
+                    Expanded(
+                      child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 200),
+                        child: (hasProfile && !_showInputArea)
+                            ? Container(
+                                key: const ValueKey('profile_card'),
+                                width: double.infinity,
+                                alignment: Alignment.centerLeft,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 14, vertical: 10),
+                                decoration: BoxDecoration(
+                                  color: colorScheme.surface,
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.task_alt_rounded,
+                                      color: colorScheme.primary,
+                                      size: 24,
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Expanded(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            activeProfile.label,
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14,
+                                            ),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          const SizedBox(height: 2),
+                                          Text(
+                                            '优选线路配置 (已激活)',
+                                            style: TextStyle(
+                                              fontSize: 11,
+                                              color: colorScheme
+                                                  .onSurfaceVariant,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : Column(
+                                key: const ValueKey('input_form'),
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text(
-                                    activeProfile.label,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
+                                  SizedBox(
+                                    height: 38,
+                                    child: TextField(
+                                      controller: _urlController,
+                                      style: const TextStyle(fontSize: 13),
+                                      decoration: InputDecoration(
+                                        hintText: '粘贴订阅链接...',
+                                        hintStyle:
+                                            const TextStyle(fontSize: 12),
+                                        prefixIcon: const Icon(Icons.link,
+                                            size: 18),
+                                        suffixIcon: IconButton(
+                                          icon: const Icon(Icons.content_paste,
+                                              size: 16),
+                                          tooltip: '粘贴',
+                                          onPressed: _handlePaste,
+                                        ),
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          borderSide: BorderSide.none,
+                                        ),
+                                        filled: true,
+                                        fillColor: colorScheme.surface,
+                                        contentPadding:
+                                            const EdgeInsets.symmetric(
+                                          horizontal: 12,
+                                        ),
+                                      ),
+                                      onChanged: (_) => setState(() {}),
                                     ),
                                   ),
-                                  const SizedBox(height: 2),
-                                  Text(
-                                    '优选线路配置 (已激活)',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: colorScheme.onSurfaceVariant,
+                                  const SizedBox(height: 6),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    height: 34,
+                                    child: FilledButton(
+                                      onPressed: _isImporting
+                                          ? null
+                                          : _handleImportSubscription,
+                                      style: FilledButton.styleFrom(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                      ),
+                                      child: Text(
+                                        _isImporting ? '导入中...' : '导入配置',
+                                        style: const TextStyle(fontSize: 13),
+                                      ),
                                     ),
                                   ),
                                 ],
                               ),
-                            ),
-                            const Icon(
-                              Icons.check_circle,
-                              color: Colors.green,
-                              size: 20,
-                            ),
-                          ],
-                        ),
                       ),
-                    ] else ...[
-                      TextField(
-                        controller: _urlController,
-                        decoration: InputDecoration(
-                          hintText: '粘贴优化后的订阅链接...',
-                          prefixIcon: const Icon(Icons.link, size: 20),
-                          suffixIcon: IconButton(
-                            icon: const Icon(Icons.content_paste, size: 20),
-                            tooltip: '粘贴',
-                            onPressed: _handlePaste,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(14),
-                            borderSide: BorderSide.none,
-                          ),
-                          filled: true,
-                          fillColor: colorScheme.surface,
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 12,
-                          ),
-                        ),
-                        onChanged: (_) => setState(() {}),
-                      ),
-                      const SizedBox(height: 12),
-                      SizedBox(
-                        width: double.infinity,
-                        height: 44,
-                        child: FilledButton.icon(
-                          onPressed:
-                              _isImporting ? null : _handleImportSubscription,
-                          icon: _isImporting
-                              ? const SizedBox(
-                                  width: 18,
-                                  height: 18,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    color: Colors.white,
-                                  ),
-                                )
-                              : const Icon(Icons.download_rounded, size: 18),
-                          label: Text(_isImporting ? '导入配置中...' : '导入订阅配置'),
-                          style: FilledButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(14),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ],
                 ),
               ),
