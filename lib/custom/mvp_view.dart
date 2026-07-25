@@ -1,11 +1,8 @@
-import 'package:fl_clash/common/common.dart';
-import 'package:fl_clash/enum/enum.dart';
-import 'package:fl_clash/providers/providers.dart';
-import 'package:fl_clash/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'mvp_models.dart';
 import 'mvp_provider.dart';
 
 class CustomMvpView extends ConsumerStatefulWidget {
@@ -29,6 +26,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     final data = await Clipboard.getData(Clipboard.kTextPlain);
     if (data?.text != null && data!.text!.isNotEmpty) {
       _urlController.text = data.text!.trim();
+      setState(() {});
     }
   }
 
@@ -48,54 +46,32 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
       _isImporting = true;
     });
 
-    try {
-      await ref.read(profilesActionProvider.notifier).addProfileFormURL(url);
-      if (mounted) {
-        _urlController.clear();
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('订阅配置导入成功！'),
-            behavior: SnackBarBehavior.floating,
-            backgroundColor: Colors.green,
-          ),
-        );
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('导入失败: ${e.toString()}'),
-            behavior: SnackBarBehavior.floating,
-            backgroundColor: context.colorScheme.error,
-          ),
-        );
-      }
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isImporting = false;
-        });
-      }
-    }
-  }
+    await Future.delayed(const Duration(milliseconds: 600));
 
-  void _handleToggleProxy(bool isStart) {
-    debouncer.call(FunctionTag.updateStatus, () {
-      globalState.container
-          .read(setupActionProvider.notifier)
-          .updateStatus(isStart, isInit: !ref.read(initProvider));
-    }, duration: commonDuration);
+    if (mounted) {
+      ref.read(customProfilesProvider.notifier).addProfile(url);
+      _urlController.clear();
+      setState(() {
+        _isImporting = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('订阅配置导入成功！'),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.green,
+        ),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = context.colorScheme;
+    final colorScheme = Theme.of(context).colorScheme;
     final isLightMode = ref.watch(customMvpProvider);
-    final isStart = ref.watch(isStartProvider);
-    final coreStatus = ref.watch(coreStatusProvider);
-    final profiles = ref.watch(profilesProvider);
-    final currentProfile = ref.watch(currentProfileProvider);
-    final runTime = ref.watch(runTimeProvider);
+    final isStart = ref.watch(customProxyStartProvider);
+    final coreStatus = ref.watch(customCoreStatusProvider);
+    final profiles = ref.watch(customProfilesProvider);
+    final currentProfileId = ref.watch(customCurrentProfileIdProvider);
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
@@ -209,18 +185,18 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: switch (coreStatus) {
-                                  CoreStatus.connected => Colors.green,
-                                  CoreStatus.connecting => Colors.orange,
-                                  CoreStatus.disconnected => Colors.grey,
+                                  MvpCoreStatus.connected => Colors.green,
+                                  MvpCoreStatus.connecting => Colors.orange,
+                                  MvpCoreStatus.disconnected => Colors.grey,
                                 },
                               ),
                             ),
                             const SizedBox(width: 8.0),
                             Text(
                               switch (coreStatus) {
-                                CoreStatus.connected => '已连接代理',
-                                CoreStatus.connecting => '正在连接...',
-                                CoreStatus.disconnected => '未连接',
+                                MvpCoreStatus.connected => '已连接代理',
+                                MvpCoreStatus.connecting => '正在连接...',
+                                MvpCoreStatus.disconnected => '未连接',
                               },
                               style: Theme.of(context)
                                   .textTheme
@@ -231,9 +207,9 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                             ),
                           ],
                         ),
-                        if (isStart && runTime != null)
+                        if (isStart)
                           Text(
-                            utils.getTimeText(runTime),
+                            '运行中',
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium
@@ -259,7 +235,9 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                           child: Switch(
                             value: isStart,
                             onChanged: (value) {
-                              _handleToggleProxy(value);
+                              ref
+                                  .read(customProxyStartProvider.notifier)
+                                  .setStart(value);
                             },
                           ),
                         ),
@@ -396,7 +374,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                         separatorBuilder: (_, __) => const Divider(height: 1),
                         itemBuilder: (context, index) {
                           final item = profiles[index];
-                          final isSelected = currentProfile?.id == item.id;
+                          final isSelected = currentProfileId == item.id;
                           return ListTile(
                             contentPadding: EdgeInsets.zero,
                             leading: Icon(
@@ -423,8 +401,8 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                             ),
                             onTap: () {
                               ref
-                                  .read(currentProfileIdProvider.notifier)
-                                  .update((_) => item.id);
+                                  .read(customCurrentProfileIdProvider.notifier)
+                                  .state = item.id;
                             },
                           );
                         },
