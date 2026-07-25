@@ -1,4 +1,6 @@
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/custom/mvp_provider.dart';
+import 'package:fl_clash/custom/mvp_view.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/manager/app_manager.dart';
 import 'package:fl_clash/models/common.dart';
@@ -11,7 +13,7 @@ import 'package:intl/intl.dart';
 
 typedef OnSelected = void Function(int index);
 
-class HomePage extends StatelessWidget {
+class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
   void _handleToPage(PageLabel pageLabel) {
@@ -21,7 +23,13 @@ class HomePage extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isLightMode = ref.watch(customMvpProvider);
+    if (isLightMode) {
+      return const HomeBackScopeContainer(
+        child: CustomMvpView(),
+      );
+    }
     return HomeBackScopeContainer(
       child: AppSidebarContainer(
         child: Material(
