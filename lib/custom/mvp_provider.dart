@@ -76,19 +76,14 @@ class CustomProfilesNotifier extends Notifier<List<MvpProfileItem>> {
     return const [
       MvpProfileItem(
         id: '1',
-        label: '默认高级订阅 A',
+        label: '专线极速配置 v1.0',
         url: 'https://example.com/subscribe/node-a',
-      ),
-      MvpProfileItem(
-        id: '2',
-        label: '备用专线订阅 B',
-        url: 'https://example.com/subscribe/node-b',
       ),
     ];
   }
 
   void addProfile(String url) {
-    final label = '订阅配置 ${state.length + 1}';
+    final label = '优化配置 ${state.length + 1}';
     final newItem = MvpProfileItem(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       label: label,

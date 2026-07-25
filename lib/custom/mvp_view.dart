@@ -15,6 +15,7 @@ class CustomMvpView extends ConsumerStatefulWidget {
 class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
   final TextEditingController _urlController = TextEditingController();
   bool _isImporting = false;
+  bool _showInputArea = false;
 
   @override
   void dispose() {
@@ -46,17 +47,18 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
       _isImporting = true;
     });
 
-    await Future.delayed(const Duration(milliseconds: 600));
+    await Future.delayed(const Duration(milliseconds: 500));
 
     if (mounted) {
       ref.read(customProfilesProvider.notifier).addProfile(url);
       _urlController.clear();
       setState(() {
         _isImporting = false;
+        _showInputArea = false;
       });
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('订阅配置导入成功！'),
+          content: Text('配置导入成功，已自动生效！'),
           behavior: SnackBarBehavior.floating,
           backgroundColor: Colors.green,
         ),
@@ -66,352 +68,373 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     final isLightMode = ref.watch(customMvpProvider);
     final isStart = ref.watch(customProxyStartProvider);
     final coreStatus = ref.watch(customCoreStatusProvider);
     final profiles = ref.watch(customProfilesProvider);
     final currentProfileId = ref.watch(customCurrentProfileIdProvider);
 
+    // 获取当前唯一在用的优化配置
+    final activeProfile = profiles.firstWhere(
+      (element) => element.id == currentProfileId,
+      orElse: () => profiles.isNotEmpty
+          ? profiles.first
+          : const MvpProfileItem(id: '', label: '', url: ''),
+    );
+    final hasProfile = activeProfile.id.isNotEmpty;
+
     return Scaffold(
       backgroundColor: colorScheme.surface,
       appBar: AppBar(
         title: const Text(
-          'MVP 代理客户端',
-          style: TextStyle(fontWeight: FontWeight.bold),
+          '极简加速器',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
         ),
-        centerTitle: false,
+        elevation: 0,
         actions: [
+          // 模式切换 Segment/Chip (Light 极简 <-> 高级设置)
           Padding(
-            padding: const EdgeInsets.only(right: 16.0),
-            child: Chip(
-              avatar: Icon(
-                Icons.flash_on,
-                size: 16,
-                color: colorScheme.primary,
+            padding: const EdgeInsets.only(right: 12.0),
+            child: Container(
+              height: 36,
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+              decoration: BoxDecoration(
+                color: colorScheme.surfaceContainerHigh,
+                borderRadius: BorderRadius.circular(20),
               ),
-              label: const Text('Light 版', style: TextStyle(fontSize: 12)),
-              backgroundColor: colorScheme.primaryContainer.withOpacity(0.5),
+              child: Row(
+                children: [
+                  Text(
+                    isLightMode ? 'Light 极简' : '高级设置',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: colorScheme.primary,
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  Switch(
+                    value: isLightMode,
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    onChanged: (value) {
+                      ref.read(customMvpProvider.notifier).setEnabled(value);
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ],
       ),
       body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-          children: [
-            // 界面模式切换 Card
-            Card(
-              elevation: 0,
-              color: colorScheme.surfaceContainerHigh,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16.0),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(10.0),
-                      decoration: BoxDecoration(
-                        color: colorScheme.primaryContainer,
-                        borderRadius: BorderRadius.circular(12.0),
-                      ),
-                      child: Icon(
-                        Icons.dashboard_customize_outlined,
-                        color: colorScheme.onPrimaryContainer,
-                      ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: Column(
+            children: [
+              const Spacer(flex: 1),
+
+              // 1. 核心大按钮与一键连接展示 Card
+              Container(
+                width: double.infinity,
+                padding:
+                    const EdgeInsets.symmetric(vertical: 36, horizontal: 24),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(28),
+                  gradient: LinearGradient(
+                    colors: isStart
+                        ? [
+                            colorScheme.primaryContainer,
+                            colorScheme.primaryContainer.withOpacity(0.7),
+                          ]
+                        : [
+                            colorScheme.surfaceContainerHigh,
+                            colorScheme.surfaceContainer,
+                          ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: isStart
+                          ? colorScheme.primary.withOpacity(0.2)
+                          : Colors.black.withOpacity(0.04),
+                      blurRadius: 20,
+                      offset: const Offset(0, 10),
                     ),
-                    const SizedBox(width: 16.0),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                  ],
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // 连接状态 Tag
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 14, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: isStart
+                            ? Colors.green.withOpacity(0.15)
+                            : colorScheme.surfaceContainerHighest,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(
-                            '显示 Light MVP 页面',
-                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                          Container(
+                            width: 8,
+                            height: 8,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: switch (coreStatus) {
+                                MvpCoreStatus.connected => Colors.green,
+                                MvpCoreStatus.connecting => Colors.orange,
+                                MvpCoreStatus.disconnected => Colors.grey,
+                              },
+                            ),
                           ),
-                          const SizedBox(height: 2.0),
+                          const SizedBox(width: 8),
                           Text(
-                            isLightMode ? '当前：Light 极简版首页' : '当前：原版完整界面',
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                  color: colorScheme.onSurfaceVariant,
-                                ),
+                            switch (coreStatus) {
+                              MvpCoreStatus.connected => '加速服务已连接',
+                              MvpCoreStatus.connecting => '正在准备连接...',
+                              MvpCoreStatus.disconnected => '未连接服务',
+                            },
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                              color: isStart
+                                  ? Colors.green.shade800
+                                  : colorScheme.onSurfaceVariant,
+                            ),
                           ),
                         ],
                       ),
                     ),
-                    Switch(
-                      value: isLightMode,
-                      onChanged: (value) {
-                        ref.read(customMvpProvider.notifier).setEnabled(value);
+                    const SizedBox(height: 28),
+
+                    // 大电源启动/停止按钮 Icon
+                    GestureDetector(
+                      onTap: () {
+                        ref
+                            .read(customProxyStartProvider.notifier)
+                            .setStart(!isStart);
                       },
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
+                        width: 120,
+                        height: 120,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: isStart
+                              ? colorScheme.primary
+                              : colorScheme.surface,
+                          boxShadow: [
+                            BoxShadow(
+                              color: isStart
+                                  ? colorScheme.primary.withOpacity(0.4)
+                                  : Colors.black12,
+                              blurRadius: isStart ? 24 : 12,
+                              spreadRadius: isStart ? 4 : 0,
+                            ),
+                          ],
+                        ),
+                        child: Icon(
+                          Icons.power_settings_new_rounded,
+                          size: 56,
+                          color: isStart
+                              ? colorScheme.onPrimary
+                              : colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+
+                    // 启动/停止连接按钮
+                    SizedBox(
+                      width: 180,
+                      height: 48,
+                      child: FilledButton(
+                        onPressed: () {
+                          ref
+                              .read(customProxyStartProvider.notifier)
+                              .setStart(!isStart);
+                        },
+                        style: FilledButton.styleFrom(
+                          backgroundColor: isStart
+                              ? colorScheme.errorContainer
+                              : colorScheme.primary,
+                          foregroundColor: isStart
+                              ? colorScheme.onErrorContainer
+                              : colorScheme.onPrimary,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(24),
+                          ),
+                        ),
+                        child: Text(
+                          isStart ? '停止连接' : '启动连接',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ),
               ),
-            ),
-            const SizedBox(height: 16.0),
 
-            // 代理开关控制 Card
-            Card(
-              elevation: 2,
-              color: isStart
-                  ? colorScheme.primaryContainer.withOpacity(0.3)
-                  : colorScheme.surfaceContainer,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0),
-                side: BorderSide(
-                  color: isStart
-                      ? colorScheme.primary.withOpacity(0.5)
-                      : Colors.transparent,
-                  width: 1.5,
+              const Spacer(flex: 1),
+
+              // 2. 极简唯一配置文件与链接导入 Card
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: colorScheme.surfaceContainerHigh,
+                  borderRadius: BorderRadius.circular(24),
                 ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(
                           children: [
-                            Container(
-                              width: 12,
-                              height: 12,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: switch (coreStatus) {
-                                  MvpCoreStatus.connected => Colors.green,
-                                  MvpCoreStatus.connecting => Colors.orange,
-                                  MvpCoreStatus.disconnected => Colors.grey,
-                                },
-                              ),
+                            Icon(
+                              Icons.verified_outlined,
+                              size: 20,
+                              color: colorScheme.primary,
                             ),
-                            const SizedBox(width: 8.0),
-                            Text(
-                              switch (coreStatus) {
-                                MvpCoreStatus.connected => '已连接代理',
-                                MvpCoreStatus.connecting => '正在连接...',
-                                MvpCoreStatus.disconnected => '未连接',
-                              },
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium
-                                  ?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                            ),
-                          ],
-                        ),
-                        if (isStart)
-                          Text(
-                            '运行中',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(
-                                  color: colorScheme.primary,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                          ),
-                      ],
-                    ),
-                    const SizedBox(height: 20.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          '代理开关',
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
-                        ),
-                        Transform.scale(
-                          scale: 1.2,
-                          child: Switch(
-                            value: isStart,
-                            onChanged: (value) {
-                              ref
-                                  .read(customProxyStartProvider.notifier)
-                                  .setStart(value);
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 16.0),
-
-            // 订阅链接导入 Card
-            Card(
-              elevation: 0,
-              color: colorScheme.surfaceContainerHigh,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.link_rounded,
-                          color: colorScheme.primary,
-                        ),
-                        const SizedBox(width: 8.0),
-                        Text(
-                          '导入订阅链接',
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12.0),
-                    TextField(
-                      controller: _urlController,
-                      decoration: InputDecoration(
-                        hintText: 'https://example.com/subscribe',
-                        prefixIcon: const Icon(Icons.http),
-                        suffixIcon: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.content_paste),
-                              tooltip: '粘贴',
-                              onPressed: _handlePaste,
-                            ),
-                            if (_urlController.text.isNotEmpty)
-                              IconButton(
-                                icon: const Icon(Icons.clear),
-                                tooltip: '清空',
-                                onPressed: () {
-                                  _urlController.clear();
-                                  setState(() {});
-                                },
-                              ),
-                          ],
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                        filled: true,
-                        fillColor: colorScheme.surface,
-                      ),
-                      onChanged: (_) => setState(() {}),
-                    ),
-                    const SizedBox(height: 16.0),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 48,
-                      child: FilledButton.icon(
-                        onPressed:
-                            _isImporting ? null : _handleImportSubscription,
-                        icon: _isImporting
-                            ? const SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  color: Colors.white,
-                                ),
-                              )
-                            : const Icon(Icons.download_rounded),
-                        label: Text(
-                          _isImporting ? '导入中...' : '导入订阅配置',
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        style: FilledButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12.0),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 16.0),
-
-            // 当前配置 Profile 列表 Card
-            if (profiles.isNotEmpty)
-              Card(
-                elevation: 0,
-                color: colorScheme.surfaceContainerLow,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16.0),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '已保存的订阅配置 (${profiles.length})',
-                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                              color: colorScheme.onSurfaceVariant,
-                              fontWeight: FontWeight.bold,
-                            ),
-                      ),
-                      const SizedBox(height: 12.0),
-                      ListView.separated(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: profiles.length,
-                        separatorBuilder: (_, __) => const Divider(height: 1),
-                        itemBuilder: (context, index) {
-                          final item = profiles[index];
-                          final isSelected = currentProfileId == item.id;
-                          return ListTile(
-                            contentPadding: EdgeInsets.zero,
-                            leading: Icon(
-                              isSelected
-                                  ? Icons.check_circle
-                                  : Icons.circle_outlined,
-                              color: isSelected
-                                  ? colorScheme.primary
-                                  : colorScheme.onSurfaceVariant,
-                            ),
-                            title: Text(
-                              item.label,
+                            const SizedBox(width: 8),
+                            const Text(
+                              '专用配置文件',
                               style: TextStyle(
-                                fontWeight: isSelected
-                                    ? FontWeight.bold
-                                    : FontWeight.normal,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                            subtitle: Text(
-                              item.url,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(fontSize: 12),
-                            ),
-                            onTap: () {
-                              ref
-                                  .read(customCurrentProfileIdProvider.notifier)
-                                  .selectId(item.id);
+                          ],
+                        ),
+                        if (hasProfile)
+                          TextButton(
+                            onPressed: () {
+                              setState(() {
+                                _showInputArea = !_showInputArea;
+                              });
                             },
-                          );
-                        },
+                            child: Text(
+                              _showInputArea ? '收起' : '更换链接',
+                              style: const TextStyle(fontSize: 13),
+                            ),
+                          ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+
+                    // 展示唯一极简配置或订阅输入框
+                    if (hasProfile && !_showInputArea) ...[
+                      Container(
+                        padding: const EdgeInsets.all(14),
+                        decoration: BoxDecoration(
+                          color: colorScheme.surface,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.description_rounded,
+                              color: colorScheme.primary,
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    activeProfile.label,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    '优选线路配置 (已激活)',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: colorScheme.onSurfaceVariant,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const Icon(
+                              Icons.check_circle,
+                              color: Colors.green,
+                              size: 20,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ] else ...[
+                      TextField(
+                        controller: _urlController,
+                        decoration: InputDecoration(
+                          hintText: '粘贴优化后的订阅链接...',
+                          prefixIcon: const Icon(Icons.link, size: 20),
+                          suffixIcon: IconButton(
+                            icon: const Icon(Icons.content_paste, size: 20),
+                            tooltip: '粘贴',
+                            onPressed: _handlePaste,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(14),
+                            borderSide: BorderSide.none,
+                          ),
+                          filled: true,
+                          fillColor: colorScheme.surface,
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 12,
+                          ),
+                        ),
+                        onChanged: (_) => setState(() {}),
+                      ),
+                      const SizedBox(height: 12),
+                      SizedBox(
+                        width: double.infinity,
+                        height: 44,
+                        child: FilledButton.icon(
+                          onPressed:
+                              _isImporting ? null : _handleImportSubscription,
+                          icon: _isImporting
+                              ? const SizedBox(
+                                  width: 18,
+                                  height: 18,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              : const Icon(Icons.download_rounded, size: 18),
+                          label: Text(_isImporting ? '导入配置中...' : '导入订阅配置'),
+                          style: FilledButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                          ),
+                        ),
                       ),
                     ],
-                  ),
+                  ],
                 ),
               ),
-          ],
+
+              const Spacer(flex: 1),
+            ],
+          ),
         ),
       ),
     );
