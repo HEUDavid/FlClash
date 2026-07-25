@@ -88,29 +88,38 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     return Scaffold(
       backgroundColor: colorScheme.surface,
       appBar: AppBar(
-        // 1. 标题改成 mimi
+        scaffoldModeBanner: false,
+        // 1. Title 改成 Mi Mi
         title: const Text(
-          'mimi',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          'Mi Mi',
+          style: TextStyle(
+            fontWeight: FontWeight.w800,
+            fontSize: 22,
+            letterSpacing: 0.5,
+          ),
         ),
         elevation: 0,
+        backgroundColor: Colors.transparent,
         actions: [
           // 2. Mode Switch (Light / Pro)
           Padding(
-            padding: const EdgeInsets.only(right: 12.0),
+            padding: const EdgeInsets.only(right: 16.0),
             child: Container(
-              height: 36,
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+              height: 34,
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
               decoration: BoxDecoration(
                 color: colorScheme.surfaceContainerHigh,
                 borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: colorScheme.outlineVariant.withOpacity(0.4),
+                ),
               ),
               child: Row(
                 children: [
                   Text(
                     isLightMode ? 'Light' : 'Pro',
                     style: TextStyle(
-                      fontSize: 13,
+                      fontSize: 12,
                       fontWeight: FontWeight.bold,
                       color: colorScheme.primary,
                     ),
@@ -136,18 +145,18 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
             children: [
               const Spacer(flex: 1),
 
-              // 3. 核心开关区域：已连接 / 未连接 开关展示
+              // 3. 核心大电源按钮区域 (去除重复多余的切换控件，精简为状态 Badge + 核心电源大按键)
               Container(
                 width: double.infinity,
                 padding:
-                    const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
+                    const EdgeInsets.symmetric(vertical: 40, horizontal: 24),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(28),
+                  borderRadius: BorderRadius.circular(32),
                   gradient: LinearGradient(
                     colors: isStart
                         ? [
                             colorScheme.primaryContainer,
-                            colorScheme.primaryContainer.withOpacity(0.7),
+                            colorScheme.primaryContainer.withOpacity(0.6),
                           ]
                         : [
                             colorScheme.surfaceContainerHigh,
@@ -159,17 +168,17 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                   boxShadow: [
                     BoxShadow(
                       color: isStart
-                          ? colorScheme.primary.withOpacity(0.2)
+                          ? colorScheme.primary.withOpacity(0.25)
                           : Colors.black.withOpacity(0.04),
-                      blurRadius: 20,
-                      offset: const Offset(0, 10),
+                      blurRadius: 24,
+                      offset: const Offset(0, 12),
                     ),
                   ],
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // 连接状态 Tag (已连接 / 未连接)
+                    // 状态 Badge (已连接 / 连接中... / 未连接)
                     Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 6),
@@ -212,9 +221,9 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 32),
 
-                    // 大开关 Button Icon
+                    // 核心大电源 Icon 按键 (一键开启/停止连接)
                     GestureDetector(
                       onTap: () {
                         ref
@@ -223,8 +232,8 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                       },
                       child: AnimatedContainer(
                         duration: const Duration(milliseconds: 300),
-                        width: 110,
-                        height: 110,
+                        width: 128,
+                        height: 128,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: isStart
@@ -233,51 +242,34 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                           boxShadow: [
                             BoxShadow(
                               color: isStart
-                                  ? colorScheme.primary.withOpacity(0.4)
-                                  : Colors.black12,
-                              blurRadius: isStart ? 24 : 12,
-                              spreadRadius: isStart ? 4 : 0,
+                                  ? colorScheme.primary.withOpacity(0.45)
+                                  : Colors.black.withOpacity(0.08),
+                              blurRadius: isStart ? 30 : 16,
+                              spreadRadius: isStart ? 6 : 0,
                             ),
                           ],
                         ),
                         child: Icon(
                           Icons.power_settings_new_rounded,
-                          size: 52,
+                          size: 60,
                           color: isStart
                               ? colorScheme.onPrimary
                               : colorScheme.onSurfaceVariant,
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 24),
 
-                    // 已连接 / 未连接 开关控件
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          isStart ? '已连接' : '未连接',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: isStart
-                                ? colorScheme.primary
-                                : colorScheme.onSurfaceVariant,
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Transform.scale(
-                          scale: 1.1,
-                          child: Switch(
-                            value: isStart,
-                            onChanged: (value) {
-                              ref
-                                  .read(customProxyStartProvider.notifier)
-                                  .setStart(value);
-                            },
-                          ),
-                        ),
-                      ],
+                    // 提示说明文字
+                    Text(
+                      isStart ? '点击停止连接' : '点击启动连接',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        color: isStart
+                            ? colorScheme.primary
+                            : colorScheme.onSurfaceVariant,
+                      ),
                     ),
                   ],
                 ),
@@ -285,14 +277,17 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
 
               const Spacer(flex: 1),
 
-              // 4 & 5. 配置文件卡片与更换/收起（固定高度 140px 防止页面抖动，去掉“专用”）
+              // 4. 配置文件卡片 (固定 135px 高度，平滑切换，绝对防抖动，去掉“专用”)
               Container(
                 width: double.infinity,
-                height: 140, // 固定容器高度，解决展开/收起时的抖动问题
+                height: 135, // 绝对固定容器高度
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: colorScheme.surfaceContainerHigh,
                   borderRadius: BorderRadius.circular(24),
+                  border: Border.all(
+                    color: colorScheme.outlineVariant.withOpacity(0.3),
+                  ),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -308,7 +303,6 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                               color: colorScheme.primary,
                             ),
                             const SizedBox(width: 6),
-                            // 5. 去掉“专用”，改成“配置文件”
                             const Text(
                               '配置文件',
                               style: TextStyle(
@@ -340,7 +334,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                     ),
                     const SizedBox(height: 8),
 
-                    // 内容展示区（固定高度放下对应内容，不触发表格尺寸跳跃抖动）
+                    // 内容平滑切换区
                     Expanded(
                       child: AnimatedSwitcher(
                         duration: const Duration(milliseconds: 200),
@@ -399,7 +393,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   SizedBox(
-                                    height: 38,
+                                    height: 36,
                                     child: TextField(
                                       controller: _urlController,
                                       style: const TextStyle(fontSize: 13),
