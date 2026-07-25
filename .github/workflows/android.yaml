@@ -1,0 +1,96 @@
+name: build-android
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+env:
+  IS_STABLE: 'true'
+  FLUTTER_VERSION: '3.44.4'
+
+jobs:
+  build:
+    name: Build Android
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup Android Signing
+        run: |
+          if [ -n "${{ secrets.KEYSTORE }}" ]; then
+            echo "${{ secrets.KEYSTORE }}" | base64 --decode > android/app/keystore.jks
+            echo "${{ secrets.SERVICE_JSON }}" | base64 --decode > android/app/google-services.json
+            {
+              echo "keyAlias=${{ secrets.KEY_ALIAS }}"
+              echo "storePassword=${{ secrets.STORE_PASSWORD }}"
+              echo "keyPassword=${{ secrets.KEY_PASSWORD }}"
+            } >> android/local.properties
+          else
+            echo "No custom keystore provided, using default signing."
+          fi
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.26.4'
+          cache-dependency-path: |
+            core/go.sum
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: master
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+
+      - name: Setup NDK
+        uses: nttld/setup-ndk@v1
+        with:
+          ndk-version: r28c
+          add-to-path: true
+          link-to-sdk: true
+
+      - name: Get Flutter Dependency
+        run: |
+          flutter --version
+          flutter pub get
+
+      - name: Setup
+        run: dart setup.dart android --env stable -v
+
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: artifact-android
+          path: ./dist
+          overwrite: true
+
+  release:
+    name: Release
+    needs: [ build ]
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - name: Download
+        uses: actions/download-artifact@v4
+        with:
+          path: ./dist/
+          name: artifact-android
+
+      - name: Generate sha256
+        run: |
+          cd ./dist
+          sha256sum ./* > SHA256SUMS
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ./dist/*
