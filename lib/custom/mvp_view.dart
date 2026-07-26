@@ -1,3 +1,6 @@
+import 'package:fl_clash/enum/enum.dart';
+import 'package:fl_clash/providers/providers.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,29 +16,30 @@ class CustomMvpView extends ConsumerStatefulWidget {
   ConsumerState<CustomMvpView> createState() => _CustomMvpViewState();
 }
 
-class _CustomMvpViewState extends ConsumerState<CustomMvpView>
-    with SingleTickerProviderStateMixin {
+class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
   final TextEditingController _urlController = TextEditingController();
   bool _isImporting = false;
   bool _isUpdating = false;
   bool _showInputArea = false;
 
-  late AnimationController _pulseController;
-
-  @override
-  void initState() {
-    super.initState();
-    _pulseController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 2000),
-    )..repeat(reverse: true);
-  }
-
   @override
   void dispose() {
-    _pulseController.dispose();
     _urlController.dispose();
     super.dispose();
+  }
+
+  void _handleToggleShield(bool currentIsStart) {
+    if (!kIsWeb) {
+      try {
+        final isInit = !ref.read(initProvider);
+        ref.read(setupActionProvider.notifier).updateStatus(
+              !currentIsStart,
+              isInit: isInit,
+            );
+      } catch (_) {}
+    }
+    // Sync local mock state for UI consistency in preview mode
+    ref.read(customProxyStartProvider.notifier).setStart(!currentIsStart);
   }
 
   Future<void> _handleUpdateSubscription(String url) async {
@@ -45,6 +49,11 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView>
     });
 
     try {
+      if (!kIsWeb) {
+        try {
+          await ref.read(profilesActionProvider.notifier).updateProfiles();
+        } catch (_) {}
+      }
       await updateSubscriptionOrBackup(url);
       if (mounted) {
         setState(() {
@@ -212,18 +221,60 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView>
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final isLightMode = ref.watch(customMvpProvider);
-    final isStart = ref.watch(customProxyStartProvider);
-    final coreStatus = ref.watch(customCoreStatusProvider);
-    final profiles = ref.watch(customProfilesProvider);
-    final currentProfileId = ref.watch(customCurrentProfileIdProvider);
 
-    final activeProfile = profiles.firstWhere(
-      (element) => element.id == currentProfileId,
-      orElse: () => profiles.isNotEmpty
-          ? profiles.first
-          : const MvpProfileItem(id: '', label: '', url: ''),
-    );
-    final hasProfile = activeProfile.id.isNotEmpty;
+    // Dynamic dual-mode resolution (App Mode vs Web Preview Mode)
+    bool isStart = ref.watch(customProxyStartProvider);
+    MvpCoreStatus coreStatus = ref.watch(customCoreStatusProvider);
+    MvpProfileItem activeProfile = const MvpProfileItem(id: '', label: '', url: '');
+    bool hasProfile = false;
+
+    if (!kIsWeb) {
+      try {
+        isStart = ref.watch(isStartProvider);
+        final realCoreStatus = ref.watch(coreStatusProvider);
+        coreStatus = switch (realCoreStatus) {
+          CoreStatus.connected => MvpCoreStatus.connected,
+          CoreStatus.connecting => MvpCoreStatus.connecting,
+          CoreStatus.disconnected => MvpCoreStatus.disconnected,
+        };
+
+        final realProfiles = ref.watch(profilesProvider);
+        final realCurrentProfile = ref.watch(currentProfileProvider);
+        if (realCurrentProfile != null) {
+          hasProfile = true;
+          activeProfile = MvpProfileItem(
+            id: realCurrentProfile.id.toString(),
+            label: realCurrentProfile.label.isNotEmpty
+                ? realCurrentProfile.label
+                : '远程备份数据',
+            url: realCurrentProfile.url,
+          );
+        } else if (realProfiles.isNotEmpty) {
+          hasProfile = true;
+          final p = realProfiles.first;
+          activeProfile = MvpProfileItem(
+            id: p.id.toString(),
+            label: p.label.isNotEmpty ? p.label : '远程备份数据',
+            url: p.url,
+          );
+        }
+      } catch (_) {}
+    }
+
+    if (!hasProfile) {
+      final mockProfiles = ref.watch(customProfilesProvider);
+      final mockCurrentProfileId = ref.watch(customCurrentProfileIdProvider);
+      final foundMock = mockProfiles.firstWhere(
+        (element) => element.id == mockCurrentProfileId,
+        orElse: () => mockProfiles.isNotEmpty
+            ? mockProfiles.first
+            : const MvpProfileItem(id: '', label: '', url: ''),
+      );
+      if (foundMock.id.isNotEmpty) {
+        hasProfile = true;
+        activeProfile = foundMock;
+      }
+    }
 
     // AdGuard Theme Design System Colors
     final bgPrimary = isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC);
@@ -515,9 +566,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView>
 
         // Main AdGuard Interactive Shield Button (Strict fixed 160x190 bounds)
         GestureDetector(
-          onTap: () {
-            ref.read(customProxyStartProvider.notifier).setStart(!isStart);
-          },
+          onTap: () => _handleToggleShield(isStart),
           child: SizedBox(
             width: 160,
             height: 190,

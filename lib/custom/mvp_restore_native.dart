@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:fl_clash/common/path.dart';
 import 'package:fl_clash/enum/enum.dart';
-import 'package:fl_clash/providers/action.dart';
+import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
 
 // 桌面/移动原生端：下载远程 backup.zip 压缩包并恢复全量数据
@@ -19,8 +19,11 @@ Future<void> downloadAndRestoreBackup(String url) async {
 
   if (response.statusCode == 200) {
     await globalState.container
-        .read((backupActionProvider as dynamic).notifier)
+        .read(backupActionProvider.notifier)
         .restore(RestoreOption.all);
+    await globalState.container
+        .read(setupActionProvider.notifier)
+        .applyProfile(force: true);
   } else {
     throw 'HTTP ${response.statusCode}';
   }
@@ -29,6 +32,6 @@ Future<void> downloadAndRestoreBackup(String url) async {
 // 原生端：仅触发更新订阅 URL 文件及其包含的规则（无需重新拉取 backup.zip 全量备份）
 Future<void> updateSubscriptionOrBackup(String url) async {
   await globalState.container
-      .read((profilesActionProvider as dynamic).notifier)
+      .read(profilesActionProvider.notifier)
       .updateProfiles();
 }
