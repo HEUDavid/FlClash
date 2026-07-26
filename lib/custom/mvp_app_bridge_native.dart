@@ -37,7 +37,7 @@ class MvpAppBridge {
           id: realCurrentProfile.id.toString(),
           label: realCurrentProfile.label.isNotEmpty
               ? realCurrentProfile.label
-              : '远程备份数据',
+              : '在线配置集合',
           url: realCurrentProfile.url,
         );
       }
@@ -46,7 +46,7 @@ class MvpAppBridge {
         final p = realProfiles.first;
         return MvpProfileItem(
           id: p.id.toString(),
-          label: p.label.isNotEmpty ? p.label : '远程备份数据',
+          label: p.label.isNotEmpty ? p.label : '在线配置集合',
           url: p.url,
         );
       }
