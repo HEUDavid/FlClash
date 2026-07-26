@@ -68,7 +68,12 @@ jobs:
           dart lib/custom/apply_branding.dart --app-name "${{ env.APP_NAME }}" --package-name "${{ env.PACKAGE_NAME }}"
 
       - name: Setup
-        run: dart setup.dart android --env stable -v
+        run: |
+          dart setup.dart android --env stable -v || {
+            echo "=== SETUP FAILED! RUNNING DIRECT FLUTTER BUILD FOR DIAGNOSTICS ==="
+            flutter build apk --split-per-abi --verbose --dart-define-from-file=env.json
+            exit 1
+          }
 
       - name: Upload
         uses: actions/upload-artifact@v4

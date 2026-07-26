@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:args/args.dart';
@@ -41,23 +42,7 @@ void main(List<String> args) {
     ],
   );
 
-  _replaceInFile(
-    path: 'android/app/google-services.json',
-    replacements: [
-      (
-        RegExp(r'"package_name":\s*"com\.follow\.clash"'),
-        '"package_name": "$packageName"',
-      ),
-      (
-        RegExp(r'"package_name":\s*"com\.follow\.clash\.debug"'),
-        '"package_name": "$packageName.debug"',
-      ),
-      (
-        RegExp(r'"package_name":\s*"com\.follow\.clash\.dev"'),
-        '"package_name": "$packageName.dev"',
-      ),
-    ],
-  );
+  _updateGoogleServicesJson('android/app/google-services.json', packageName);
 
   _replaceInFile(
     path: 'lib/common/constant.dart',
@@ -206,4 +191,102 @@ void _replaceInFile({
   } else {
     stdout.writeln('No changes needed: $path');
   }
+}
+
+void _updateGoogleServicesJson(String path, String packageName) {
+  final file = File(path);
+  if (!file.existsSync()) {
+    stdout.writeln(
+      'Warning: File not found: $path (skipping google-services.json)',
+    );
+    return;
+  }
+  try {
+    final content = file.readAsStringSync();
+    final json = jsonDecode(content) as Map<String, dynamic>;
+    final clientList = json['client'] as List<dynamic>?;
+    if (clientList != null && clientList.isNotEmpty) {
+      bool changed = false;
+      final existingNames = <String>{};
+
+      for (final client in clientList) {
+        if (client is Map<String, dynamic>) {
+          final clientInfo = client['client_info'] as Map<String, dynamic>?;
+          final androidClientInfo =
+              clientInfo?['android_client_info'] as Map<String, dynamic>?;
+          if (androidClientInfo != null) {
+            final oldName = androidClientInfo['package_name'] as String?;
+            if (oldName == 'com.follow.clash') {
+              androidClientInfo['package_name'] = packageName;
+              changed = true;
+            } else if (oldName == 'com.follow.clash.debug') {
+              androidClientInfo['package_name'] = '$packageName.debug';
+              changed = true;
+            } else if (oldName == 'com.follow.clash.dev') {
+              androidClientInfo['package_name'] = '$packageName.dev';
+              changed = true;
+            }
+            final currentName = androidClientInfo['package_name'] as String?;
+            if (currentName != null) {
+              existingNames.add(currentName);
+            }
+          }
+        }
+      }
+
+      final neededNames = [
+        packageName,
+        '$packageName.debug',
+        '$packageName.dev',
+      ];
+      for (final needed in neededNames) {
+        if (!existingNames.contains(needed)) {
+          final templateClient = clientList.first;
+          final clonedClient =
+              jsonDecode(jsonEncode(templateClient)) as Map<String, dynamic>;
+          final clientInfo =
+              clonedClient['client_info'] as Map<String, dynamic>?;
+          final androidClientInfo =
+              clientInfo?['android_client_info'] as Map<String, dynamic>?;
+          if (androidClientInfo != null) {
+            androidClientInfo['package_name'] = needed;
+            clientList.add(clonedClient);
+            existingNames.add(needed);
+            changed = true;
+          }
+        }
+      }
+
+      if (changed) {
+        const encoder = JsonEncoder.withIndent('  ');
+        file.writeAsStringSync(encoder.convert(json));
+        stdout.writeln('Updated: $path (injected required package names)');
+      } else {
+        stdout.writeln('No changes needed: $path');
+      }
+      return;
+    }
+  } catch (e) {
+    stdout.writeln(
+      'Warning: Failed to parse $path as JSON ($e), falling back to regex.',
+    );
+  }
+
+  _replaceInFile(
+    path: path,
+    replacements: [
+      (
+        RegExp(r'"package_name":\s*"com\.follow\.clash"'),
+        '"package_name": "$packageName"',
+      ),
+      (
+        RegExp(r'"package_name":\s*"com\.follow\.clash\.debug"'),
+        '"package_name": "$packageName.debug"',
+      ),
+      (
+        RegExp(r'"package_name":\s*"com\.follow\.clash\.dev"'),
+        '"package_name": "$packageName.dev"',
+      ),
+    ],
+  );
 }
