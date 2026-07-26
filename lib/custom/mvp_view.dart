@@ -270,13 +270,6 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
             final double shieldBottomGap = isCompactHeight ? 14.0 : 20.0;
             final double cardsBottomGap = isCompactHeight ? 12.0 : 14.0;
 
-            final double minContentHeight = isCompactHeight ? 520.0 : 600.0;
-            final double remainingSpace =
-                constraints.maxHeight - minContentHeight;
-            final double heroSpacerGap = remainingSpace > 0
-                ? (remainingSpace / 2).clamp(10.0, 44.0)
-                : 10.0;
-
             return SingleChildScrollView(
               physics: const BouncingScrollPhysics(
                 parent: AlwaysScrollableScrollPhysics(),
@@ -291,72 +284,66 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                     padding: EdgeInsets.symmetric(
                       horizontal: horizontalPadding,
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            SizedBox(height: verticalEdgePadding),
+                    child: IntrinsicHeight(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          SizedBox(height: verticalEdgePadding),
 
-                            // 1. Top Header with AdGuard Logo & Mode Switcher
-                            _buildAdGuardHeader(
-                              isDark: isDark,
-                              isLightMode: isLightMode,
-                              borderColor: borderColor,
-                              activeGreen: activeGreen,
-                              isCompactWidth: isCompactWidth,
-                            ),
+                          // 1. Top Header with AdGuard Logo & Mode Switcher
+                          _buildAdGuardHeader(
+                            isDark: isDark,
+                            isLightMode: isLightMode,
+                            borderColor: borderColor,
+                            activeGreen: activeGreen,
+                            isCompactWidth: isCompactWidth,
+                          ),
 
-                            SizedBox(height: headerBottomGap + heroSpacerGap),
+                          SizedBox(height: headerBottomGap),
+                          const Spacer(flex: 1),
 
-                            // 2 & 3. Central Protection Shield Hero Widget
-                            _buildProtectionShieldHero(
-                              isDark: isDark,
-                              isStart: isStart,
-                              coreStatus: coreStatus,
-                              activeGreen: activeGreen,
-                              activeGreenDark: activeGreenDark,
-                              inactiveGray: inactiveGray,
-                              isCompactHeight: isCompactHeight,
-                              isCompactWidth: isCompactWidth,
-                            ),
+                          // 2 & 3. Central Protection Shield Hero Widget
+                          _buildProtectionShieldHero(
+                            isDark: isDark,
+                            isStart: isStart,
+                            coreStatus: coreStatus,
+                            activeGreen: activeGreen,
+                            activeGreenDark: activeGreenDark,
+                            inactiveGray: inactiveGray,
+                            isCompactHeight: isCompactHeight,
+                            isCompactWidth: isCompactWidth,
+                          ),
 
-                            SizedBox(height: heroSpacerGap + shieldBottomGap),
-                          ],
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            // 4. AdGuard Protection Quick Info Pills
-                            _buildQuickInfoCards(
-                              isDark: isDark,
-                              isStart: isStart,
-                              coreStatus: coreStatus,
-                              cardBg: cardBg,
-                              borderColor: borderColor,
-                              activeGreen: activeGreen,
-                              isCompactWidth: isCompactWidth,
-                            ),
+                          const Spacer(flex: 1),
+                          SizedBox(height: shieldBottomGap),
 
-                            SizedBox(height: cardsBottomGap),
+                          // 4. AdGuard Protection Quick Info Pills
+                          _buildQuickInfoCards(
+                            isDark: isDark,
+                            isStart: isStart,
+                            coreStatus: coreStatus,
+                            cardBg: cardBg,
+                            borderColor: borderColor,
+                            activeGreen: activeGreen,
+                            isCompactWidth: isCompactWidth,
+                          ),
 
-                            // 5. AdGuard Style Subscription / Profile Card
-                            _buildProfileConfigCard(
-                              isDark: isDark,
-                              hasProfile: hasProfile,
-                              activeProfile: activeProfile,
-                              cardBg: cardBg,
-                              borderColor: borderColor,
-                              activeGreen: activeGreen,
-                              isCompactWidth: isCompactWidth,
-                            ),
+                          SizedBox(height: cardsBottomGap),
 
-                            SizedBox(height: verticalEdgePadding),
-                          ],
-                        ),
-                      ],
+                          // 5. AdGuard Style Subscription / Profile Card
+                          _buildProfileConfigCard(
+                            isDark: isDark,
+                            hasProfile: hasProfile,
+                            activeProfile: activeProfile,
+                            cardBg: cardBg,
+                            borderColor: borderColor,
+                            activeGreen: activeGreen,
+                            isCompactWidth: isCompactWidth,
+                          ),
+
+                          SizedBox(height: verticalEdgePadding),
+                        ],
+                      ),
                     ),
                   ),
                 ),
