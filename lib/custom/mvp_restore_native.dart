@@ -34,9 +34,7 @@ Future<void> updateSubscriptionOrBackup(String url) async {
   final container = globalState.container;
 
   // 1. 刷新订阅 Profile 文件
-  await container
-      .read(profilesActionProvider.notifier)
-      .updateProfiles();
+  await container.read(profilesActionProvider.notifier).updateProfiles();
 
   // 2. 刷新所有规则集与外部 Provider (Rule / Proxy Providers)
   final providers = container.read(providersProvider);
@@ -53,8 +51,5 @@ Future<void> updateSubscriptionOrBackup(String url) async {
 
   // 3. 重新同步并载入核心配置
   await container.read(providersProvider.notifier).syncProviders();
-  await container
-      .read(setupActionProvider.notifier)
-      .applyProfile(force: true);
+  await container.read(setupActionProvider.notifier).applyProfile(force: true);
 }
-

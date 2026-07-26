@@ -211,8 +211,8 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     final bool isStart =
         MvpAppBridge.watchIsStart(ref) ?? ref.watch(customProxyStartProvider);
 
-    final MvpCoreStatus coreStatus =
-        MvpAppBridge.watchCoreStatus(ref) ?? ref.watch(customCoreStatusProvider);
+    final MvpCoreStatus coreStatus = MvpAppBridge.watchCoreStatus(ref) ??
+        ref.watch(customCoreStatusProvider);
 
     final realActiveProfile = MvpAppBridge.watchActiveProfile(ref);
     final MvpProfileItem activeProfile;
@@ -235,9 +235,11 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     }
 
     // AdGuard Theme Design System Colors
-    final bgPrimary = isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC);
+    final bgPrimary =
+        isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC);
     final cardBg = isDark ? const Color(0xFF1E293B) : const Color(0xFFFFFFFF);
-    final borderColor = isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0);
+    final borderColor =
+        isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0);
 
     const activeGreen = Color(0xFF10B981);
     const activeGreenDark = Color(0xFF047857);
@@ -253,9 +255,8 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
             final bool isWideWidth = constraints.maxWidth >= 600;
             final bool isCompactHeight = constraints.maxHeight < 680;
 
-            final double horizontalPadding = isCompactWidth
-                ? 14.0
-                : (isWideWidth ? 28.0 : 20.0);
+            final double horizontalPadding =
+                isCompactWidth ? 14.0 : (isWideWidth ? 28.0 : 20.0);
             final double maxContentWidth = isWideWidth ? 580.0 : 540.0;
             final double verticalEdgePadding = isCompactHeight ? 14.0 : 24.0;
             final double headerBottomGap = isCompactHeight ? 10.0 : 16.0;
@@ -511,9 +512,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     required bool isCompactWidth,
   }) {
     final statusTitle = isStart ? '广告防护已开启' : '广告防护已暂停';
-    final statusSubtitle = isStart
-        ? '防护运行中 · 智能拦截与隐私保护'
-        : '点击上方盾牌一键开启防护';
+    final statusSubtitle = isStart ? '防护运行中 · 智能拦截与隐私保护' : '点击上方盾牌一键开启防护';
 
     final offBgColor =
         isDark ? const Color(0xFF334155) : const Color(0xFFCBD5E1);
@@ -565,7 +564,8 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                             spreadRadius: isCompactHeight ? 2.0 : 4.0,
                           ),
                           BoxShadow(
-                            color: const Color(0xFF34D399).withValues(alpha: 0.20),
+                            color:
+                                const Color(0xFF34D399).withValues(alpha: 0.20),
                             blurRadius: isCompactHeight ? 40.0 : 52.0,
                             spreadRadius: isCompactHeight ? 6.0 : 10.0,
                           ),
@@ -637,7 +637,8 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                         duration: const Duration(milliseconds: 250),
                         child: Container(
                           key: ValueKey(isStart),
-                          padding: EdgeInsets.all(isCompactHeight ? 12.0 : 14.0),
+                          padding:
+                              EdgeInsets.all(isCompactHeight ? 12.0 : 14.0),
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             color: Colors.white.withValues(
@@ -1047,12 +1048,15 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
               behavior: HitTestBehavior.opaque,
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 180),
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                 decoration: BoxDecoration(
-                  color: activeGreen.withValues(alpha: _isUpdating ? 0.08 : 0.12),
+                  color:
+                      activeGreen.withValues(alpha: _isUpdating ? 0.08 : 0.12),
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(
-                    color: activeGreen.withValues(alpha: _isUpdating ? 0.2 : 0.3),
+                    color:
+                        activeGreen.withValues(alpha: _isUpdating ? 0.2 : 0.3),
                     width: 1,
                   ),
                 ),
@@ -1114,9 +1118,8 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
               hintText: '粘贴配置文件链接...',
               hintStyle: TextStyle(
                 fontSize: 12,
-                color: isDark
-                    ? const Color(0xFF64748B)
-                    : const Color(0xFF94A3B8),
+                color:
+                    isDark ? const Color(0xFF64748B) : const Color(0xFF94A3B8),
               ),
               suffixIcon: IconButton(
                 icon: const Icon(Icons.content_paste_rounded, size: 16),
@@ -1135,9 +1138,8 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                 borderSide: BorderSide(color: activeGreen, width: 1),
               ),
               filled: true,
-              fillColor: isDark
-                  ? const Color(0xFF0F172A)
-                  : const Color(0xFFF8FAFC),
+              fillColor:
+                  isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC),
               contentPadding: const EdgeInsets.symmetric(horizontal: 12),
             ),
             onChanged: (_) => setState(() {}),
@@ -1220,8 +1222,8 @@ class AdGuardShieldPainter extends CustomPainter {
     // 1. Draw Outer Ambient Drop Shadow
     final shadowPaint = Paint()
       ..color = (isStart
-              ? const Color(0xFF10B981).withValues(alpha: 0.30)
-              : Colors.black.withValues(alpha: isDark ? 0.40 : 0.12))
+          ? const Color(0xFF10B981).withValues(alpha: 0.30)
+          : Colors.black.withValues(alpha: isDark ? 0.40 : 0.12))
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 12.0);
     canvas.save();
     canvas.translate(0, 4);
@@ -1245,9 +1247,11 @@ class AdGuardShieldPainter extends CustomPainter {
     final Path sheenPath = Path();
     sheenPath.moveTo(w * 0.20, h * 0.04);
     sheenPath.quadraticBezierTo(w * 0.50, 0, w * 0.80, h * 0.04);
-    sheenPath.cubicTo(w * 0.94, h * 0.06, w * 0.98, h * 0.20, w * 0.92, h * 0.38);
+    sheenPath.cubicTo(
+        w * 0.94, h * 0.06, w * 0.98, h * 0.20, w * 0.92, h * 0.38);
     sheenPath.quadraticBezierTo(w * 0.50, h * 0.26, w * 0.08, h * 0.38);
-    sheenPath.cubicTo(w * 0.02, h * 0.20, w * 0.06, h * 0.06, w * 0.20, h * 0.04);
+    sheenPath.cubicTo(
+        w * 0.02, h * 0.20, w * 0.06, h * 0.06, w * 0.20, h * 0.04);
     sheenPath.close();
 
     final sheenPaint = Paint()
