@@ -474,7 +474,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'BACKUP RESTORE',
+                '重置配置',
                 style: TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w900,
@@ -498,7 +498,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                       border: Border.all(color: borderColor, width: 1),
                     ),
                     child: Text(
-                      _showInputArea ? '收起' : '更换',
+                      _showInputArea ? '收起' : '导入',
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
@@ -598,7 +598,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
               color: isDark ? Colors.white : Colors.black,
             ),
             decoration: InputDecoration(
-              hintText: '粘贴或输入远程 backup.zip 下载链接...',
+              hintText: '粘贴配置文件链接...',
               hintStyle: TextStyle(
                 fontSize: 12,
                 color: isDark ? const Color(0xFF6E6E78) : const Color(0xFF9E9EAA),
@@ -648,7 +648,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                     ),
                   )
                 : const Text(
-                    '下载备份并恢复数据',
+                    '下载并导入',
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w800,
