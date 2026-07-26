@@ -276,6 +276,8 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                             activeGreen,
                           ),
 
+                          // 【1与2之间的间距】配合 Spacer，确保在竖屏优雅居中，在横屏/小屏下保底拥有 16px 舒适间距
+                          const SizedBox(height: 16),
                           const Spacer(flex: 1),
 
                           // 2 & 3. Central Protection Shield Hero Widget (大盾牌 2 + 防护文案 3)
