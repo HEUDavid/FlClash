@@ -1,43 +1,21 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'mvp_models.dart';
 
-// MVP 模式开关 Provider
+// MVP 模式开关 Provider (默认每次启动都进入极简页面)
 class CustomMvpNotifier extends Notifier<bool> {
-  static const String _prefKey = 'custom_mvp_light_mode';
-
   @override
   bool build() {
-    _init();
     return true;
   }
 
-  Future<void> _init() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final saved = prefs.getBool(_prefKey);
-      if (saved != null) {
-        state = saved;
-      }
-    } catch (_) {}
-  }
-
-  Future<void> toggle() async {
+  void toggle() {
     state = !state;
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool(_prefKey, state);
-    } catch (_) {}
   }
 
-  Future<void> setEnabled(bool value) async {
+  void setEnabled(bool value) {
     if (state == value) return;
     state = value;
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool(_prefKey, state);
-    } catch (_) {}
   }
 }
 
