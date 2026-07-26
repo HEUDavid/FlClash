@@ -73,13 +73,7 @@ final customCoreStatusProvider = Provider<MvpCoreStatus>((ref) {
 class CustomProfilesNotifier extends Notifier<List<MvpProfileItem>> {
   @override
   List<MvpProfileItem> build() {
-    return const [
-      MvpProfileItem(
-        id: '1',
-        label: '专线极速配置 v1.0',
-        url: 'https://example.com/subscribe/node-a',
-      ),
-    ];
+    return const [];
   }
 
   void addProfile(String url) {
