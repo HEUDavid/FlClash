@@ -209,11 +209,11 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     final isLightMode = ref.watch(customMvpProvider);
 
     // Dynamic dual-mode resolution (App Mode vs Web Preview Mode)
-    final realIsStart = MvpAppBridge.watchIsStart(ref);
-    final isStart = realIsStart ?? ref.watch(customProxyStartProvider);
+    final bool isStart =
+        MvpAppBridge.watchIsStart(ref) ?? ref.watch(customProxyStartProvider);
 
-    final realCoreStatus = MvpAppBridge.watchCoreStatus(ref);
-    final coreStatus = realCoreStatus ?? ref.watch(customCoreStatusProvider);
+    final MvpCoreStatus coreStatus =
+        MvpAppBridge.watchCoreStatus(ref) ?? ref.watch(customCoreStatusProvider);
 
     final realActiveProfile = MvpAppBridge.watchActiveProfile(ref);
     final MvpProfileItem activeProfile;
