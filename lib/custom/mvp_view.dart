@@ -251,12 +251,20 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const SizedBox(height: 12),
+              // 【顶部间距 1】页面最顶端距离安全区域/状态栏的固定留白
+              const SizedBox(height: 18),
 
               // 1. Top Header with AdGuard Logo & Mode Switcher
-              _buildAdGuardHeader(isDark, isLightMode, borderColor, activeGreen),
+              _buildAdGuardHeader(
+                isDark,
+                isLightMode,
+                borderColor,
+                activeGreen,
+              ),
 
-              const Spacer(flex: 1),
+              // 【顶部间距 2】顶部 Header 与 盾牌 Hero 区域之间的动态弹性留白
+              const Spacer(flex: 2),
+              const SizedBox(height: 8),
 
               // 2. Central Protection Shield Hero Widget (AdGuard Style)
               _buildProtectionShieldHero(
@@ -268,12 +276,22 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                 inactiveGray: inactiveGray,
               ),
 
+              // 【核心控制间距 3】盾牌文本底部 与「防护状态 / 核心状态」卡片之间的固定间距（调小此值可使该栏继续上移）
+              const SizedBox(height: 14),
+
+              // 3. AdGuard Protection Quick Info Pills（防护状态 / 核心状态 栏）
+              _buildQuickInfoCards(
+                isDark,
+                isStart,
+                coreStatus,
+                cardBg,
+                borderColor,
+                activeGreen,
+              ),
+
+              // 【中间间距 4】「防护状态 / 核心状态」卡片 与 底部「配置/订阅」卡片之间的动态弹性间距
               const Spacer(flex: 1),
-
-              // 3. AdGuard Protection Quick Info Pills
-              _buildQuickInfoCards(isDark, isStart, coreStatus, cardBg, borderColor, activeGreen),
-
-              const SizedBox(height: 16),
+              const SizedBox(height: 12),
 
               // 4. AdGuard Style Subscription / Profile Card
               _buildProfileConfigCard(
@@ -285,6 +303,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                 activeGreen: activeGreen,
               ),
 
+              // 【底部间距 5】页面最底部的固定留白边距
               const SizedBox(height: 24),
             ],
           ),
