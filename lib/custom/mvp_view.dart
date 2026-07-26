@@ -474,7 +474,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '重置配置',
+                '配置文件',
                 style: TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w900,
@@ -498,7 +498,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                       border: Border.all(color: borderColor, width: 1),
                     ),
                     child: Text(
-                      _showInputArea ? '收起' : '导入',
+                      _showInputArea ? '收起' : '重置',
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
