@@ -43,7 +43,7 @@ Future<void> updateSubscriptionOrBackup(String url) async {
     final updateTasks = providers.map((provider) async {
       try {
         await container
-            .read(appActionProvider.notifier)
+            .read(proxiesActionProvider.notifier)
             .updateProvider(provider);
       } catch (e) {
         commonPrint.log('updateProvider error: $e', logLevel: LogLevel.warning);
