@@ -498,7 +498,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                       border: Border.all(color: borderColor, width: 1),
                     ),
                     child: Text(
-                      _showInputArea ? '收起' : '更换备份',
+                      _showInputArea ? '收起' : '更换',
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
