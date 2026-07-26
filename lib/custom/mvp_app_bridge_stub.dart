@@ -9,6 +9,4 @@ class MvpAppBridge {
   static MvpProfileItem? watchActiveProfile(WidgetRef ref) => null;
 
   static void toggleShield(WidgetRef ref, bool currentIsStart) {}
-
-  static Future<void> updateProfiles(WidgetRef ref) async {}
 }

@@ -54,16 +54,6 @@ class CustomProfilesNotifier extends Notifier<List<MvpProfileItem>> {
     return const [];
   }
 
-  void addProfile(String url) {
-    final label = '优化配置 ${state.length + 1}';
-    final newItem = MvpProfileItem(
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
-      label: label,
-      url: url,
-    );
-    state = [...state, newItem];
-  }
-
   void addProfileFromBackup(String url) {
     final label = '远程备份数据 (${DateTime.now().month}/${DateTime.now().day})';
     final newItem = MvpProfileItem(

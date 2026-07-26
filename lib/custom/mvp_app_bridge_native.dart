@@ -60,10 +60,4 @@ class MvpAppBridge {
           );
     } catch (_) {}
   }
-
-  static Future<void> updateProfiles(WidgetRef ref) async {
-    try {
-      await ref.read(profilesActionProvider.notifier).updateProfiles();
-    } catch (_) {}
-  }
 }
