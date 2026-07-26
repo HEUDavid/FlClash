@@ -447,10 +447,12 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView>
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // Status Badge Pill
+        // Status Badge Pill (Strict fixed 170x32 bounds to prevent width/height jitter)
         AnimatedContainer(
           duration: const Duration(milliseconds: 250),
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+          width: 170,
+          height: 32,
+          padding: const EdgeInsets.symmetric(horizontal: 12),
           decoration: BoxDecoration(
             color: isStart
                 ? activeGreen.withValues(alpha: 0.12)
@@ -459,12 +461,14 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView>
             border: Border.all(
               color: isStart
                   ? activeGreen.withValues(alpha: 0.3)
-                  : Colors.transparent,
+                  : (isDark
+                      ? const Color(0xFF334155)
+                      : const Color(0xFFCBD5E1)),
               width: 1,
             ),
           ),
           child: Row(
-            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               AnimatedContainer(
                 duration: const Duration(milliseconds: 250),
@@ -476,21 +480,31 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView>
                 ),
               ),
               const SizedBox(width: 8),
-              Text(
-                switch (coreStatus) {
-                  MvpCoreStatus.connected => 'PROTECTED · 已保护',
-                  MvpCoreStatus.connecting => 'CONNECTING · 连接中',
-                  MvpCoreStatus.disconnected => 'DISABLED · 未保护',
-                },
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: 1.0,
-                  color: isStart
-                      ? activeGreen
-                      : (isDark
-                          ? const Color(0xFF94A3B8)
-                          : const Color(0xFF64748B)),
+              SizedBox(
+                width: 124,
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 200),
+                  child: Text(
+                    switch (coreStatus) {
+                      MvpCoreStatus.connected => 'PROTECTED · 已保护',
+                      MvpCoreStatus.connecting => 'CONNECTING · 连接中',
+                      MvpCoreStatus.disconnected => 'DISABLED · 未保护',
+                    },
+                    key: ValueKey(coreStatus),
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 0.5,
+                      color: isStart
+                          ? activeGreen
+                          : (isDark
+                              ? const Color(0xFF94A3B8)
+                              : const Color(0xFF64748B)),
+                    ),
+                  ),
                 ),
               ),
             ],
