@@ -428,7 +428,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
 
           // 状态说明
           Text(
-            isStart ? '点击停止连接' : '点击启动连接',
+            isStart ? '点击停止' : '点击启动',
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w600,
