@@ -163,7 +163,20 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
 
               const Spacer(flex: 2),
 
-              // 2. 核心主控制板块 (Nordic Minimal Dial Card)
+              // 2. 备份恢复配置板块
+              _buildNordicConfigCard(
+                colorScheme,
+                isDark,
+                hasProfile,
+                activeProfile,
+                cardBg,
+                borderColor,
+                accentColor,
+              ),
+
+              const Spacer(flex: 2),
+
+              // 3. 核心主控制板块 (Nordic Minimal Dial Card)
               _buildNordicHeroCard(
                 colorScheme,
                 isDark,
@@ -176,17 +189,6 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
               ),
 
               const Spacer(flex: 3),
-
-              // 3. 底部配置板块 (绝对固定高度 156px，极简 1px 细线边框，防抖动)
-              _buildNordicConfigCard(
-                colorScheme,
-                isDark,
-                hasProfile,
-                activeProfile,
-                cardBg,
-                borderColor,
-                accentColor,
-              ),
 
               const SizedBox(height: 20),
             ],
