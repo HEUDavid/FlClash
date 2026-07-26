@@ -455,72 +455,6 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // Status Badge Pill (Strict fixed 170x32 bounds to prevent width/height jitter)
-        AnimatedContainer(
-          duration: const Duration(milliseconds: 250),
-          width: 170,
-          height: 32,
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          decoration: BoxDecoration(
-            color: isStart
-                ? activeGreen.withValues(alpha: 0.12)
-                : (isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0)),
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: isStart
-                  ? activeGreen.withValues(alpha: 0.3)
-                  : (isDark
-                      ? const Color(0xFF334155)
-                      : const Color(0xFFCBD5E1)),
-              width: 1,
-            ),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 250),
-                width: 8,
-                height: 8,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: isStart ? activeGreen : inactiveGray,
-                ),
-              ),
-              const SizedBox(width: 8),
-              SizedBox(
-                width: 124,
-                child: AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 200),
-                  child: Text(
-                    switch (coreStatus) {
-                      MvpCoreStatus.connected => 'PROTECTED · 已保护',
-                      MvpCoreStatus.connecting => 'CONNECTING · 连接中',
-                      MvpCoreStatus.disconnected => 'DISABLED · 未保护',
-                    },
-                    key: ValueKey(coreStatus),
-                    textAlign: TextAlign.center,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 0.5,
-                      color: isStart
-                          ? activeGreen
-                          : (isDark
-                              ? const Color(0xFF94A3B8)
-                              : const Color(0xFF64748B)),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-
-        const SizedBox(height: 28),
-
         // Main AdGuard Interactive Shield Button (Strict fixed 160x190 bounds)
         GestureDetector(
           onTap: () => _handleToggleShield(isStart),
@@ -913,6 +847,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     return Container(
       key: const ValueKey('active_profile_adguard'),
       width: double.infinity,
+      height: 86,
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC),

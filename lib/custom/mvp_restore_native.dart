@@ -29,9 +29,32 @@ Future<void> downloadAndRestoreBackup(String url) async {
   }
 }
 
-// 原生端：仅触发更新订阅 URL 文件及其包含的规则（无需重新拉取 backup.zip 全量备份）
+// 原生端：触发更新订阅 URL 文件以及规则集（Rule Providers），并应用生效
 Future<void> updateSubscriptionOrBackup(String url) async {
-  await globalState.container
+  final container = globalState.container;
+
+  // 1. 刷新订阅 Profile 文件
+  await container
       .read(profilesActionProvider.notifier)
       .updateProfiles();
+
+  // 2. 刷新所有规则集与外部 Provider (Rule / Proxy Providers)
+  final providers = container.read(providersProvider);
+  if (providers.isNotEmpty) {
+    final updateTasks = providers.map((provider) async {
+      try {
+        await container
+            .read(appActionProvider.notifier)
+            .updateProvider(provider);
+      } catch (_) {}
+    });
+    await Future.wait(updateTasks);
+  }
+
+  // 3. 重新同步并载入核心配置
+  await container.read(providersProvider.notifier).syncProviders();
+  await container
+      .read(setupActionProvider.notifier)
+      .applyProfile(force: true);
 }
+
