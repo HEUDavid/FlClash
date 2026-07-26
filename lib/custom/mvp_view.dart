@@ -436,8 +436,8 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView>
   }) {
     final statusTitle = isStart ? '广告防护已开启' : '广告防护已暂停';
     final statusSubtitle = isStart
-        ? '全天候防护运行中 · 智能过滤广告与追踪'
-        : '点击下方盾牌一键开启全面保护';
+        ? '防护运行中 · 智能拦截与隐私追踪'
+        : '点击上方盾牌一键开启防护';
 
     final offBgColor =
         isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0);
