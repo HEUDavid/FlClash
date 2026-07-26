@@ -1,3 +1,4 @@
+import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,7 +9,8 @@ class MvpAppBridge {
   static bool? watchIsStart(WidgetRef ref) {
     try {
       return ref.watch(isStartProvider);
-    } catch (_) {
+    } catch (e) {
+      commonPrint.log('watchIsStart error: $e', logLevel: LogLevel.warning);
       return null;
     }
   }
@@ -21,7 +23,8 @@ class MvpAppBridge {
         CoreStatus.connecting => MvpCoreStatus.connecting,
         CoreStatus.disconnected => MvpCoreStatus.disconnected,
       };
-    } catch (_) {
+    } catch (e) {
+      commonPrint.log('watchCoreStatus error: $e', logLevel: LogLevel.warning);
       return null;
     }
   }
@@ -47,7 +50,9 @@ class MvpAppBridge {
           url: p.url,
         );
       }
-    } catch (_) {}
+    } catch (e) {
+      commonPrint.log('watchActiveProfile error: $e', logLevel: LogLevel.warning);
+    }
     return null;
   }
 
@@ -58,6 +63,9 @@ class MvpAppBridge {
             !currentIsStart,
             isInit: isInit,
           );
-    } catch (_) {}
+    } catch (e) {
+      commonPrint.log('toggleShield error: $e', logLevel: LogLevel.warning);
+    }
   }
 }
+

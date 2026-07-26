@@ -20,6 +20,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
   bool _isUpdating = false;
   bool _showInputArea = false;
   bool _isShieldPressed = false;
+  bool _isShieldToggling = false;
 
   @override
   void dispose() {
@@ -28,8 +29,17 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
   }
 
   void _handleToggleShield(bool currentIsStart) {
+    if (_isShieldToggling) return;
+    _isShieldToggling = true;
+
     MvpAppBridge.toggleShield(ref, currentIsStart);
     ref.read(customProxyStartProvider.notifier).setStart(!currentIsStart);
+
+    Future.delayed(const Duration(milliseconds: 350), () {
+      if (mounted) {
+        _isShieldToggling = false;
+      }
+    });
   }
 
   Future<void> _handleUpdateSubscription(String url) async {
@@ -40,66 +50,65 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
 
     try {
       await updateSubscriptionOrBackup(url);
-      if (mounted) {
-        setState(() {
-          _isUpdating = false;
-        });
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Row(
-              children: [
-                Icon(Icons.check_circle_rounded, color: Colors.white, size: 18),
-                SizedBox(width: 8),
-                Text(
-                  '配置与规则已更新至最新状态',
-                  style: TextStyle(letterSpacing: 0.5, fontSize: 13),
-                ),
-              ],
-            ),
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            backgroundColor: const Color(0xFF10B981),
+      if (!mounted) return;
+      setState(() {
+        _isUpdating = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Row(
+            children: [
+              Icon(Icons.check_circle_rounded, color: Colors.white, size: 18),
+              SizedBox(width: 8),
+              Text(
+                '配置与规则已更新至最新状态',
+                style: TextStyle(letterSpacing: 0.5, fontSize: 13),
+              ),
+            ],
           ),
-        );
-      }
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          backgroundColor: const Color(0xFF10B981),
+        ),
+      );
     } catch (e) {
-      if (mounted) {
-        setState(() {
-          _isUpdating = false;
-        });
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Row(
-              children: [
-                const Icon(
-                  Icons.error_outline_rounded,
-                  color: Colors.white,
-                  size: 18,
+      if (!mounted) return;
+      setState(() {
+        _isUpdating = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Row(
+            children: [
+              const Icon(
+                Icons.error_outline_rounded,
+                color: Colors.white,
+                size: 18,
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  '更新失败: $e',
+                  style: const TextStyle(letterSpacing: 0.5, fontSize: 13),
                 ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    '更新失败: $e',
-                    style: const TextStyle(letterSpacing: 0.5, fontSize: 13),
-                  ),
-                ),
-              ],
-            ),
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            backgroundColor: Colors.redAccent.shade700,
+              ),
+            ],
           ),
-        );
-      }
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          backgroundColor: Colors.redAccent.shade700,
+        ),
+      );
     }
   }
 
   Future<void> _handlePaste() async {
     final data = await Clipboard.getData(Clipboard.kTextPlain);
+    if (!mounted) return;
     if (data?.text != null && data!.text!.isNotEmpty) {
       _urlController.text = data.text!.trim();
       setState(() {});
@@ -138,66 +147,64 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
 
     try {
       await downloadAndRestoreBackup(url);
+      if (!mounted) return;
 
       ref.read(customProfilesProvider.notifier).addProfileFromBackup(url);
       _urlController.clear();
 
-      if (mounted) {
-        setState(() {
-          _isImporting = false;
-          _showInputArea = false;
-        });
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Row(
-              children: [
-                Icon(Icons.check_rounded, color: Colors.white, size: 18),
-                SizedBox(width: 8),
-                Text(
-                  '规则文件导入成功，防护数据已恢复！',
-                  style: TextStyle(letterSpacing: 0.5, fontSize: 13),
-                ),
-              ],
-            ),
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            backgroundColor: const Color(0xFF10B981),
+      setState(() {
+        _isImporting = false;
+        _showInputArea = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Row(
+            children: [
+              Icon(Icons.check_rounded, color: Colors.white, size: 18),
+              SizedBox(width: 8),
+              Text(
+                '规则文件导入成功，防护数据已恢复！',
+                style: TextStyle(letterSpacing: 0.5, fontSize: 13),
+              ),
+            ],
           ),
-        );
-      }
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          backgroundColor: const Color(0xFF10B981),
+        ),
+      );
     } catch (e) {
-      if (mounted) {
-        setState(() {
-          _isImporting = false;
-        });
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Row(
-              children: [
-                const Icon(
-                  Icons.error_outline_rounded,
-                  color: Colors.white,
-                  size: 18,
+      if (!mounted) return;
+      setState(() {
+        _isImporting = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Row(
+            children: [
+              const Icon(
+                Icons.error_outline_rounded,
+                color: Colors.white,
+                size: 18,
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  '导入失败: $e',
+                  style: const TextStyle(letterSpacing: 0.5, fontSize: 13),
                 ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    '导入失败: $e',
-                    style: const TextStyle(letterSpacing: 0.5, fontSize: 13),
-                  ),
-                ),
-              ],
-            ),
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            backgroundColor: Colors.redAccent.shade700,
+              ),
+            ],
           ),
-        );
-      }
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          backgroundColor: Colors.redAccent.shade700,
+        ),
+      );
     }
   }
 
@@ -263,6 +270,13 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
             final double shieldBottomGap = isCompactHeight ? 14.0 : 20.0;
             final double cardsBottomGap = isCompactHeight ? 12.0 : 14.0;
 
+            final double minContentHeight = isCompactHeight ? 520.0 : 600.0;
+            final double remainingSpace =
+                constraints.maxHeight - minContentHeight;
+            final double heroSpacerGap = remainingSpace > 0
+                ? (remainingSpace / 2).clamp(10.0, 44.0)
+                : 10.0;
+
             return SingleChildScrollView(
               physics: const BouncingScrollPhysics(
                 parent: AlwaysScrollableScrollPhysics(),
@@ -277,66 +291,73 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                     padding: EdgeInsets.symmetric(
                       horizontal: horizontalPadding,
                     ),
-                    child: IntrinsicHeight(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          SizedBox(height: verticalEdgePadding),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            SizedBox(height: verticalEdgePadding),
 
-                          // 1. Top Header with AdGuard Logo & Mode Switcher
-                          _buildAdGuardHeader(
-                            isDark: isDark,
-                            isLightMode: isLightMode,
-                            borderColor: borderColor,
-                            activeGreen: activeGreen,
-                            isCompactWidth: isCompactWidth,
-                          ),
+                            // 1. Top Header with AdGuard Logo & Mode Switcher
+                            _buildAdGuardHeader(
+                              isDark: isDark,
+                              isLightMode: isLightMode,
+                              borderColor: borderColor,
+                              activeGreen: activeGreen,
+                              isCompactWidth: isCompactWidth,
+                            ),
 
-                          SizedBox(height: headerBottomGap),
-                          const Spacer(flex: 1),
+                            SizedBox(height: headerBottomGap + heroSpacerGap),
 
-                          // 2 & 3. Central Protection Shield Hero Widget
-                          _buildProtectionShieldHero(
-                            isDark: isDark,
-                            isStart: isStart,
-                            coreStatus: coreStatus,
-                            activeGreen: activeGreen,
-                            activeGreenDark: activeGreenDark,
-                            inactiveGray: inactiveGray,
-                            isCompactHeight: isCompactHeight,
-                            isCompactWidth: isCompactWidth,
-                          ),
+                            // 2 & 3. Central Protection Shield Hero Widget
+                            _buildProtectionShieldHero(
+                              isDark: isDark,
+                              isStart: isStart,
+                              coreStatus: coreStatus,
+                              activeGreen: activeGreen,
+                              activeGreenDark: activeGreenDark,
+                              inactiveGray: inactiveGray,
+                              isCompactHeight: isCompactHeight,
+                              isCompactWidth: isCompactWidth,
+                            ),
 
-                          const Spacer(flex: 1),
-                          SizedBox(height: shieldBottomGap),
+                            SizedBox(height: heroSpacerGap + shieldBottomGap),
+                          ],
+                        ),
 
-                          // 4. AdGuard Protection Quick Info Pills
-                          _buildQuickInfoCards(
-                            isDark: isDark,
-                            isStart: isStart,
-                            coreStatus: coreStatus,
-                            cardBg: cardBg,
-                            borderColor: borderColor,
-                            activeGreen: activeGreen,
-                            isCompactWidth: isCompactWidth,
-                          ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            // 4. AdGuard Protection Quick Info Pills
+                            _buildQuickInfoCards(
+                              isDark: isDark,
+                              isStart: isStart,
+                              coreStatus: coreStatus,
+                              cardBg: cardBg,
+                              borderColor: borderColor,
+                              activeGreen: activeGreen,
+                              isCompactWidth: isCompactWidth,
+                            ),
 
-                          SizedBox(height: cardsBottomGap),
+                            SizedBox(height: cardsBottomGap),
 
-                          // 5. AdGuard Style Subscription / Profile Card
-                          _buildProfileConfigCard(
-                            isDark: isDark,
-                            hasProfile: hasProfile,
-                            activeProfile: activeProfile,
-                            cardBg: cardBg,
-                            borderColor: borderColor,
-                            activeGreen: activeGreen,
-                            isCompactWidth: isCompactWidth,
-                          ),
+                            // 5. AdGuard Style Subscription / Profile Card
+                            _buildProfileConfigCard(
+                              isDark: isDark,
+                              hasProfile: hasProfile,
+                              activeProfile: activeProfile,
+                              cardBg: cardBg,
+                              borderColor: borderColor,
+                              activeGreen: activeGreen,
+                              isCompactWidth: isCompactWidth,
+                            ),
 
-                          SizedBox(height: verticalEdgePadding),
-                        ],
-                      ),
+                            SizedBox(height: verticalEdgePadding),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
                 ),

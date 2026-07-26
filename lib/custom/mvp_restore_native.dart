@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/common/path.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/providers/providers.dart';
@@ -44,7 +45,9 @@ Future<void> updateSubscriptionOrBackup(String url) async {
         await container
             .read(appActionProvider.notifier)
             .updateProvider(provider);
-      } catch (_) {}
+      } catch (e) {
+        commonPrint.log('updateProvider error: $e', logLevel: LogLevel.warning);
+      }
     });
     await Future.wait(updateTasks);
   }
@@ -53,3 +56,4 @@ Future<void> updateSubscriptionOrBackup(String url) async {
   await container.read(providersProvider.notifier).syncProviders();
   await container.read(setupActionProvider.notifier).applyProfile(force: true);
 }
+
