@@ -21,7 +21,6 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
 
   Future<void> _handleUpdateSubscription(String url) async {
     if (_isUpdating) return;
-    HapticFeedback.mediumImpact();
     setState(() {
       _isUpdating = true;
     });
@@ -436,7 +435,6 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
           // 核心开关按键 (Tactile Minimal Dial)
           GestureDetector(
             onTap: () {
-              HapticFeedback.selectionClick();
               ref.read(customProxyStartProvider.notifier).setStart(!isStart);
             },
             child: AnimatedContainer(
@@ -549,7 +547,6 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
               if (hasProfile)
                 GestureDetector(
                   onTap: () {
-                    HapticFeedback.lightImpact();
                     setState(() {
                       _showInputArea = !_showInputArea;
                     });

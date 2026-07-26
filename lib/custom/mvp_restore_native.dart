@@ -4,7 +4,7 @@ import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/providers/action.dart';
 import 'package:fl_clash/state.dart';
 
-// 桌面/移动原生端：真实的 backup.zip 下载与数据库 Restore 数据恢复 pipeline
+// 桌面/移动原生端：下载远程 backup.zip 压缩包并恢复全量数据
 Future<void> downloadAndRestoreBackup(String url) async {
   final backupPath = await appPath.backupFilePath;
   final dio = Dio(
@@ -26,16 +26,9 @@ Future<void> downloadAndRestoreBackup(String url) async {
   }
 }
 
-// 原生端：触发订阅节点更新及远程备份同步
+// 原生端：仅触发更新订阅 URL 文件及其包含的规则（无需重新拉取 backup.zip 全量备份）
 Future<void> updateSubscriptionOrBackup(String url) async {
-  if (url.isNotEmpty && (url.startsWith('http://') || url.startsWith('https://'))) {
-    try {
-      await downloadAndRestoreBackup(url);
-    } catch (_) {}
-  }
-  try {
-    await globalState.container
-        .read((profilesActionProvider as dynamic).notifier)
-        .updateProfiles();
-  } catch (_) {}
+  await globalState.container
+      .read((profilesActionProvider as dynamic).notifier)
+      .updateProfiles();
 }
