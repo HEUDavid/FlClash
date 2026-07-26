@@ -214,7 +214,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'MI',
+              'Mi',
               style: TextStyle(
                 fontWeight: FontWeight.w900,
                 fontSize: 22,
