@@ -91,6 +91,16 @@ class CustomProfilesNotifier extends Notifier<List<MvpProfileItem>> {
     );
     state = [...state, newItem];
   }
+
+  void addProfileFromBackup(String url) {
+    final label = '远程备份数据 (${DateTime.now().month}/${DateTime.now().day})';
+    final newItem = MvpProfileItem(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      label: label,
+      url: url,
+    );
+    state = [...state, newItem];
+  }
 }
 
 final customProfilesProvider =

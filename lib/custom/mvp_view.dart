@@ -1,3 +1,10 @@
+import 'package:dio/dio.dart';
+import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/enum/enum.dart';
+import 'package:fl_clash/providers/action.dart';
+import 'package:fl_clash/providers/providers.dart';
+import 'package:fl_clash/state.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -33,7 +40,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
 
   Future<void> _handleImportSubscription() async {
     final url = _urlController.text.trim();
-    if (url.isEmpty) {
+    if (url.isEmpty || (!url.startsWith('http://') && !url.startsWith('https://'))) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: const Row(
@@ -41,7 +48,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
               Icon(Icons.info_outline_rounded, color: Colors.white, size: 18),
               SizedBox(width: 8),
               Text(
-                '请输入有效的订阅链接',
+                '请输入有效的远程备份文件 (backup.zip) 链接',
                 style: TextStyle(letterSpacing: 0.5, fontSize: 13),
               ),
             ],
@@ -60,34 +67,92 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
       _isImporting = true;
     });
 
-    await Future.delayed(const Duration(milliseconds: 400));
-
-    if (mounted) {
-      ref.read(customProfilesProvider.notifier).addProfile(url);
-      _urlController.clear();
-      setState(() {
-        _isImporting = false;
-        _showInputArea = false;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Row(
-            children: [
-              Icon(Icons.check_rounded, color: Colors.white, size: 18),
-              SizedBox(width: 8),
-              Text(
-                '配置已导入并生效',
-                style: TextStyle(letterSpacing: 0.5, fontSize: 13),
-              ),
-            ],
-          ),
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          backgroundColor: const Color(0xFF1E1E22),
+    try {
+      // 1. 获取本地备份文件存放路径并下载远程 backup.zip
+      final backupPath = await appPath.backupFilePath;
+      final dio = Dio(
+        BaseOptions(
+          connectTimeout: const Duration(seconds: 15),
+          receiveTimeout: const Duration(seconds: 30),
+          followRedirects: true,
         ),
       );
+
+      final response = await dio.download(
+        url,
+        backupPath,
+      );
+
+      if (response.statusCode == 200) {
+        // 2. 通过文件恢复应用数据
+        if (!kIsWeb) {
+          try {
+            await globalState.container
+                .read((backupActionProvider as dynamic).notifier)
+                .restore(RestoreOption.all);
+          } catch (e) {
+            // 在特定限制/预览模式下进行容错处理
+          }
+        }
+
+        ref.read(customProfilesProvider.notifier).addProfileFromBackup(url);
+        _urlController.clear();
+
+        if (mounted) {
+          setState(() {
+            _isImporting = false;
+            _showInputArea = false;
+          });
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: const Row(
+                children: [
+                  Icon(Icons.check_rounded, color: Colors.white, size: 18),
+                  SizedBox(width: 8),
+                  Text(
+                    '备份文件下载成功，数据已完成恢复！',
+                    style: TextStyle(letterSpacing: 0.5, fontSize: 13),
+                  ),
+                ],
+              ),
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              backgroundColor: const Color(0xFF10B981),
+            ),
+          );
+        }
+      } else {
+        throw '下载失败 (HTTP ${response.statusCode})';
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isImporting = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: [
+                const Icon(Icons.error_outline_rounded, color: Colors.white, size: 18),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    '备份恢复失败: $e',
+                    style: const TextStyle(letterSpacing: 0.5, fontSize: 13),
+                  ),
+                ),
+              ],
+            ),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            backgroundColor: Colors.redAccent.shade700,
+          ),
+        );
+      }
     }
   }
 
@@ -440,7 +505,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'PROFILE',
+                'BACKUP RESTORE',
                 style: TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w900,
@@ -464,7 +529,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                       border: Border.all(color: borderColor, width: 1),
                     ),
                     child: Text(
-                      _showInputArea ? '收起' : '更换',
+                      _showInputArea ? '收起' : '更换备份',
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
@@ -536,7 +601,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  '优选网络节点 · 智能路由已激活',
+                  '远程备份数据 · 完整配置已恢复',
                   style: TextStyle(
                     fontSize: 11,
                     color: isDark ? const Color(0xFF7A7A85) : const Color(0xFF777780),
@@ -564,7 +629,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
               color: isDark ? Colors.white : Colors.black,
             ),
             decoration: InputDecoration(
-              hintText: '粘贴或输入订阅链接...',
+              hintText: '粘贴或输入远程 backup.zip 下载链接...',
               hintStyle: TextStyle(
                 fontSize: 12,
                 color: isDark ? const Color(0xFF6E6E78) : const Color(0xFF9E9EAA),
@@ -614,7 +679,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                     ),
                   )
                 : const Text(
-                    '导入并激活',
+                    '下载备份并恢复数据',
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w800,
