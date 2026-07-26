@@ -436,8 +436,8 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView>
   }) {
     final statusTitle = isStart ? '广告防护已开启' : '广告防护已暂停';
     final statusSubtitle = isStart
-        ? '全天候防护运行中 · 智能过滤广告与追踪'
-        : '点击下方盾牌一键开启全面保护';
+        ? '防护运行中 · 智能拦截与隐私保护'
+        : '点击上方盾牌一键开启防护';
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -618,7 +618,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView>
             isDark: isDark,
             icon: Icons.shield_rounded,
             title: '防护状态',
-            value: isStart ? '全面保护' : '未开启',
+            value: isStart ? '已开启' : '未开启',
             cardBg: cardBg,
             borderColor: borderColor,
             activeColor: activeGreen,
@@ -768,7 +768,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView>
                   ),
                   const SizedBox(width: 6),
                   Text(
-                    '规则与配置文件',
+                    '配置文件',
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
@@ -956,7 +956,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView>
               color: isDark ? Colors.white : Colors.black,
             ),
             decoration: InputDecoration(
-              hintText: '粘贴配置文件或规则包链接...',
+              hintText: '粘贴配置文件链接...',
               hintStyle: TextStyle(
                 fontSize: 12,
                 color: isDark
@@ -1010,7 +1010,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView>
                     ),
                   )
                 : const Text(
-                    '下载并导入防护配置',
+                    '下载并导入配置',
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w700,
