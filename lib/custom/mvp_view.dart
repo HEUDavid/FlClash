@@ -42,7 +42,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
               Icon(Icons.info_outline_rounded, color: Colors.white, size: 18),
               SizedBox(width: 8),
               Text(
-                '请输入有效的远程备份文件 (backup.zip) 链接',
+                '请输入有效的配置文件链接',
                 style: TextStyle(letterSpacing: 0.5, fontSize: 13),
               ),
             ],
