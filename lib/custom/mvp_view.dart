@@ -1,5 +1,3 @@
-import 'package:dio/dio.dart';
-import 'package:fl_clash/common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -64,59 +62,36 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     });
 
     try {
-      // 1. 获取本地备份文件存放路径并下载远程 backup.zip
-      final backupPath = await appPath.backupFilePath;
-      final dio = Dio(
-        BaseOptions(
-          connectTimeout: const Duration(seconds: 15),
-          receiveTimeout: const Duration(seconds: 30),
-          followRedirects: true,
-        ),
-      );
+      // 自动从远程下载 backup.zip 并恢复数据 (Web 模式下自动隔绝 FFI/sqlite3)
+      await downloadAndRestoreBackup(url);
 
-      final response = await dio.download(
-        url,
-        backupPath,
-      );
+      ref.read(customProfilesProvider.notifier).addProfileFromBackup(url);
+      _urlController.clear();
 
-      if (response.statusCode == 200) {
-        // 2. 通过文件恢复应用数据
-        try {
-          await restoreBackupData();
-        } catch (e) {
-          // 在特定限制/预览模式下进行容错处理
-        }
-
-        ref.read(customProfilesProvider.notifier).addProfileFromBackup(url);
-        _urlController.clear();
-
-        if (mounted) {
-          setState(() {
-            _isImporting = false;
-            _showInputArea = false;
-          });
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: const Row(
-                children: [
-                  Icon(Icons.check_rounded, color: Colors.white, size: 18),
-                  SizedBox(width: 8),
-                  Text(
-                    '备份文件下载成功，数据已完成恢复！',
-                    style: TextStyle(letterSpacing: 0.5, fontSize: 13),
-                  ),
-                ],
-              ),
-              behavior: SnackBarBehavior.floating,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              backgroundColor: const Color(0xFF10B981),
+      if (mounted) {
+        setState(() {
+          _isImporting = false;
+          _showInputArea = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Row(
+              children: [
+                Icon(Icons.check_rounded, color: Colors.white, size: 18),
+                SizedBox(width: 8),
+                Text(
+                  '备份文件下载成功，数据已完成恢复！',
+                  style: TextStyle(letterSpacing: 0.5, fontSize: 13),
+                ),
+              ],
             ),
-          );
-        }
-      } else {
-        throw '下载失败 (HTTP ${response.statusCode})';
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            backgroundColor: const Color(0xFF10B981),
+          ),
+        );
       }
     } catch (e) {
       if (mounted) {
