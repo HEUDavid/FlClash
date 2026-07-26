@@ -9,10 +9,6 @@ class CustomMvpNotifier extends Notifier<bool> {
     return true;
   }
 
-  void toggle() {
-    state = !state;
-  }
-
   void setEnabled(bool value) {
     if (state == value) return;
     state = value;
@@ -27,10 +23,6 @@ class CustomProxyStartNotifier extends Notifier<bool> {
   @override
   bool build() {
     return false;
-  }
-
-  void toggle() {
-    state = !state;
   }
 
   void setStart(bool value) {
@@ -76,12 +68,9 @@ class CustomCurrentProfileIdNotifier extends Notifier<String?> {
     final profiles = ref.watch(customProfilesProvider);
     return profiles.isNotEmpty ? profiles.first.id : null;
   }
-
-  void selectId(String? id) {
-    state = id;
-  }
 }
 
 final customCurrentProfileIdProvider =
     NotifierProvider<CustomCurrentProfileIdNotifier, String?>(
         CustomCurrentProfileIdNotifier.new);
+
