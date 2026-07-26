@@ -1,16 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:fl_clash/common/common.dart';
-import 'package:fl_clash/enum/enum.dart';
-import 'package:fl_clash/providers/action.dart';
-import 'package:fl_clash/providers/providers.dart';
-import 'package:fl_clash/state.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'mvp_models.dart';
 import 'mvp_provider.dart';
+import 'mvp_restore_helper.dart';
 
 class CustomMvpView extends ConsumerStatefulWidget {
   const CustomMvpView({super.key});
@@ -85,14 +81,10 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
 
       if (response.statusCode == 200) {
         // 2. 通过文件恢复应用数据
-        if (!kIsWeb) {
-          try {
-            await globalState.container
-                .read((backupActionProvider as dynamic).notifier)
-                .restore(RestoreOption.all);
-          } catch (e) {
-            // 在特定限制/预览模式下进行容错处理
-          }
+        try {
+          await restoreBackupData();
+        } catch (e) {
+          // 在特定限制/预览模式下进行容错处理
         }
 
         ref.read(customProfilesProvider.notifier).addProfileFromBackup(url);
