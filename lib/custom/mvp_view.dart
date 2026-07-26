@@ -334,7 +334,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView>
                   ),
                 ),
                 Text(
-                  'Mihomo TUN Mode',
+                  '智能广告拦截与保护',
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 10,
@@ -436,7 +436,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView>
   }) {
     final statusTitle = isStart ? '广告防护已开启' : '广告防护已暂停';
     final statusSubtitle = isStart
-        ? 'TUN 模式稳定运行中 · 智能过滤广告与追踪'
+        ? '全天候防护运行中 · 智能过滤广告与追踪'
         : '点击下方盾牌一键开启全面保护';
 
     return Column(
@@ -616,9 +616,9 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView>
         Expanded(
           child: _buildInfoItem(
             isDark: isDark,
-            icon: Icons.vpn_lock_rounded,
-            title: 'TUN 模式',
-            value: isStart ? '全面过滤' : '未开启',
+            icon: Icons.shield_rounded,
+            title: '防护状态',
+            value: isStart ? '全面保护' : '未开启',
             cardBg: cardBg,
             borderColor: borderColor,
             activeColor: activeGreen,
