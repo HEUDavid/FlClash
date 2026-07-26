@@ -23,28 +23,6 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Replace App Name & Package Name
-        run: |
-          echo "Replacing app name to ${{ env.APP_NAME }} and package name to ${{ env.PACKAGE_NAME }}..."
-          # 1. 替换 Android 包名 (Application ID)
-          sed -i "s/applicationId = \"com.follow.clash\"/applicationId = \"${{ env.PACKAGE_NAME }}\"/g" android/app/build.gradle.kts
-          # 2. 替换 Flutter 侧应用名称常量
-          sed -i "s/const appName = 'FlClash';/const appName = '${{ env.APP_NAME }}';/g" lib/common/constant.dart
-          # 3. 替换 Android 主 Application 与 Tile 开关 Label
-          sed -i "s/android:label=\"FlClash\"/android:label=\"${{ env.APP_NAME }}\"/g" android/app/src/main/AndroidManifest.xml
-          # 4. 替换 Android Debug 模式 Label
-          sed -i "s/android:label=\"FlClash Debug\"/android:label=\"${{ env.APP_NAME }} Debug\"/g" android/app/src/debug/AndroidManifest.xml
-          # 5. 替换 Android 原生字符串资源
-          sed -i "s/<string name=\"FlClash\">FlClash<\/string>/<string name=\"FlClash\">${{ env.APP_NAME }}<\/string>/g" android/common/src/main/res/values/strings.xml
-          # 6. 替换前台通知服务标题
-          sed -i "s/setContentTitle(\"FlClash\")/setContentTitle(\"${{ env.APP_NAME }}\")/g" android/service/src/main/java/com/follow/clash/service/modules/NotificationModule.kt
-          # 7. 替换通知默认参数标题
-          sed -i "s/val title: String = \"FlClash\"/val title: String = \"${{ env.APP_NAME }}\"/g" android/service/src/main/java/com/follow/clash/service/models/NotificationParams.kt
-          # 8. 替换 VPN 连接会话 Session 名称
-          sed -i "s/setSession(\"FlClash\")/setSession(\"${{ env.APP_NAME }}\")/g" android/service/src/main/java/com/follow/clash/service/VpnService.kt
-
-
-
       - name: Setup Android Signing
         run: |
           if [ -n "${{ secrets.KEYSTORE }}" ]; then
@@ -84,6 +62,10 @@ jobs:
         run: |
           flutter --version
           flutter pub get
+
+      - name: Apply Branding
+        run: |
+          dart lib/custom/apply_branding.dart --app-name "${{ env.APP_NAME }}" --package-name "${{ env.PACKAGE_NAME }}"
 
       - name: Setup
         run: dart setup.dart android --env stable -v
