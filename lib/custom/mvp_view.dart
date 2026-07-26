@@ -450,8 +450,8 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     Color accentColor,
   ) {
     return Container(
-      height: 156, // 绝对固定容器高度
-      padding: const EdgeInsets.all(18),
+      height: 162, // 充足固定容器高度，防止溢出
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       decoration: BoxDecoration(
         color: cardBg,
         borderRadius: BorderRadius.circular(18),
@@ -588,7 +588,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SizedBox(
-          height: 38,
+          height: 36,
           child: TextField(
             controller: _urlController,
             style: TextStyle(
@@ -624,7 +624,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
             onChanged: (_) => setState(() {}),
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 6),
         SizedBox(
           width: double.infinity,
           height: 34,
