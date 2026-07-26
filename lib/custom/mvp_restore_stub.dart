@@ -3,3 +3,8 @@ Future<void> downloadAndRestoreBackup(String url) async {
   // Web 预览模式：模拟下载与恢复延迟
   await Future.delayed(const Duration(milliseconds: 500));
 }
+
+Future<void> updateSubscriptionOrBackup(String url) async {
+  // Web 预览模式：模拟更新订阅与备份
+  await Future.delayed(const Duration(milliseconds: 600));
+}

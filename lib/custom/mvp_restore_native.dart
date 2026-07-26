@@ -25,3 +25,17 @@ Future<void> downloadAndRestoreBackup(String url) async {
     throw 'HTTP ${response.statusCode}';
   }
 }
+
+// 原生端：触发订阅节点更新及远程备份同步
+Future<void> updateSubscriptionOrBackup(String url) async {
+  if (url.isNotEmpty && (url.startsWith('http://') || url.startsWith('https://'))) {
+    try {
+      await downloadAndRestoreBackup(url);
+    } catch (_) {}
+  }
+  try {
+    await globalState.container
+        .read((profilesActionProvider as dynamic).notifier)
+        .updateProfiles();
+  } catch (_) {}
+}

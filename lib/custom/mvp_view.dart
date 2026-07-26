@@ -16,7 +16,71 @@ class CustomMvpView extends ConsumerStatefulWidget {
 class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
   final TextEditingController _urlController = TextEditingController();
   bool _isImporting = false;
+  bool _isUpdating = false;
   bool _showInputArea = false;
+
+  Future<void> _handleUpdateSubscription(String url) async {
+    if (_isUpdating) return;
+    HapticFeedback.mediumImpact();
+    setState(() {
+      _isUpdating = true;
+    });
+
+    try {
+      await updateSubscriptionOrBackup(url);
+      if (mounted) {
+        setState(() {
+          _isUpdating = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Row(
+              children: [
+                Icon(Icons.check_circle_rounded, color: Colors.white, size: 18),
+                SizedBox(width: 8),
+                Text(
+                  '配置与订阅已成功更新至最新状态！',
+                  style: TextStyle(letterSpacing: 0.5, fontSize: 13),
+                ),
+              ],
+            ),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            backgroundColor: const Color(0xFF10B981),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isUpdating = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: [
+                const Icon(Icons.error_outline_rounded, color: Colors.white, size: 18),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    '更新失败: $e',
+                    style: const TextStyle(letterSpacing: 0.5, fontSize: 13),
+                  ),
+                ),
+              ],
+            ),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            backgroundColor: Colors.redAccent.shade700,
+          ),
+        );
+      }
+    }
+  }
 
   @override
   void dispose() {
@@ -577,6 +641,52 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                   ),
                 ),
               ],
+            ),
+          ),
+          const SizedBox(width: 8),
+          // 触发更新订阅 URL 的操作按钮
+          GestureDetector(
+            onTap: _isUpdating
+                ? null
+                : () => _handleUpdateSubscription(activeProfile.url),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              decoration: BoxDecoration(
+                color: accentColor.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(6),
+                border: Border.all(
+                  color: accentColor.withValues(alpha: 0.25),
+                  width: 1,
+                ),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _isUpdating
+                      ? SizedBox(
+                          width: 12,
+                          height: 12,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 1.8,
+                            color: accentColor,
+                          ),
+                        )
+                      : Icon(
+                          Icons.sync_rounded,
+                          size: 14,
+                          color: accentColor,
+                        ),
+                  const SizedBox(width: 4),
+                  Text(
+                    _isUpdating ? '更新中' : '更新',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w800,
+                      color: accentColor,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
