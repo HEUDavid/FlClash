@@ -1036,7 +1036,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    '远程备份数据 · 规则集已部署生效',
+                    '在线配置集合 · 已部署生效',
                     style: TextStyle(
                       fontSize: isCompactWidth ? 10.0 : 11.0,
                       color: isDark
