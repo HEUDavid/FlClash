@@ -13,11 +13,30 @@ class CustomMvpView extends ConsumerStatefulWidget {
   ConsumerState<CustomMvpView> createState() => _CustomMvpViewState();
 }
 
-class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
+class _CustomMvpViewState extends ConsumerState<CustomMvpView>
+    with SingleTickerProviderStateMixin {
   final TextEditingController _urlController = TextEditingController();
   bool _isImporting = false;
   bool _isUpdating = false;
   bool _showInputArea = false;
+
+  late AnimationController _pulseController;
+
+  @override
+  void initState() {
+    super.initState();
+    _pulseController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 2000),
+    )..repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _pulseController.dispose();
+    _urlController.dispose();
+    super.dispose();
+  }
 
   Future<void> _handleUpdateSubscription(String url) async {
     if (_isUpdating) return;
@@ -38,14 +57,14 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                 Icon(Icons.check_circle_rounded, color: Colors.white, size: 18),
                 SizedBox(width: 8),
                 Text(
-                  '配置与订阅已成功更新至最新状态！',
+                  '配置与规则已更新至最新状态',
                   style: TextStyle(letterSpacing: 0.5, fontSize: 13),
                 ),
               ],
             ),
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(10),
             ),
             backgroundColor: const Color(0xFF10B981),
           ),
@@ -60,7 +79,11 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
           SnackBar(
             content: Row(
               children: [
-                const Icon(Icons.error_outline_rounded, color: Colors.white, size: 18),
+                const Icon(
+                  Icons.error_outline_rounded,
+                  color: Colors.white,
+                  size: 18,
+                ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
@@ -72,19 +95,13 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
             ),
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(10),
             ),
             backgroundColor: Colors.redAccent.shade700,
           ),
         );
       }
     }
-  }
-
-  @override
-  void dispose() {
-    _urlController.dispose();
-    super.dispose();
   }
 
   Future<void> _handlePaste() async {
@@ -97,7 +114,8 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
 
   Future<void> _handleImportSubscription() async {
     final url = _urlController.text.trim();
-    if (url.isEmpty || (!url.startsWith('http://') && !url.startsWith('https://'))) {
+    if (url.isEmpty ||
+        (!url.startsWith('http://') && !url.startsWith('https://'))) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: const Row(
@@ -112,9 +130,9 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
           ),
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(10),
           ),
-          backgroundColor: const Color(0xFF2C2C30),
+          backgroundColor: const Color(0xFF1E293B),
         ),
       );
       return;
@@ -125,7 +143,6 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     });
 
     try {
-      // 自动从远程下载 backup.zip 并恢复数据 (Web 模式下自动隔绝 FFI/sqlite3)
       await downloadAndRestoreBackup(url);
 
       ref.read(customProfilesProvider.notifier).addProfileFromBackup(url);
@@ -143,14 +160,14 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                 Icon(Icons.check_rounded, color: Colors.white, size: 18),
                 SizedBox(width: 8),
                 Text(
-                  '备份文件下载成功，数据已完成恢复！',
+                  '规则文件导入成功，防护数据已恢复！',
                   style: TextStyle(letterSpacing: 0.5, fontSize: 13),
                 ),
               ],
             ),
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(10),
             ),
             backgroundColor: const Color(0xFF10B981),
           ),
@@ -165,11 +182,15 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
           SnackBar(
             content: Row(
               children: [
-                const Icon(Icons.error_outline_rounded, color: Colors.white, size: 18),
+                const Icon(
+                  Icons.error_outline_rounded,
+                  color: Colors.white,
+                  size: 18,
+                ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    '备份恢复失败: $e',
+                    '导入失败: $e',
                     style: const TextStyle(letterSpacing: 0.5, fontSize: 13),
                   ),
                 ),
@@ -177,7 +198,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
             ),
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(10),
             ),
             backgroundColor: Colors.redAccent.shade700,
           ),
@@ -189,7 +210,6 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
     final isDark = theme.brightness == Brightness.dark;
     final isLightMode = ref.watch(customMvpProvider);
     final isStart = ref.watch(customProxyStartProvider);
@@ -205,55 +225,59 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     );
     final hasProfile = activeProfile.id.isNotEmpty;
 
-    // 北欧极简配色调盘 (Nordic Monochromatic & Swiss Accent)
-    final bgPrimary = isDark ? const Color(0xFF0F0F11) : const Color(0xFFFAFAFC);
-    final cardBg = isDark ? const Color(0xFF17171B) : const Color(0xFFFFFFFF);
-    final borderColor = isDark ? const Color(0xFF28282E) : const Color(0xFFE4E4EB);
-    const accentColor = Color(0xFF2563EB); // 皇家蔚蓝 Accent
-    const activeStatusColor = Color(0xFF10B981); // 北欧翡翠绿
+    // AdGuard Theme Design System Colors
+    final bgPrimary = isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC);
+    final cardBg = isDark ? const Color(0xFF1E293B) : const Color(0xFFFFFFFF);
+    final borderColor = isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0);
+
+    const activeGreen = Color(0xFF10B981);
+    const activeGreenDark = Color(0xFF047857);
+    final inactiveGray =
+        isDark ? const Color(0xFF475569) : const Color(0xFFCBD5E1);
 
     return Scaffold(
       backgroundColor: bgPrimary,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(height: 12),
-              // 1. 顶部 Header (包豪斯极简排版)
-              _buildSwissHeader(colorScheme, isDark, isLightMode, borderColor),
 
-              const Spacer(flex: 2),
+              // 1. Top Header with AdGuard Logo & Mode Switcher
+              _buildAdGuardHeader(isDark, isLightMode, borderColor, activeGreen),
 
-              // 2. 备份恢复配置板块
-              _buildNordicConfigCard(
-                colorScheme,
-                isDark,
-                hasProfile,
-                activeProfile,
-                cardBg,
-                borderColor,
-                accentColor,
+              const Spacer(flex: 1),
+
+              // 2. Central Protection Shield Hero Widget (AdGuard Style)
+              _buildProtectionShieldHero(
+                isDark: isDark,
+                isStart: isStart,
+                coreStatus: coreStatus,
+                activeGreen: activeGreen,
+                activeGreenDark: activeGreenDark,
+                inactiveGray: inactiveGray,
               ),
 
-              const Spacer(flex: 2),
+              const Spacer(flex: 1),
 
-              // 3. 核心主控制板块 (Nordic Minimal Dial Card)
-              _buildNordicHeroCard(
-                colorScheme,
-                isDark,
-                isStart,
-                coreStatus,
-                cardBg,
-                borderColor,
-                accentColor,
-                activeStatusColor,
+              // 3. AdGuard Protection Quick Info Pills
+              _buildQuickInfoCards(isDark, isStart, coreStatus, cardBg, borderColor, activeGreen),
+
+              const SizedBox(height: 16),
+
+              // 4. AdGuard Style Subscription / Profile Card
+              _buildProfileConfigCard(
+                isDark: isDark,
+                hasProfile: hasProfile,
+                activeProfile: activeProfile,
+                cardBg: cardBg,
+                borderColor: borderColor,
+                activeGreen: activeGreen,
               ),
 
-              const Spacer(flex: 3),
-
-              const SizedBox(height: 20),
+              const SizedBox(height: 24),
             ],
           ),
         ),
@@ -261,62 +285,96 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     );
   }
 
-  // 1. 北欧极简 Header
-  Widget _buildSwissHeader(
-    ColorScheme colorScheme,
+  // 1. AdGuard Header Bar
+  Widget _buildAdGuardHeader(
     bool isDark,
     bool isLightMode,
     Color borderColor,
+    Color activeGreen,
   ) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        // 标题标识 (MI MI Tracked Typography)
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        // App Identity with Shield Symbol
+        Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              'Mi',
-              style: TextStyle(
-                fontWeight: FontWeight.w900,
-                fontSize: 22,
-                letterSpacing: 2.5,
-                color: isDark ? const Color(0xFFF3F3F6) : const Color(0xFF111115),
+            Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                color: activeGreen.withValues(alpha: 0.15),
+                shape: BoxShape.circle,
+              ),
+              child: CustomPaint(
+                painter: AdGuardShieldPainter(
+                  fillColor: activeGreen,
+                  borderColor: Colors.transparent,
+                ),
+                child: const Center(
+                  child: Icon(
+                    Icons.check_rounded,
+                    size: 16,
+                    color: Colors.white,
+                  ),
+                ),
               ),
             ),
-            const SizedBox(height: 2),
-            Container(
-              width: 16,
-              height: 2,
-              color: isDark ? Colors.white38 : Colors.black38,
+            const SizedBox(width: 10),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Block Ad',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w800,
+                    fontSize: 18,
+                    letterSpacing: 0.2,
+                    color: isDark ? Colors.white : const Color(0xFF0F172A),
+                  ),
+                ),
+                Text(
+                  'Mihomo TUN Mode',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 10,
+                    color: isDark
+                        ? const Color(0xFF94A3B8)
+                        : const Color(0xFF64748B),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
 
-        // 分段式单色模式切换器 [ LIGHT | PRO ]
+        // Segmented Switcher [ 极简 | 高级 ]
         Container(
           height: 34,
           padding: const EdgeInsets.all(2),
           decoration: BoxDecoration(
-            color: isDark ? const Color(0xFF1D1D22) : const Color(0xFFEEEEEF),
-            borderRadius: BorderRadius.circular(6),
+            color: isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0),
+            borderRadius: BorderRadius.circular(20),
             border: Border.all(color: borderColor, width: 1),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              _buildSwissTab(
+              _buildSegmentTab(
                 label: '极简',
                 isSelected: isLightMode,
-                onTap: () => ref.read(customMvpProvider.notifier).setEnabled(true),
+                onTap: () =>
+                    ref.read(customMvpProvider.notifier).setEnabled(true),
                 isDark: isDark,
+                activeColor: activeGreen,
               ),
-              _buildSwissTab(
+              _buildSegmentTab(
                 label: '高级',
                 isSelected: !isLightMode,
-                onTap: () => ref.read(customMvpProvider.notifier).setEnabled(false),
+                onTap: () =>
+                    ref.read(customMvpProvider.notifier).setEnabled(false),
                 isDark: isDark,
+                activeColor: activeGreen,
               ),
             ],
           ),
@@ -325,27 +383,28 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     );
   }
 
-  Widget _buildSwissTab({
+  Widget _buildSegmentTab({
     required String label,
     required bool isSelected,
     required VoidCallback onTap,
     required bool isDark,
+    required Color activeColor,
   }) {
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 180),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
         decoration: BoxDecoration(
           color: isSelected
-              ? (isDark ? const Color(0xFF2D2D35) : Colors.white)
+              ? (isDark ? const Color(0xFF334155) : Colors.white)
               : Colors.transparent,
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: BorderRadius.circular(16),
           boxShadow: isSelected
               ? [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.06),
+                    color: Colors.black.withValues(alpha: 0.08),
                     blurRadius: 4,
                     offset: const Offset(0, 1),
                   ),
@@ -356,146 +415,310 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
           label,
           style: TextStyle(
             fontSize: 11,
-            fontWeight: FontWeight.w800,
-            letterSpacing: 1.2,
+            fontWeight: FontWeight.w700,
             color: isSelected
-                ? (isDark ? Colors.white : const Color(0xFF111115))
-                : (isDark ? const Color(0xFF6E6E78) : const Color(0xFF8E8E93)),
+                ? (isDark ? Colors.white : const Color(0xFF0F172A))
+                : (isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B)),
           ),
         ),
       ),
     );
   }
 
-  // 2. 北欧主控制卡片
-  Widget _buildNordicHeroCard(
-    ColorScheme colorScheme,
-    bool isDark,
-    bool isStart,
-    MvpCoreStatus coreStatus,
-    Color cardBg,
-    Color borderColor,
-    Color accentColor,
-    Color activeStatusColor,
-  ) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 24),
-      decoration: BoxDecoration(
-        color: cardBg,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: borderColor, width: 1),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.03),
-            blurRadius: 24,
-            offset: const Offset(0, 8),
+  // 2. Central Protection Shield Hero Area
+  Widget _buildProtectionShieldHero({
+    required bool isDark,
+    required bool isStart,
+    required MvpCoreStatus coreStatus,
+    required Color activeGreen,
+    required Color activeGreenDark,
+    required Color inactiveGray,
+  }) {
+    final statusTitle = isStart ? '广告防护已开启' : '广告防护已暂停';
+    final statusSubtitle = isStart
+        ? 'TUN 模式稳定运行中 · 智能过滤广告与追踪'
+        : '点击下方盾牌一键开启全面保护';
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // Status Badge Pill
+        AnimatedContainer(
+          duration: const Duration(milliseconds: 250),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+          decoration: BoxDecoration(
+            color: isStart
+                ? activeGreen.withValues(alpha: 0.12)
+                : (isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0)),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: isStart
+                  ? activeGreen.withValues(alpha: 0.3)
+                  : Colors.transparent,
+              width: 1,
+            ),
           ),
-        ],
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // 极简状态行 (STATUS BADGE)
-          Row(
+          child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               AnimatedContainer(
                 duration: const Duration(milliseconds: 250),
-                width: 7,
-                height: 7,
+                width: 8,
+                height: 8,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: isStart
-                      ? activeStatusColor
-                      : (isDark ? const Color(0xFF555560) : const Color(0xFFA0A0AA)),
+                  color: isStart ? activeGreen : inactiveGray,
                 ),
               ),
               const SizedBox(width: 8),
               Text(
                 switch (coreStatus) {
-                  MvpCoreStatus.connected => '已连接',
-                  MvpCoreStatus.connecting => '连接中...',
-                  MvpCoreStatus.disconnected => '已停止',
+                  MvpCoreStatus.connected => 'PROTECTED · 已保护',
+                  MvpCoreStatus.connecting => 'CONNECTING · 连接中',
+                  MvpCoreStatus.disconnected => 'DISABLED · 未保护',
                 },
                 style: TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w800,
-                  letterSpacing: 1.8,
+                  letterSpacing: 1.0,
                   color: isStart
-                      ? activeStatusColor
-                      : (isDark ? const Color(0xFF8A8A93) : const Color(0xFF6E6E73)),
+                      ? activeGreen
+                      : (isDark
+                          ? const Color(0xFF94A3B8)
+                          : const Color(0xFF64748B)),
                 ),
               ),
             ],
           ),
+        ),
 
-          const SizedBox(height: 40),
+        const SizedBox(height: 28),
 
-          // 核心开关按键 (Tactile Minimal Dial)
-          GestureDetector(
-            onTap: () {
-              ref.read(customProxyStartProvider.notifier).setStart(!isStart);
-            },
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 280),
-              curve: Curves.easeOutCubic,
-              width: 140,
-              height: 140,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: isStart
-                    ? (isDark ? const Color(0xFF1E293B) : const Color(0xFFEFF6FF))
-                    : (isDark ? const Color(0xFF222227) : const Color(0xFFF4F4F6)),
-                border: Border.all(
-                  color: isStart
-                      ? accentColor
-                      : (isDark ? const Color(0xFF33333C) : const Color(0xFFD8D8E0)),
-                  width: isStart ? 2.5 : 1.5,
+        // Main AdGuard Interactive Shield Button
+        GestureDetector(
+          onTap: () {
+            ref.read(customProxyStartProvider.notifier).setStart(!isStart);
+          },
+          child: AnimatedBuilder(
+            animation: _pulseController,
+            builder: (context, child) {
+              final pulseGlow = isStart ? _pulseController.value * 12.0 : 0.0;
+              return Container(
+                width: 170,
+                height: 200,
+                decoration: BoxDecoration(
+                  boxShadow: isStart
+                      ? [
+                          BoxShadow(
+                            color: activeGreen.withValues(
+                              alpha: 0.25 + (_pulseController.value * 0.15),
+                            ),
+                            blurRadius: 30 + pulseGlow,
+                            spreadRadius: 4 + (pulseGlow * 0.2),
+                          ),
+                        ]
+                      : null,
                 ),
-                boxShadow: isStart
-                    ? [
-                        BoxShadow(
-                          color: accentColor.withValues(alpha: 0.15),
-                          blurRadius: 28,
-                          spreadRadius: 2,
+                child: CustomPaint(
+                  painter: AdGuardShieldPainter(
+                    fillColor: isStart
+                        ? activeGreen
+                        : (isDark
+                            ? const Color(0xFF334155)
+                            : const Color(0xFFE2E8F0)),
+                    borderColor: isStart
+                        ? const Color(0xFF34D399)
+                        : (isDark
+                            ? const Color(0xFF475569)
+                            : const Color(0xFFCBD5E1)),
+                    gradientColors: isStart
+                        ? [
+                            const Color(0xFF34D399),
+                            activeGreen,
+                            activeGreenDark,
+                          ]
+                        : null,
+                  ),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const SizedBox(height: 10),
+                        Icon(
+                          isStart
+                              ? Icons.verified_user_rounded
+                              : Icons.shield_outlined,
+                          size: 64,
+                          color: isStart
+                              ? Colors.white
+                              : (isDark
+                                  ? const Color(0xFF94A3B8)
+                                  : const Color(0xFF64748B)),
                         ),
-                      ]
-                    : null,
-              ),
-              child: Center(
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 280),
-                  width: 90,
-                  height: 90,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: isStart
-                        ? accentColor
-                        : (isDark ? const Color(0xFF2D2D35) : const Color(0xFFE5E5EA)),
-                  ),
-                  child: Icon(
-                    Icons.power_settings_new_rounded,
-                    size: 44,
-                    color: isStart
-                        ? Colors.white
-                        : (isDark ? const Color(0xFF8A8A93) : const Color(0xFF6E6E73)),
+                        const SizedBox(height: 8),
+                        Icon(
+                          Icons.power_settings_new_rounded,
+                          size: 22,
+                          color: isStart
+                              ? Colors.white.withValues(alpha: 0.9)
+                              : (isDark
+                                  ? const Color(0xFF64748B)
+                                  : const Color(0xFF94A3B8)),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
+              );
+            },
+          ),
+        ),
+
+        const SizedBox(height: 24),
+
+        // Status Main Heading Text
+        Text(
+          statusTitle,
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.w800,
+            letterSpacing: 0.3,
+            color: isDark ? Colors.white : const Color(0xFF0F172A),
+          ),
+        ),
+        const SizedBox(height: 6),
+
+        // Status Subtitle Text
+        Text(
+          statusSubtitle,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w500,
+            color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // 3. Quick Info Status Pills (AdGuard Style Overview)
+  Widget _buildQuickInfoCards(
+    bool isDark,
+    bool isStart,
+    MvpCoreStatus coreStatus,
+    Color cardBg,
+    Color borderColor,
+    Color activeGreen,
+  ) {
+    return Row(
+      children: [
+        Expanded(
+          child: _buildInfoItem(
+            isDark: isDark,
+            icon: Icons.vpn_lock_rounded,
+            title: 'TUN 模式',
+            value: isStart ? '全面过滤' : '未开启',
+            cardBg: cardBg,
+            borderColor: borderColor,
+            activeColor: activeGreen,
+            isActive: isStart,
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: _buildInfoItem(
+            isDark: isDark,
+            icon: Icons.security_rounded,
+            title: '核心状态',
+            value: switch (coreStatus) {
+              MvpCoreStatus.connected => '已连接',
+              MvpCoreStatus.connecting => '连接中',
+              MvpCoreStatus.disconnected => '已停用',
+            },
+            cardBg: cardBg,
+            borderColor: borderColor,
+            activeColor: activeGreen,
+            isActive: isStart,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildInfoItem({
+    required bool isDark,
+    required IconData icon,
+    required String title,
+    required String value,
+    required Color cardBg,
+    required Color borderColor,
+    required Color activeColor,
+    required bool isActive,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      decoration: BoxDecoration(
+        color: cardBg,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: borderColor, width: 1),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: isDark ? 0.15 : 0.02),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: isActive
+                  ? activeColor.withValues(alpha: 0.12)
+                  : (isDark
+                      ? const Color(0xFF334155)
+                      : const Color(0xFFF1F5F9)),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(
+              icon,
+              size: 18,
+              color: isActive
+                  ? activeColor
+                  : (isDark
+                      ? const Color(0xFF94A3B8)
+                      : const Color(0xFF64748B)),
             ),
           ),
-
-          const SizedBox(height: 32),
-
-          // 状态说明
-          Text(
-            isStart ? '点击停止' : '点击启动',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              letterSpacing: 0.6,
-              color: isDark ? const Color(0xFFD0D0D5) : const Color(0xFF333338),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                    color: isDark
+                        ? const Color(0xFF94A3B8)
+                        : const Color(0xFF64748B),
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  value,
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                    color: isDark ? Colors.white : const Color(0xFF0F172A),
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
             ),
           ),
         ],
@@ -503,26 +726,24 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     );
   }
 
-  // 3. 底部配置卡片 (固定高度 156px)
-  Widget _buildNordicConfigCard(
-    ColorScheme colorScheme,
-    bool isDark,
-    bool hasProfile,
-    MvpProfileItem activeProfile,
-    Color cardBg,
-    Color borderColor,
-    Color accentColor,
-  ) {
+  // 4. AdGuard Style Profile Config Card
+  Widget _buildProfileConfigCard({
+    required bool isDark,
+    required bool hasProfile,
+    required MvpProfileItem activeProfile,
+    required Color cardBg,
+    required Color borderColor,
+    required Color activeGreen,
+  }) {
     return Container(
-      height: 162, // 充足固定容器高度，防止溢出
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: cardBg,
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: borderColor, width: 1),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: isDark ? 0.18 : 0.02),
+            color: Colors.black.withValues(alpha: isDark ? 0.18 : 0.03),
             blurRadius: 16,
             offset: const Offset(0, 4),
           ),
@@ -530,19 +751,33 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          // 标题与动作按钮
+          // Card Header Row
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                '配置文件',
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 1.5,
-                  color: isDark ? const Color(0xFF777782) : const Color(0xFF8E8E93),
-                ),
+              Row(
+                children: [
+                  Icon(
+                    Icons.tune_rounded,
+                    size: 16,
+                    color: isDark
+                        ? const Color(0xFF94A3B8)
+                        : const Color(0xFF64748B),
+                  ),
+                  const SizedBox(width: 6),
+                  Text(
+                    '规则与配置文件',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      color: isDark
+                          ? const Color(0xFFCBD5E1)
+                          : const Color(0xFF475569),
+                    ),
+                  ),
+                ],
               ),
               if (hasProfile)
                 GestureDetector(
@@ -552,19 +787,21 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                     });
                   },
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                     decoration: BoxDecoration(
-                      color: isDark ? const Color(0xFF222227) : const Color(0xFFF0F0F3),
-                      borderRadius: BorderRadius.circular(4),
+                      color: isDark
+                          ? const Color(0xFF334155)
+                          : const Color(0xFFF1F5F9),
+                      borderRadius: BorderRadius.circular(8),
                       border: Border.all(color: borderColor, width: 1),
                     ),
                     child: Text(
-                      _showInputArea ? '收起' : '重置',
+                      _showInputArea ? '收起' : '更换/重置',
                       style: TextStyle(
-                        fontSize: 12,
+                        fontSize: 11,
                         fontWeight: FontWeight.w700,
-                        letterSpacing: 0.5,
-                        color: accentColor,
+                        color: activeGreen,
                       ),
                     ),
                   ),
@@ -574,74 +811,84 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
 
           const SizedBox(height: 12),
 
-          // 卡片内容切换区
-          Expanded(
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 220),
-              child: (hasProfile && !_showInputArea)
-                  ? _buildActiveDisplay(isDark, activeProfile, borderColor, accentColor)
-                  : _buildImportInput(isDark, borderColor, accentColor),
-            ),
+          // Animated Switcher between Active Profile view and Input View
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 220),
+            child: (hasProfile && !_showInputArea)
+                ? _buildActiveProfileDisplay(
+                    isDark,
+                    activeProfile,
+                    borderColor,
+                    activeGreen,
+                  )
+                : _buildImportInputDisplay(isDark, borderColor, activeGreen),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildActiveDisplay(
+  Widget _buildActiveProfileDisplay(
     bool isDark,
     MvpProfileItem activeProfile,
     Color borderColor,
-    Color accentColor,
+    Color activeGreen,
   ) {
     return Container(
-      key: const ValueKey('active_profile'),
+      key: const ValueKey('active_profile_adguard'),
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF202025) : const Color(0xFFF7F7FA),
-        borderRadius: BorderRadius.circular(10),
+        color: isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(color: borderColor, width: 1),
       ),
       child: Row(
         children: [
           Container(
-            width: 8,
-            height: 8,
+            width: 10,
+            height: 10,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: accentColor,
+              color: activeGreen,
+              boxShadow: [
+                BoxShadow(
+                  color: activeGreen.withValues(alpha: 0.4),
+                  blurRadius: 6,
+                ),
+              ],
             ),
           ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
                   activeProfile.label,
                   style: TextStyle(
-                    fontWeight: FontWeight.w800,
-                    fontSize: 14,
-                    color: isDark ? const Color(0xFFF0F0F4) : const Color(0xFF111115),
+                    fontWeight: FontWeight.w700,
+                    fontSize: 13,
+                    color: isDark ? Colors.white : const Color(0xFF0F172A),
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  '远程备份数据 · 完整配置已恢复',
+                  '远程备份数据 · 规则集已部署生效',
                   style: TextStyle(
                     fontSize: 11,
-                    color: isDark ? const Color(0xFF7A7A85) : const Color(0xFF777780),
+                    color: isDark
+                        ? const Color(0xFF94A3B8)
+                        : const Color(0xFF64748B),
                   ),
                 ),
               ],
             ),
           ),
           const SizedBox(width: 8),
-          // 触发更新订阅 URL 的操作按钮
           GestureDetector(
             onTap: _isUpdating
                 ? null
@@ -649,10 +896,10 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
               decoration: BoxDecoration(
-                color: accentColor.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(6),
+                color: activeGreen.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(8),
                 border: Border.all(
-                  color: accentColor.withValues(alpha: 0.25),
+                  color: activeGreen.withValues(alpha: 0.3),
                   width: 1,
                 ),
               ),
@@ -665,21 +912,21 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                           height: 12,
                           child: CircularProgressIndicator(
                             strokeWidth: 1.8,
-                            color: accentColor,
+                            color: activeGreen,
                           ),
                         )
                       : Icon(
                           Icons.sync_rounded,
                           size: 14,
-                          color: accentColor,
+                          color: activeGreen,
                         ),
                   const SizedBox(width: 4),
                   Text(
                     _isUpdating ? '更新中' : '更新',
                     style: TextStyle(
                       fontSize: 12,
-                      fontWeight: FontWeight.w800,
-                      color: accentColor,
+                      fontWeight: FontWeight.w700,
+                      color: activeGreen,
                     ),
                   ),
                 ],
@@ -691,13 +938,17 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     );
   }
 
-  Widget _buildImportInput(bool isDark, Color borderColor, Color accentColor) {
+  Widget _buildImportInputDisplay(
+    bool isDark,
+    Color borderColor,
+    Color activeGreen,
+  ) {
     return Column(
-      key: const ValueKey('import_input'),
-      mainAxisAlignment: MainAxisAlignment.center,
+      key: const ValueKey('import_input_adguard'),
+      mainAxisSize: MainAxisSize.min,
       children: [
         SizedBox(
-          height: 36,
+          height: 40,
           child: TextField(
             controller: _urlController,
             style: TextStyle(
@@ -705,44 +956,48 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
               color: isDark ? Colors.white : Colors.black,
             ),
             decoration: InputDecoration(
-              hintText: '粘贴配置文件链接...',
+              hintText: '粘贴配置文件或规则包链接...',
               hintStyle: TextStyle(
                 fontSize: 12,
-                color: isDark ? const Color(0xFF6E6E78) : const Color(0xFF9E9EAA),
+                color: isDark
+                    ? const Color(0xFF64748B)
+                    : const Color(0xFF94A3B8),
               ),
               suffixIcon: IconButton(
                 icon: const Icon(Icons.content_paste_rounded, size: 16),
                 onPressed: _handlePaste,
               ),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide(color: borderColor, width: 1),
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide(color: borderColor, width: 1),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: accentColor, width: 1),
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(color: activeGreen, width: 1),
               ),
               filled: true,
-              fillColor: isDark ? const Color(0xFF202025) : const Color(0xFFF7F7FA),
+              fillColor: isDark
+                  ? const Color(0xFF0F172A)
+                  : const Color(0xFFF8FAFC),
               contentPadding: const EdgeInsets.symmetric(horizontal: 12),
             ),
             onChanged: (_) => setState(() {}),
           ),
         ),
-        const SizedBox(height: 6),
+        const SizedBox(height: 8),
         SizedBox(
           width: double.infinity,
-          height: 34,
+          height: 38,
           child: FilledButton(
             onPressed: _isImporting ? null : _handleImportSubscription,
             style: FilledButton.styleFrom(
-              backgroundColor: accentColor,
+              backgroundColor: activeGreen,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(10),
               ),
             ),
             child: _isImporting
@@ -755,11 +1010,11 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                     ),
                   )
                 : const Text(
-                    '下载并导入',
+                    '下载并导入防护配置',
                     style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 0.8,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 0.5,
                     ),
                   ),
           ),
@@ -767,4 +1022,61 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
       ],
     );
   }
+}
+
+/// AdGuard Iconic Shield Custom Painter
+class AdGuardShieldPainter extends CustomPainter {
+  final Color fillColor;
+  final Color borderColor;
+  final List<Color>? gradientColors;
+
+  AdGuardShieldPainter({
+    required this.fillColor,
+    required this.borderColor,
+    this.gradientColors,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final w = size.width;
+    final h = size.height;
+    final path = Path();
+
+    // Classic curved shield path calculation
+    path.moveTo(w * 0.15, 0);
+    path.quadraticBezierTo(w * 0.5, h * 0.05, w * 0.85, 0);
+    path.cubicTo(w * 1.02, h * 0.35, w * 0.92, h * 0.72, w * 0.5, h);
+    path.cubicTo(w * 0.08, h * 0.72, -w * 0.02, h * 0.35, w * 0.15, 0);
+    path.close();
+
+    if (gradientColors != null && gradientColors!.length >= 2) {
+      final paint = Paint()
+        ..shader = LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: gradientColors!,
+        ).createShader(Rect.fromLTWH(0, 0, w, h))
+        ..style = PaintingStyle.fill;
+      canvas.drawPath(path, paint);
+    } else {
+      final paint = Paint()
+        ..color = fillColor
+        ..style = PaintingStyle.fill;
+      canvas.drawPath(path, paint);
+    }
+
+    if (borderColor != Colors.transparent) {
+      final borderPaint = Paint()
+        ..color = borderColor
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2.0;
+      canvas.drawPath(path, borderPaint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant AdGuardShieldPainter oldDelegate) =>
+      oldDelegate.fillColor != fillColor ||
+      oldDelegate.borderColor != borderColor ||
+      oldDelegate.gradientColors != gradientColors;
 }
