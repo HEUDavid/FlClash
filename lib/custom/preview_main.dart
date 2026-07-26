@@ -23,14 +23,14 @@ class MvpPreviewApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.deepPurple,
+          seedColor: const Color(0xFF10B981),
           brightness: Brightness.light,
         ),
       ),
       darkTheme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.deepPurple,
+          seedColor: const Color(0xFF10B981),
           brightness: Brightness.dark,
         ),
       ),

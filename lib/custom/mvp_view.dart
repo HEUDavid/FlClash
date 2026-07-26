@@ -257,30 +257,31 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                 child: ConstrainedBox(
                   constraints: BoxConstraints(
                     minHeight: constraints.maxHeight,
-                    maxWidth: 540,
+                    maxWidth: maxContentWidth,
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: horizontalPadding,
+                    ),
                     child: IntrinsicHeight(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          // 【顶部页边距 1】与底部页边距 5 保持一致 (24px)
-                          const SizedBox(height: 24),
+                          SizedBox(height: verticalEdgePadding),
 
                           // 1. Top Header with AdGuard Logo & Mode Switcher
                           _buildAdGuardHeader(
-                            isDark,
-                            isLightMode,
-                            borderColor,
-                            activeGreen,
+                            isDark: isDark,
+                            isLightMode: isLightMode,
+                            borderColor: borderColor,
+                            activeGreen: activeGreen,
+                            isCompactWidth: isCompactWidth,
                           ),
 
-                          // 【1与2之间的间距】配合 Spacer，确保在竖屏优雅居中，在横屏/小屏下保底拥有 16px 舒适间距
-                          const SizedBox(height: 16),
+                          SizedBox(height: headerBottomGap),
                           const Spacer(flex: 1),
 
-                          // 2 & 3. Central Protection Shield Hero Widget (大盾牌 2 + 防护文案 3)
+                          // 2 & 3. Central Protection Shield Hero Widget
                           _buildProtectionShieldHero(
                             isDark: isDark,
                             isStart: isStart,
@@ -288,26 +289,27 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                             activeGreen: activeGreen,
                             activeGreenDark: activeGreenDark,
                             inactiveGray: inactiveGray,
+                            isCompactHeight: isCompactHeight,
+                            isCompactWidth: isCompactWidth,
                           ),
 
                           const Spacer(flex: 1),
-                          // 【3与4之间的间距】增加 3 (防护文案) 与 4 (防护状态/核心状态) 之间的间距
-                          const SizedBox(height: 20),
+                          SizedBox(height: shieldBottomGap),
 
-                          // 4. AdGuard Protection Quick Info Pills (防护状态 / 核心状态)
+                          // 4. AdGuard Protection Quick Info Pills
                           _buildQuickInfoCards(
-                            isDark,
-                            isStart,
-                            coreStatus,
-                            cardBg,
-                            borderColor,
-                            activeGreen,
+                            isDark: isDark,
+                            isStart: isStart,
+                            coreStatus: coreStatus,
+                            cardBg: cardBg,
+                            borderColor: borderColor,
+                            activeGreen: activeGreen,
+                            isCompactWidth: isCompactWidth,
                           ),
 
-                          // 【4与5之间的间距】略微增加 4 与 5 (配置文件) 之间的间距
-                          const SizedBox(height: 14),
+                          SizedBox(height: cardsBottomGap),
 
-                          // 5. AdGuard Style Subscription / Profile Card (配置文件)
+                          // 5. AdGuard Style Subscription / Profile Card
                           _buildProfileConfigCard(
                             isDark: isDark,
                             hasProfile: hasProfile,
@@ -315,10 +317,10 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                             cardBg: cardBg,
                             borderColor: borderColor,
                             activeGreen: activeGreen,
+                            isCompactWidth: isCompactWidth,
                           ),
 
-                          // 【底部页边距 5】与顶部页边距 1 保持一致 (24px)
-                          const SizedBox(height: 24),
+                          SizedBox(height: verticalEdgePadding),
                         ],
                       ),
                     ),
@@ -333,12 +335,18 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
   }
 
   // 1. AdGuard Header Bar
-  Widget _buildAdGuardHeader(
-    bool isDark,
-    bool isLightMode,
-    Color borderColor,
-    Color activeGreen,
-  ) {
+  Widget _buildAdGuardHeader({
+    required bool isDark,
+    required bool isLightMode,
+    required Color borderColor,
+    required Color activeGreen,
+    required bool isCompactWidth,
+  }) {
+    final double logoSize = isCompactWidth ? 30.0 : 34.0;
+    final double iconSize = isCompactWidth ? 14.0 : 16.0;
+    final double titleSize = isCompactWidth ? 16.0 : 18.0;
+    final double subtitleSize = isCompactWidth ? 9.5 : 10.0;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -347,8 +355,8 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              width: 34,
-              height: 34,
+              width: logoSize,
+              height: logoSize,
               decoration: BoxDecoration(
                 color: activeGreen.withValues(alpha: 0.12),
                 shape: BoxShape.circle,
@@ -360,16 +368,16 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                   isDark: isDark,
                   isStart: true,
                 ),
-                child: const Center(
+                child: Center(
                   child: Icon(
                     Icons.check_rounded,
-                    size: 16,
+                    size: iconSize,
                     color: Colors.white,
                   ),
                 ),
               ),
             ),
-            const SizedBox(width: 10),
+            SizedBox(width: isCompactWidth ? 8.0 : 10.0),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -377,7 +385,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                   'Block Ad',
                   style: TextStyle(
                     fontWeight: FontWeight.w800,
-                    fontSize: 18,
+                    fontSize: titleSize,
                     letterSpacing: 0.2,
                     color: isDark ? Colors.white : const Color(0xFF0F172A),
                   ),
@@ -386,7 +394,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                   '智能广告拦截与保护',
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
-                    fontSize: 10,
+                    fontSize: subtitleSize,
                     color: isDark
                         ? const Color(0xFF94A3B8)
                         : const Color(0xFF64748B),
@@ -399,7 +407,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
 
         // Segmented Switcher [ 极简 | 高级 ]
         Container(
-          height: 36,
+          height: isCompactWidth ? 34.0 : 36.0,
           padding: const EdgeInsets.all(3),
           decoration: BoxDecoration(
             color: isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0),
@@ -415,7 +423,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                 onTap: () =>
                     ref.read(customMvpProvider.notifier).setEnabled(true),
                 isDark: isDark,
-                activeColor: activeGreen,
+                isCompactWidth: isCompactWidth,
               ),
               _buildSegmentTab(
                 label: '高级',
@@ -423,7 +431,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                 onTap: () =>
                     ref.read(customMvpProvider.notifier).setEnabled(false),
                 isDark: isDark,
-                activeColor: activeGreen,
+                isCompactWidth: isCompactWidth,
               ),
             ],
           ),
@@ -437,14 +445,18 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     required bool isSelected,
     required VoidCallback onTap,
     required bool isDark,
-    required Color activeColor,
+    required bool isCompactWidth,
   }) {
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 180),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+        curve: Curves.easeOutCubic,
+        padding: EdgeInsets.symmetric(
+          horizontal: isCompactWidth ? 11.0 : 14.0,
+          vertical: 4.0,
+        ),
         decoration: BoxDecoration(
           color: isSelected
               ? (isDark ? const Color(0xFF334155) : Colors.white)
@@ -463,7 +475,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
         child: Text(
           label,
           style: TextStyle(
-            fontSize: 11,
+            fontSize: isCompactWidth ? 10.5 : 11.0,
             fontWeight: FontWeight.w700,
             color: isSelected
                 ? (isDark ? Colors.white : const Color(0xFF0F172A))
@@ -474,7 +486,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     );
   }
 
-  // 2. Central Protection Shield Hero Area (Fixed bounds & Multi-layer 3D Shader)
+  // 2. Central Protection Shield Hero Area (Responsive bounds & Multi-layer 3D Shader)
   Widget _buildProtectionShieldHero({
     required bool isDark,
     required bool isStart,
@@ -482,6 +494,8 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     required Color activeGreen,
     required Color activeGreenDark,
     required Color inactiveGray,
+    required bool isCompactHeight,
+    required bool isCompactWidth,
   }) {
     final statusTitle = isStart ? '广告防护已开启' : '广告防护已暂停';
     final statusSubtitle = isStart
@@ -493,22 +507,31 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     final offBorderColor =
         isDark ? const Color(0xFF475569) : const Color(0xFF94A3B8);
 
+    final double shieldWidth = isCompactHeight ? 155.0 : 185.0;
+    final double shieldHeight = isCompactHeight ? 185.0 : 220.0;
+    final double mainIconSize = isCompactHeight ? 52.0 : 62.0;
+    final double subIconSize = isCompactHeight ? 18.0 : 22.0;
+    final double titleFontSize = isCompactWidth ? 20.0 : 22.0;
+    final double subtitleFontSize = isCompactWidth ? 12.0 : 13.0;
+    final double titleGap = isCompactHeight ? 12.0 : 18.0;
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // Main Interactive 3D Shield Button (Height slightly enlarged: 185x220)
+        // Main Interactive 3D Shield Button
         GestureDetector(
           onTapDown: (_) => setState(() => _isShieldPressed = true),
           onTapUp: (_) => setState(() => _isShieldPressed = false),
           onTapCancel: () => setState(() => _isShieldPressed = false),
           onTap: () => _handleToggleShield(isStart),
+          behavior: HitTestBehavior.opaque,
           child: AnimatedScale(
             scale: _isShieldPressed ? 0.95 : 1.0,
             duration: const Duration(milliseconds: 120),
             curve: Curves.easeOutCubic,
             child: SizedBox(
-              width: 185,
-              height: 220,
+              width: shieldWidth,
+              height: shieldHeight,
               child: Stack(
                 clipBehavior: Clip.none,
                 alignment: Alignment.center,
@@ -518,20 +541,20 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                     duration: const Duration(milliseconds: 350),
                     opacity: isStart ? 1.0 : 0.0,
                     child: Container(
-                      width: 185,
-                      height: 220,
+                      width: shieldWidth,
+                      height: shieldHeight,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
                             color: activeGreen.withValues(alpha: 0.35),
-                            blurRadius: 38,
-                            spreadRadius: 4,
+                            blurRadius: isCompactHeight ? 30.0 : 38.0,
+                            spreadRadius: isCompactHeight ? 2.0 : 4.0,
                           ),
                           BoxShadow(
                             color: const Color(0xFF34D399).withValues(alpha: 0.20),
-                            blurRadius: 52,
-                            spreadRadius: 10,
+                            blurRadius: isCompactHeight ? 40.0 : 52.0,
+                            spreadRadius: isCompactHeight ? 6.0 : 10.0,
                           ),
                         ],
                       ),
@@ -559,7 +582,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                       )!;
 
                       return CustomPaint(
-                        size: const Size(185, 220),
+                        size: Size(shieldWidth, shieldHeight),
                         painter: AdGuardShieldPainter(
                           fillColor: currentFill,
                           borderColor: currentBorder,
@@ -601,7 +624,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                         duration: const Duration(milliseconds: 250),
                         child: Container(
                           key: ValueKey(isStart),
-                          padding: const EdgeInsets.all(14),
+                          padding: EdgeInsets.all(isCompactHeight ? 12.0 : 14.0),
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             color: Colors.white.withValues(
@@ -616,7 +639,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                                 isStart
                                     ? Icons.verified_user_rounded
                                     : Icons.shield_outlined,
-                                size: 62,
+                                size: mainIconSize,
                                 color: isStart
                                     ? Colors.white
                                     : (isDark
@@ -635,7 +658,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                               const SizedBox(height: 4),
                               Icon(
                                 Icons.power_settings_new_rounded,
-                                size: 22,
+                                size: subIconSize,
                                 color: isStart
                                     ? Colors.white.withValues(alpha: 0.95)
                                     : (isDark
@@ -654,16 +677,16 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
           ),
         ),
 
-        const SizedBox(height: 18),
+        SizedBox(height: titleGap),
 
-        // Status Main Heading Text (Restored clean style without left green dot)
+        // Status Main Heading Text
         AnimatedSwitcher(
           duration: const Duration(milliseconds: 200),
           child: Text(
             statusTitle,
             key: ValueKey(statusTitle),
             style: TextStyle(
-              fontSize: 22,
+              fontSize: titleFontSize,
               fontWeight: FontWeight.w800,
               letterSpacing: 0.3,
               color: isDark ? Colors.white : const Color(0xFF0F172A),
@@ -682,7 +705,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
               key: ValueKey(statusSubtitle),
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 13,
+                fontSize: subtitleFontSize,
                 fontWeight: FontWeight.w500,
                 color:
                     isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
@@ -694,15 +717,16 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     );
   }
 
-  // 3. Quick Info Status Pills (AdGuard Style Overview)
-  Widget _buildQuickInfoCards(
-    bool isDark,
-    bool isStart,
-    MvpCoreStatus coreStatus,
-    Color cardBg,
-    Color borderColor,
-    Color activeGreen,
-  ) {
+  // 3. Quick Info Status Pills
+  Widget _buildQuickInfoCards({
+    required bool isDark,
+    required bool isStart,
+    required MvpCoreStatus coreStatus,
+    required Color cardBg,
+    required Color borderColor,
+    required Color activeGreen,
+    required bool isCompactWidth,
+  }) {
     return Row(
       children: [
         Expanded(
@@ -715,9 +739,10 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
             borderColor: borderColor,
             activeColor: activeGreen,
             isActive: isStart,
+            isCompactWidth: isCompactWidth,
           ),
         ),
-        const SizedBox(width: 12),
+        SizedBox(width: isCompactWidth ? 8.0 : 12.0),
         Expanded(
           child: _buildInfoItem(
             isDark: isDark,
@@ -732,6 +757,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
             borderColor: borderColor,
             activeColor: activeGreen,
             isActive: isStart,
+            isCompactWidth: isCompactWidth,
           ),
         ),
       ],
@@ -747,9 +773,13 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     required Color borderColor,
     required Color activeColor,
     required bool isActive,
+    required bool isCompactWidth,
   }) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
+      padding: EdgeInsets.symmetric(
+        horizontal: isCompactWidth ? 10.0 : 14.0,
+        vertical: isCompactWidth ? 11.0 : 13.0,
+      ),
       decoration: BoxDecoration(
         color: cardBg,
         borderRadius: BorderRadius.circular(16),
@@ -765,7 +795,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(8),
+            padding: EdgeInsets.all(isCompactWidth ? 6.0 : 8.0),
             decoration: BoxDecoration(
               color: isActive
                   ? activeColor.withValues(alpha: 0.12)
@@ -776,7 +806,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
             ),
             child: Icon(
               icon,
-              size: 18,
+              size: isCompactWidth ? 16.0 : 18.0,
               color: isActive
                   ? activeColor
                   : (isDark
@@ -784,7 +814,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                       : const Color(0xFF64748B)),
             ),
           ),
-          const SizedBox(width: 10),
+          SizedBox(width: isCompactWidth ? 8.0 : 10.0),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -792,7 +822,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                 Text(
                   title,
                   style: TextStyle(
-                    fontSize: 11,
+                    fontSize: isCompactWidth ? 10.5 : 11.0,
                     fontWeight: FontWeight.w600,
                     color: isDark
                         ? const Color(0xFF94A3B8)
@@ -803,7 +833,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                 Text(
                   value,
                   style: TextStyle(
-                    fontSize: 13,
+                    fontSize: isCompactWidth ? 12.0 : 13.0,
                     fontWeight: FontWeight.w700,
                     color: isDark ? Colors.white : const Color(0xFF0F172A),
                   ),
@@ -826,9 +856,10 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     required Color cardBg,
     required Color borderColor,
     required Color activeGreen,
+    required bool isCompactWidth,
   }) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(isCompactWidth ? 14.0 : 16.0),
       decoration: BoxDecoration(
         color: cardBg,
         borderRadius: BorderRadius.circular(16),
@@ -878,9 +909,12 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                       _showInputArea = !_showInputArea;
                     });
                   },
+                  behavior: HitTestBehavior.opaque,
                   child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 4,
+                    ),
                     decoration: BoxDecoration(
                       color: isDark
                           ? const Color(0xFF334155)
@@ -908,140 +942,155 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
             duration: const Duration(milliseconds: 220),
             child: (hasProfile && !_showInputArea)
                 ? _buildActiveProfileDisplay(
-                    isDark,
-                    activeProfile,
-                    borderColor,
-                    activeGreen,
+                    isDark: isDark,
+                    activeProfile: activeProfile,
+                    borderColor: borderColor,
+                    activeGreen: activeGreen,
+                    isCompactWidth: isCompactWidth,
                   )
-                : _buildImportInputDisplay(isDark, borderColor, activeGreen),
+                : _buildImportInputDisplay(
+                    isDark: isDark,
+                    borderColor: borderColor,
+                    activeGreen: activeGreen,
+                    isCompactWidth: isCompactWidth,
+                  ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildActiveProfileDisplay(
-    bool isDark,
-    MvpProfileItem activeProfile,
-    Color borderColor,
-    Color activeGreen,
-  ) {
-    return Container(
+  Widget _buildActiveProfileDisplay({
+    required bool isDark,
+    required MvpProfileItem activeProfile,
+    required Color borderColor,
+    required Color activeGreen,
+    required bool isCompactWidth,
+  }) {
+    return ConstrainedBox(
       key: const ValueKey('active_profile_adguard'),
-      width: double.infinity,
-      height: 86,
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-      decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: borderColor, width: 1),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 10,
-            height: 10,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: activeGreen,
-              boxShadow: [
-                BoxShadow(
-                  color: activeGreen.withValues(alpha: 0.4),
-                  blurRadius: 6,
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  activeProfile.label,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 13,
-                    color: isDark ? Colors.white : const Color(0xFF0F172A),
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  '远程备份数据 · 规则集已部署生效',
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: isDark
-                        ? const Color(0xFF94A3B8)
-                        : const Color(0xFF64748B),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 8),
-          GestureDetector(
-            onTap: _isUpdating
-                ? null
-                : () => _handleUpdateSubscription(activeProfile.url),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      constraints: const BoxConstraints(minHeight: 82),
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.symmetric(
+          horizontal: isCompactWidth ? 12.0 : 14.0,
+          vertical: 12.0,
+        ),
+        decoration: BoxDecoration(
+          color: isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: borderColor, width: 1),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 10,
+              height: 10,
               decoration: BoxDecoration(
-                color: activeGreen.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: activeGreen.withValues(alpha: 0.3),
-                  width: 1,
-                ),
+                shape: BoxShape.circle,
+                color: activeGreen,
+                boxShadow: [
+                  BoxShadow(
+                    color: activeGreen.withValues(alpha: 0.4),
+                    blurRadius: 6,
+                  ),
+                ],
               ),
-              child: Row(
+            ),
+            SizedBox(width: isCompactWidth ? 8.0 : 12.0),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  _isUpdating
-                      ? SizedBox(
-                          width: 12,
-                          height: 12,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 1.8,
-                            color: activeGreen,
-                          ),
-                        )
-                      : Icon(
-                          Icons.sync_rounded,
-                          size: 14,
-                          color: activeGreen,
-                        ),
-                  const SizedBox(width: 4),
                   Text(
-                    _isUpdating ? '更新中' : '更新',
+                    activeProfile.label,
                     style: TextStyle(
-                      fontSize: 12,
                       fontWeight: FontWeight.w700,
-                      color: activeGreen,
+                      fontSize: isCompactWidth ? 12.0 : 13.0,
+                      color: isDark ? Colors.white : const Color(0xFF0F172A),
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    '远程备份数据 · 规则集已部署生效',
+                    style: TextStyle(
+                      fontSize: isCompactWidth ? 10.0 : 11.0,
+                      color: isDark
+                          ? const Color(0xFF94A3B8)
+                          : const Color(0xFF64748B),
                     ),
                   ),
                 ],
               ),
             ),
-          ),
-        ],
+            SizedBox(width: isCompactWidth ? 6.0 : 8.0),
+            GestureDetector(
+              onTap: _isUpdating
+                  ? null
+                  : () => _handleUpdateSubscription(activeProfile.url),
+              behavior: HitTestBehavior.opaque,
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 180),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                decoration: BoxDecoration(
+                  color: activeGreen.withValues(alpha: _isUpdating ? 0.08 : 0.12),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: activeGreen.withValues(alpha: _isUpdating ? 0.2 : 0.3),
+                    width: 1,
+                  ),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _isUpdating
+                        ? SizedBox(
+                            width: 12,
+                            height: 12,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 1.8,
+                              color: activeGreen,
+                            ),
+                          )
+                        : Icon(
+                            Icons.sync_rounded,
+                            size: 14,
+                            color: activeGreen,
+                          ),
+                    const SizedBox(width: 4),
+                    Text(
+                      _isUpdating ? '更新中' : '更新',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                        color: activeGreen,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildImportInputDisplay(
-    bool isDark,
-    Color borderColor,
-    Color activeGreen,
-  ) {
+  Widget _buildImportInputDisplay({
+    required bool isDark,
+    required Color borderColor,
+    required Color activeGreen,
+    required bool isCompactWidth,
+  }) {
     return Column(
       key: const ValueKey('import_input_adguard'),
       mainAxisSize: MainAxisSize.min,
       children: [
         SizedBox(
-          height: 40,
+          height: 44,
           child: TextField(
             controller: _urlController,
             style: TextStyle(
@@ -1081,10 +1130,10 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
             onChanged: (_) => setState(() {}),
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 12),
         SizedBox(
           width: double.infinity,
-          height: 38,
+          height: 44,
           child: FilledButton(
             onPressed: _isImporting ? null : _handleImportSubscription,
             style: FilledButton.styleFrom(
