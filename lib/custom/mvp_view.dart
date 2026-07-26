@@ -351,9 +351,9 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
               const SizedBox(width: 8),
               Text(
                 switch (coreStatus) {
-                  MvpCoreStatus.connected => 'SYSTEM ACTIVE',
-                  MvpCoreStatus.connecting => 'CONNECTING...',
-                  MvpCoreStatus.disconnected => 'DISCONNECTED',
+                  MvpCoreStatus.connected => '已连接',
+                  MvpCoreStatus.connecting => '连接中...',
+                  MvpCoreStatus.disconnected => '已停止',
                 },
                 style: TextStyle(
                   fontSize: 11,
