@@ -1,10 +1,9 @@
-import 'package:fl_clash/enum/enum.dart';
-import 'package:fl_clash/providers/providers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'mvp_app_bridge_helper.dart';
 import 'mvp_models.dart';
 import 'mvp_provider.dart';
 import 'mvp_restore_helper.dart';
@@ -29,16 +28,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
   }
 
   void _handleToggleShield(bool currentIsStart) {
-    if (!kIsWeb) {
-      try {
-        final isInit = !ref.read(initProvider);
-        ref.read(setupActionProvider.notifier).updateStatus(
-              !currentIsStart,
-              isInit: isInit,
-            );
-      } catch (_) {}
-    }
-    // Sync local mock state for UI consistency in preview mode
+    MvpAppBridge.toggleShield(ref, currentIsStart);
     ref.read(customProxyStartProvider.notifier).setStart(!currentIsStart);
   }
 
@@ -49,11 +39,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     });
 
     try {
-      if (!kIsWeb) {
-        try {
-          await ref.read(profilesActionProvider.notifier).updateProfiles();
-        } catch (_) {}
-      }
+      await MvpAppBridge.updateProfiles(ref);
       await updateSubscriptionOrBackup(url);
       if (mounted) {
         setState(() {
@@ -223,45 +209,20 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     final isLightMode = ref.watch(customMvpProvider);
 
     // Dynamic dual-mode resolution (App Mode vs Web Preview Mode)
-    bool isStart = ref.watch(customProxyStartProvider);
-    MvpCoreStatus coreStatus = ref.watch(customCoreStatusProvider);
-    MvpProfileItem activeProfile = const MvpProfileItem(id: '', label: '', url: '');
-    bool hasProfile = false;
+    final realIsStart = MvpAppBridge.watchIsStart(ref);
+    final isStart = realIsStart ?? ref.watch(customProxyStartProvider);
 
-    if (!kIsWeb) {
-      try {
-        isStart = ref.watch(isStartProvider);
-        final realCoreStatus = ref.watch(coreStatusProvider);
-        coreStatus = switch (realCoreStatus) {
-          CoreStatus.connected => MvpCoreStatus.connected,
-          CoreStatus.connecting => MvpCoreStatus.connecting,
-          CoreStatus.disconnected => MvpCoreStatus.disconnected,
-        };
+    final realCoreStatus = MvpAppBridge.watchCoreStatus(ref);
+    final coreStatus = realCoreStatus ?? ref.watch(customCoreStatusProvider);
 
-        final realProfiles = ref.watch(profilesProvider);
-        final realCurrentProfile = ref.watch(currentProfileProvider);
-        if (realCurrentProfile != null) {
-          hasProfile = true;
-          activeProfile = MvpProfileItem(
-            id: realCurrentProfile.id.toString(),
-            label: realCurrentProfile.label.isNotEmpty
-                ? realCurrentProfile.label
-                : '远程备份数据',
-            url: realCurrentProfile.url,
-          );
-        } else if (realProfiles.isNotEmpty) {
-          hasProfile = true;
-          final p = realProfiles.first;
-          activeProfile = MvpProfileItem(
-            id: p.id.toString(),
-            label: p.label.isNotEmpty ? p.label : '远程备份数据',
-            url: p.url,
-          );
-        }
-      } catch (_) {}
-    }
+    final realActiveProfile = MvpAppBridge.watchActiveProfile(ref);
+    final MvpProfileItem activeProfile;
+    final bool hasProfile;
 
-    if (!hasProfile) {
+    if (realActiveProfile != null && realActiveProfile.id.isNotEmpty) {
+      hasProfile = true;
+      activeProfile = realActiveProfile;
+    } else {
       final mockProfiles = ref.watch(customProfilesProvider);
       final mockCurrentProfileId = ref.watch(customCurrentProfileIdProvider);
       final foundMock = mockProfiles.firstWhere(
@@ -270,10 +231,8 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
             ? mockProfiles.first
             : const MvpProfileItem(id: '', label: '', url: ''),
       );
-      if (foundMock.id.isNotEmpty) {
-        hasProfile = true;
-        activeProfile = foundMock;
-      }
+      hasProfile = foundMock.id.isNotEmpty;
+      activeProfile = foundMock;
     }
 
     // AdGuard Theme Design System Colors
