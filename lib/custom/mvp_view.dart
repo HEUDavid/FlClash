@@ -326,7 +326,6 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                             SizedBox(height: heroSpacerGap + shieldBottomGap),
                           ],
                         ),
-
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [

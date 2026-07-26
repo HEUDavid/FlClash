@@ -51,7 +51,8 @@ class MvpAppBridge {
         );
       }
     } catch (e) {
-      commonPrint.log('watchActiveProfile error: $e', logLevel: LogLevel.warning);
+      commonPrint.log('watchActiveProfile error: $e',
+          logLevel: LogLevel.warning);
     }
     return null;
   }
@@ -68,4 +69,3 @@ class MvpAppBridge {
     }
   }
 }
-

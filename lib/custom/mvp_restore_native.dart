@@ -56,4 +56,3 @@ Future<void> updateSubscriptionOrBackup(String url) async {
   await container.read(providersProvider.notifier).syncProviders();
   await container.read(setupActionProvider.notifier).applyProfile(force: true);
 }
-
