@@ -249,6 +249,19 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
+            final bool isCompactWidth = constraints.maxWidth < 360;
+            final bool isWideWidth = constraints.maxWidth >= 600;
+            final bool isCompactHeight = constraints.maxHeight < 680;
+
+            final double horizontalPadding = isCompactWidth
+                ? 14.0
+                : (isWideWidth ? 28.0 : 20.0);
+            final double maxContentWidth = isWideWidth ? 580.0 : 540.0;
+            final double verticalEdgePadding = isCompactHeight ? 14.0 : 24.0;
+            final double headerBottomGap = isCompactHeight ? 10.0 : 16.0;
+            final double shieldBottomGap = isCompactHeight ? 14.0 : 20.0;
+            final double cardsBottomGap = isCompactHeight ? 12.0 : 14.0;
+
             return SingleChildScrollView(
               physics: const BouncingScrollPhysics(
                 parent: AlwaysScrollableScrollPhysics(),
