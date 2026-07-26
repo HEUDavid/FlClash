@@ -19,6 +19,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
   bool _isImporting = false;
   bool _isUpdating = false;
   bool _showInputArea = false;
+  bool _isShieldPressed = false;
 
   @override
   void dispose() {
@@ -246,67 +247,80 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     return Scaffold(
       backgroundColor: bgPrimary,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // 【顶部间距 1】页面最顶端距离安全区域/状态栏的固定留白
-              const SizedBox(height: 18),
-
-              // 1. Top Header with AdGuard Logo & Mode Switcher
-              _buildAdGuardHeader(
-                isDark,
-                isLightMode,
-                borderColor,
-                activeGreen,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              physics: const BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics(),
               ),
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: constraints.maxHeight,
+                    maxWidth: 540,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: IntrinsicHeight(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          const SizedBox(height: 20),
 
-              // 【顶部间距 2】顶部 Header 与 盾牌 Hero 区域之间的动态弹性留白
-              const Spacer(flex: 2),
-              const SizedBox(height: 8),
+                          // 1. Top Header with AdGuard Logo & Mode Switcher
+                          _buildAdGuardHeader(
+                            isDark,
+                            isLightMode,
+                            borderColor,
+                            activeGreen,
+                          ),
 
-              // 2. Central Protection Shield Hero Widget (AdGuard Style)
-              _buildProtectionShieldHero(
-                isDark: isDark,
-                isStart: isStart,
-                coreStatus: coreStatus,
-                activeGreen: activeGreen,
-                activeGreenDark: activeGreenDark,
-                inactiveGray: inactiveGray,
+                          const Spacer(flex: 1),
+
+                          // 2. Central Protection Shield Hero Widget (AdGuard Style)
+                          _buildProtectionShieldHero(
+                            isDark: isDark,
+                            isStart: isStart,
+                            coreStatus: coreStatus,
+                            activeGreen: activeGreen,
+                            activeGreenDark: activeGreenDark,
+                            inactiveGray: inactiveGray,
+                          ),
+
+                          const SizedBox(height: 16),
+
+                          // 3. AdGuard Protection Quick Info Pills
+                          _buildQuickInfoCards(
+                            isDark,
+                            isStart,
+                            coreStatus,
+                            cardBg,
+                            borderColor,
+                            activeGreen,
+                          ),
+
+                          const SizedBox(height: 10),
+
+                          // 4. AdGuard Style Subscription / Profile Card
+                          _buildProfileConfigCard(
+                            isDark: isDark,
+                            hasProfile: hasProfile,
+                            activeProfile: activeProfile,
+                            cardBg: cardBg,
+                            borderColor: borderColor,
+                            activeGreen: activeGreen,
+                          ),
+
+                          const Spacer(flex: 1),
+                          const SizedBox(height: 16),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
               ),
-
-              // 【核心控制间距 3】盾牌文本底部 与「防护状态 / 核心状态」卡片之间的固定间距（调小此值可使该栏继续上移）
-              const SizedBox(height: 14),
-
-              // 3. AdGuard Protection Quick Info Pills（防护状态 / 核心状态 栏）
-              _buildQuickInfoCards(
-                isDark,
-                isStart,
-                coreStatus,
-                cardBg,
-                borderColor,
-                activeGreen,
-              ),
-
-              // 【中间间距 4】「防护状态 / 核心状态」卡片 与 底部「配置/订阅」卡片之间的动态弹性间距
-              const Spacer(flex: 1),
-              const SizedBox(height: 12),
-
-              // 4. AdGuard Style Subscription / Profile Card
-              _buildProfileConfigCard(
-                isDark: isDark,
-                hasProfile: hasProfile,
-                activeProfile: activeProfile,
-                cardBg: cardBg,
-                borderColor: borderColor,
-                activeGreen: activeGreen,
-              ),
-
-              // 【底部间距 5】页面最底部的固定留白边距
-              const SizedBox(height: 24),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );
@@ -327,16 +341,18 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              width: 32,
-              height: 32,
+              width: 34,
+              height: 34,
               decoration: BoxDecoration(
-                color: activeGreen.withValues(alpha: 0.15),
+                color: activeGreen.withValues(alpha: 0.12),
                 shape: BoxShape.circle,
               ),
               child: CustomPaint(
                 painter: AdGuardShieldPainter(
                   fillColor: activeGreen,
                   borderColor: Colors.transparent,
+                  isDark: isDark,
+                  isStart: true,
                 ),
                 child: const Center(
                   child: Icon(
@@ -377,8 +393,8 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
 
         // Segmented Switcher [ 极简 | 高级 ]
         Container(
-          height: 34,
-          padding: const EdgeInsets.all(2),
+          height: 36,
+          padding: const EdgeInsets.all(3),
           decoration: BoxDecoration(
             color: isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0),
             borderRadius: BorderRadius.circular(20),
@@ -452,7 +468,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     );
   }
 
-  // 2. Central Protection Shield Hero Area (Fixed bounds to prevent layout jitter)
+  // 2. Central Protection Shield Hero Area (Fixed bounds & Multi-layer 3D Shader)
   Widget _buildProtectionShieldHero({
     required bool isDark,
     required bool isStart,
@@ -467,133 +483,174 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
         : '点击上方盾牌一键开启防护';
 
     final offBgColor =
-        isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0);
+        isDark ? const Color(0xFF334155) : const Color(0xFFCBD5E1);
     final offBorderColor =
-        isDark ? const Color(0xFF475569) : const Color(0xFFCBD5E1);
+        isDark ? const Color(0xFF475569) : const Color(0xFF94A3B8);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // Main AdGuard Interactive Shield Button (Strict fixed 160x190 bounds)
+        // Main Interactive 3D Shield Button (Height slightly enlarged: 185x220)
         GestureDetector(
+          onTapDown: (_) => setState(() => _isShieldPressed = true),
+          onTapUp: (_) => setState(() => _isShieldPressed = false),
+          onTapCancel: () => setState(() => _isShieldPressed = false),
           onTap: () => _handleToggleShield(isStart),
-          child: SizedBox(
-            width: 160,
-            height: 190,
-            child: Stack(
-              clipBehavior: Clip.none,
-              alignment: Alignment.center,
-              children: [
-                // Fixed Glow Layer (Alpha fade only, zero spread/size change)
-                AnimatedOpacity(
-                  duration: const Duration(milliseconds: 300),
-                  opacity: isStart ? 1.0 : 0.0,
-                  child: Container(
-                    width: 150,
-                    height: 180,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      boxShadow: [
-                        BoxShadow(
-                          color: activeGreen.withValues(alpha: 0.35),
-                          blurRadius: 28,
-                          spreadRadius: 0,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-
-                // Smooth Color Lerp Shield Canvas
-                TweenAnimationBuilder<double>(
-                  tween: Tween<double>(
-                    begin: 0.0,
-                    end: isStart ? 1.0 : 0.0,
-                  ),
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeInOutCubic,
-                  builder: (context, progress, child) {
-                    final currentFill = Color.lerp(
-                      offBgColor,
-                      activeGreen,
-                      progress,
-                    )!;
-                    final currentBorder = Color.lerp(
-                      offBorderColor,
-                      const Color(0xFF34D399),
-                      progress,
-                    )!;
-
-                    return CustomPaint(
-                      size: const Size(160, 190),
-                      painter: AdGuardShieldPainter(
-                        fillColor: currentFill,
-                        borderColor: currentBorder,
-                        gradientColors: progress > 0.1
-                            ? [
-                                Color.lerp(
-                                  offBgColor,
-                                  const Color(0xFF34D399),
-                                  progress,
-                                )!,
-                                Color.lerp(
-                                  offBgColor,
-                                  activeGreen,
-                                  progress,
-                                )!,
-                                Color.lerp(
-                                  offBgColor,
-                                  activeGreenDark,
-                                  progress,
-                                )!,
-                              ]
-                            : null,
-                      ),
-                      child: child,
-                    );
-                  },
-                  child: Center(
-                    child: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 250),
-                      child: Column(
-                        key: ValueKey(isStart),
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const SizedBox(height: 8),
-                          Icon(
-                            isStart
-                                ? Icons.verified_user_rounded
-                                : Icons.shield_outlined,
-                            size: 60,
-                            color: isStart
-                                ? Colors.white
-                                : (isDark
-                                    ? const Color(0xFF94A3B8)
-                                    : const Color(0xFF64748B)),
+          child: AnimatedScale(
+            scale: _isShieldPressed ? 0.95 : 1.0,
+            duration: const Duration(milliseconds: 120),
+            curve: Curves.easeOutCubic,
+            child: SizedBox(
+              width: 185,
+              height: 220,
+              child: Stack(
+                clipBehavior: Clip.none,
+                alignment: Alignment.center,
+                children: [
+                  // Outer Ambient Multi-layer Halo Glow
+                  AnimatedOpacity(
+                    duration: const Duration(milliseconds: 350),
+                    opacity: isStart ? 1.0 : 0.0,
+                    child: Container(
+                      width: 185,
+                      height: 220,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: activeGreen.withValues(alpha: 0.35),
+                            blurRadius: 38,
+                            spreadRadius: 4,
                           ),
-                          const SizedBox(height: 6),
-                          Icon(
-                            Icons.power_settings_new_rounded,
-                            size: 20,
-                            color: isStart
-                                ? Colors.white.withValues(alpha: 0.9)
-                                : (isDark
-                                    ? const Color(0xFF64748B)
-                                    : const Color(0xFF94A3B8)),
+                          BoxShadow(
+                            color: const Color(0xFF34D399).withValues(alpha: 0.20),
+                            blurRadius: 52,
+                            spreadRadius: 10,
                           ),
                         ],
                       ),
                     ),
                   ),
-                ),
-              ],
+
+                  // Smooth Color Lerp Shield Canvas with 3D Specular Painter
+                  TweenAnimationBuilder<double>(
+                    tween: Tween<double>(
+                      begin: 0.0,
+                      end: isStart ? 1.0 : 0.0,
+                    ),
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOutCubic,
+                    builder: (context, progress, child) {
+                      final currentFill = Color.lerp(
+                        offBgColor,
+                        activeGreen,
+                        progress,
+                      )!;
+                      final currentBorder = Color.lerp(
+                        offBorderColor,
+                        const Color(0xFF6EE7B7),
+                        progress,
+                      )!;
+
+                      return CustomPaint(
+                        size: const Size(185, 220),
+                        painter: AdGuardShieldPainter(
+                          fillColor: currentFill,
+                          borderColor: currentBorder,
+                          isDark: isDark,
+                          isStart: isStart,
+                          gradientColors: progress > 0.05
+                              ? [
+                                  Color.lerp(
+                                    offBgColor,
+                                    const Color(0xFF4ADE80),
+                                    progress,
+                                  )!,
+                                  Color.lerp(
+                                    offBgColor,
+                                    activeGreen,
+                                    progress,
+                                  )!,
+                                  Color.lerp(
+                                    offBgColor,
+                                    activeGreenDark,
+                                    progress,
+                                  )!,
+                                ]
+                              : [
+                                  isDark
+                                      ? const Color(0xFF475569)
+                                      : const Color(0xFFE2E8F0),
+                                  offBgColor,
+                                  isDark
+                                      ? const Color(0xFF1E293B)
+                                      : const Color(0xFF94A3B8),
+                                ],
+                        ),
+                        child: child,
+                      );
+                    },
+                    child: Center(
+                      child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 250),
+                        child: Container(
+                          key: ValueKey(isStart),
+                          padding: const EdgeInsets.all(14),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white.withValues(
+                              alpha: isStart ? 0.15 : 0.08,
+                            ),
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                isStart
+                                    ? Icons.verified_user_rounded
+                                    : Icons.shield_outlined,
+                                size: 62,
+                                color: isStart
+                                    ? Colors.white
+                                    : (isDark
+                                        ? const Color(0xFFCBD5E1)
+                                        : const Color(0xFF475569)),
+                                shadows: [
+                                  Shadow(
+                                    color: Colors.black.withValues(
+                                      alpha: isStart ? 0.25 : 0.1,
+                                    ),
+                                    blurRadius: 6,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 4),
+                              Icon(
+                                Icons.power_settings_new_rounded,
+                                size: 22,
+                                color: isStart
+                                    ? Colors.white.withValues(alpha: 0.95)
+                                    : (isDark
+                                        ? const Color(0xFF94A3B8)
+                                        : const Color(0xFF64748B)),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
 
-        const SizedBox(height: 24),
+        const SizedBox(height: 18),
 
-        // Status Main Heading Text (Smooth cross-fade)
+        // Status Main Heading Text (Restored clean style without left green dot)
         AnimatedSwitcher(
           duration: const Duration(milliseconds: 200),
           child: Text(
@@ -609,7 +666,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
         ),
         const SizedBox(height: 6),
 
-        // Status Subtitle Text (Fixed height wrapper to prevent text shift)
+        // Status Subtitle Text
         SizedBox(
           height: 20,
           child: AnimatedSwitcher(
@@ -654,7 +711,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
             isActive: isStart,
           ),
         ),
-        const SizedBox(width: 10),
+        const SizedBox(width: 12),
         Expanded(
           child: _buildInfoItem(
             isDark: isDark,
@@ -686,14 +743,14 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     required bool isActive,
   }) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
       decoration: BoxDecoration(
         color: cardBg,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: borderColor, width: 1),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: isDark ? 0.15 : 0.02),
+            color: Colors.black.withValues(alpha: isDark ? 0.15 : 0.03),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -729,7 +786,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                 Text(
                   title,
                   style: TextStyle(
-                    fontSize: 10,
+                    fontSize: 11,
                     fontWeight: FontWeight.w600,
                     color: isDark
                         ? const Color(0xFF94A3B8)
@@ -1054,53 +1111,115 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
   }
 }
 
-/// AdGuard Iconic Shield Custom Painter
+/// Enhanced 3D AdGuard Iconic Shield Custom Painter with Specular Sheen & Bevel Depth
 class AdGuardShieldPainter extends CustomPainter {
   final Color fillColor;
   final Color borderColor;
   final List<Color>? gradientColors;
+  final bool isDark;
+  final bool isStart;
 
   AdGuardShieldPainter({
     required this.fillColor,
     required this.borderColor,
     this.gradientColors,
+    this.isDark = false,
+    this.isStart = true,
   });
+
+  static Path createShieldPath(Size size) {
+    final w = size.width;
+    final h = size.height;
+    final path = Path();
+
+    // High precision curved shield geometry
+    path.moveTo(w * 0.20, h * 0.04);
+    path.quadraticBezierTo(w * 0.50, 0, w * 0.80, h * 0.04);
+    path.cubicTo(w * 0.96, h * 0.06, w * 1.00, h * 0.24, w * 0.95, h * 0.46);
+    path.cubicTo(w * 0.90, h * 0.72, w * 0.65, h * 0.94, w * 0.50, h * 0.99);
+    path.cubicTo(w * 0.35, h * 0.94, w * 0.10, h * 0.72, w * 0.05, h * 0.46);
+    path.cubicTo(w * 0.00, h * 0.24, w * 0.04, h * 0.06, w * 0.20, h * 0.04);
+    path.close();
+    return path;
+  }
 
   @override
   void paint(Canvas canvas, Size size) {
     final w = size.width;
     final h = size.height;
-    final path = Path();
+    final mainPath = createShieldPath(size);
 
-    // Classic curved shield path calculation
-    path.moveTo(w * 0.15, 0);
-    path.quadraticBezierTo(w * 0.5, h * 0.05, w * 0.85, 0);
-    path.cubicTo(w * 1.02, h * 0.35, w * 0.92, h * 0.72, w * 0.5, h);
-    path.cubicTo(w * 0.08, h * 0.72, -w * 0.02, h * 0.35, w * 0.15, 0);
-    path.close();
+    // 1. Draw Outer Ambient Drop Shadow
+    final shadowPaint = Paint()
+      ..color = (isStart
+              ? const Color(0xFF10B981).withValues(alpha: 0.30)
+              : Colors.black.withValues(alpha: isDark ? 0.40 : 0.12))
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 12.0);
+    canvas.save();
+    canvas.translate(0, 4);
+    canvas.drawPath(mainPath, shadowPaint);
+    canvas.restore();
 
+    // 2. Base Gradient Fill
+    final Paint fillPaint = Paint()..style = PaintingStyle.fill;
     if (gradientColors != null && gradientColors!.length >= 2) {
-      final paint = Paint()
-        ..shader = LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: gradientColors!,
-        ).createShader(Rect.fromLTWH(0, 0, w, h))
-        ..style = PaintingStyle.fill;
-      canvas.drawPath(path, paint);
+      fillPaint.shader = LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: gradientColors!,
+      ).createShader(Rect.fromLTWH(0, 0, w, h));
     } else {
-      final paint = Paint()
-        ..color = fillColor
-        ..style = PaintingStyle.fill;
-      canvas.drawPath(path, paint);
+      fillPaint.color = fillColor;
     }
+    canvas.drawPath(mainPath, fillPaint);
 
+    // 3. Top Specular Reflection (3D Glossy Surface Overlay)
+    final Path sheenPath = Path();
+    sheenPath.moveTo(w * 0.20, h * 0.04);
+    sheenPath.quadraticBezierTo(w * 0.50, 0, w * 0.80, h * 0.04);
+    sheenPath.cubicTo(w * 0.94, h * 0.06, w * 0.98, h * 0.20, w * 0.92, h * 0.38);
+    sheenPath.quadraticBezierTo(w * 0.50, h * 0.26, w * 0.08, h * 0.38);
+    sheenPath.cubicTo(w * 0.02, h * 0.20, w * 0.06, h * 0.06, w * 0.20, h * 0.04);
+    sheenPath.close();
+
+    final sheenPaint = Paint()
+      ..shader = LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [
+          Colors.white.withValues(alpha: isStart ? 0.38 : 0.22),
+          Colors.white.withValues(alpha: 0.02),
+        ],
+      ).createShader(Rect.fromLTWH(0, 0, w, h * 0.4))
+      ..style = PaintingStyle.fill;
+    canvas.drawPath(sheenPath, sheenPaint);
+
+    // 4. Inner Bevel Highlight Rim (3D Chamfer Edge)
+    canvas.save();
+    canvas.clipPath(mainPath);
+    final bevelPaint = Paint()
+      ..shader = LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [
+          Colors.white.withValues(alpha: isStart ? 0.55 : 0.30),
+          Colors.white.withValues(alpha: 0.05),
+          Colors.black.withValues(alpha: 0.20),
+        ],
+        stops: const [0.0, 0.4, 1.0],
+      ).createShader(Rect.fromLTWH(0, 0, w, h))
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.5;
+    canvas.drawPath(mainPath, bevelPaint);
+    canvas.restore();
+
+    // 5. Outer Border Stroke
     if (borderColor != Colors.transparent) {
       final borderPaint = Paint()
         ..color = borderColor
         ..style = PaintingStyle.stroke
-        ..strokeWidth = 2.0;
-      canvas.drawPath(path, borderPaint);
+        ..strokeWidth = 1.8;
+      canvas.drawPath(mainPath, borderPaint);
     }
   }
 
@@ -1108,5 +1227,7 @@ class AdGuardShieldPainter extends CustomPainter {
   bool shouldRepaint(covariant AdGuardShieldPainter oldDelegate) =>
       oldDelegate.fillColor != fillColor ||
       oldDelegate.borderColor != borderColor ||
-      oldDelegate.gradientColors != gradientColors;
+      oldDelegate.gradientColors != gradientColors ||
+      oldDelegate.isDark != isDark ||
+      oldDelegate.isStart != isStart;
 }
