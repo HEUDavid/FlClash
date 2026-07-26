@@ -265,7 +265,8 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          const SizedBox(height: 20),
+                          // 【顶部页边距 1】与底部页边距 5 保持一致 (24px)
+                          const SizedBox(height: 24),
 
                           // 1. Top Header with AdGuard Logo & Mode Switcher
                           _buildAdGuardHeader(
@@ -277,7 +278,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
 
                           const Spacer(flex: 1),
 
-                          // 2. Central Protection Shield Hero Widget (AdGuard Style)
+                          // 2 & 3. Central Protection Shield Hero Widget (大盾牌 2 + 防护文案 3)
                           _buildProtectionShieldHero(
                             isDark: isDark,
                             isStart: isStart,
@@ -287,9 +288,11 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                             inactiveGray: inactiveGray,
                           ),
 
-                          const SizedBox(height: 16),
+                          const Spacer(flex: 1),
+                          // 【3与4之间的间距】增加 3 (防护文案) 与 4 (防护状态/核心状态) 之间的间距
+                          const SizedBox(height: 20),
 
-                          // 3. AdGuard Protection Quick Info Pills
+                          // 4. AdGuard Protection Quick Info Pills (防护状态 / 核心状态)
                           _buildQuickInfoCards(
                             isDark,
                             isStart,
@@ -299,9 +302,10 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                             activeGreen,
                           ),
 
-                          const SizedBox(height: 10),
+                          // 【4与5之间的间距】略微增加 4 与 5 (配置文件) 之间的间距
+                          const SizedBox(height: 14),
 
-                          // 4. AdGuard Style Subscription / Profile Card
+                          // 5. AdGuard Style Subscription / Profile Card (配置文件)
                           _buildProfileConfigCard(
                             isDark: isDark,
                             hasProfile: hasProfile,
@@ -311,8 +315,8 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                             activeGreen: activeGreen,
                           ),
 
-                          const Spacer(flex: 1),
-                          const SizedBox(height: 16),
+                          // 【底部页边距 5】与顶部页边距 1 保持一致 (24px)
+                          const SizedBox(height: 24),
                         ],
                       ),
                     ),
