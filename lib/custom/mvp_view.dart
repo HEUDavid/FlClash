@@ -425,7 +425,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView>
     );
   }
 
-  // 2. Central Protection Shield Hero Area
+  // 2. Central Protection Shield Hero Area (Fixed bounds to prevent layout jitter)
   Widget _buildProtectionShieldHero({
     required bool isDark,
     required bool isStart,
@@ -436,8 +436,13 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView>
   }) {
     final statusTitle = isStart ? '广告防护已开启' : '广告防护已暂停';
     final statusSubtitle = isStart
-        ? '防护运行中 · 智能拦截与隐私保护'
-        : '点击上方盾牌一键开启防护';
+        ? '全天候防护运行中 · 智能过滤广告与追踪'
+        : '点击下方盾牌一键开启全面保护';
+
+    final offBgColor =
+        isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0);
+    final offBorderColor =
+        isDark ? const Color(0xFF475569) : const Color(0xFFCBD5E1);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -494,108 +499,159 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView>
 
         const SizedBox(height: 28),
 
-        // Main AdGuard Interactive Shield Button
+        // Main AdGuard Interactive Shield Button (Strict fixed 160x190 bounds)
         GestureDetector(
           onTap: () {
             ref.read(customProxyStartProvider.notifier).setStart(!isStart);
           },
-          child: AnimatedBuilder(
-            animation: _pulseController,
-            builder: (context, child) {
-              final pulseGlow = isStart ? _pulseController.value * 12.0 : 0.0;
-              return Container(
-                width: 170,
-                height: 200,
-                decoration: BoxDecoration(
-                  boxShadow: isStart
-                      ? [
-                          BoxShadow(
-                            color: activeGreen.withValues(
-                              alpha: 0.25 + (_pulseController.value * 0.15),
-                            ),
-                            blurRadius: 30 + pulseGlow,
-                            spreadRadius: 4 + (pulseGlow * 0.2),
-                          ),
-                        ]
-                      : null,
-                ),
-                child: CustomPaint(
-                  painter: AdGuardShieldPainter(
-                    fillColor: isStart
-                        ? activeGreen
-                        : (isDark
-                            ? const Color(0xFF334155)
-                            : const Color(0xFFE2E8F0)),
-                    borderColor: isStart
-                        ? const Color(0xFF34D399)
-                        : (isDark
-                            ? const Color(0xFF475569)
-                            : const Color(0xFFCBD5E1)),
-                    gradientColors: isStart
-                        ? [
-                            const Color(0xFF34D399),
-                            activeGreen,
-                            activeGreenDark,
-                          ]
-                        : null,
-                  ),
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const SizedBox(height: 10),
-                        Icon(
-                          isStart
-                              ? Icons.verified_user_rounded
-                              : Icons.shield_outlined,
-                          size: 64,
-                          color: isStart
-                              ? Colors.white
-                              : (isDark
-                                  ? const Color(0xFF94A3B8)
-                                  : const Color(0xFF64748B)),
-                        ),
-                        const SizedBox(height: 8),
-                        Icon(
-                          Icons.power_settings_new_rounded,
-                          size: 22,
-                          color: isStart
-                              ? Colors.white.withValues(alpha: 0.9)
-                              : (isDark
-                                  ? const Color(0xFF64748B)
-                                  : const Color(0xFF94A3B8)),
+          child: SizedBox(
+            width: 160,
+            height: 190,
+            child: Stack(
+              clipBehavior: Clip.none,
+              alignment: Alignment.center,
+              children: [
+                // Fixed Glow Layer (Alpha fade only, zero spread/size change)
+                AnimatedOpacity(
+                  duration: const Duration(milliseconds: 300),
+                  opacity: isStart ? 1.0 : 0.0,
+                  child: Container(
+                    width: 150,
+                    height: 180,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      boxShadow: [
+                        BoxShadow(
+                          color: activeGreen.withValues(alpha: 0.35),
+                          blurRadius: 28,
+                          spreadRadius: 0,
                         ),
                       ],
                     ),
                   ),
                 ),
-              );
-            },
+
+                // Smooth Color Lerp Shield Canvas
+                TweenAnimationBuilder<double>(
+                  tween: Tween<double>(
+                    begin: 0.0,
+                    end: isStart ? 1.0 : 0.0,
+                  ),
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOutCubic,
+                  builder: (context, progress, child) {
+                    final currentFill = Color.lerp(
+                      offBgColor,
+                      activeGreen,
+                      progress,
+                    )!;
+                    final currentBorder = Color.lerp(
+                      offBorderColor,
+                      const Color(0xFF34D399),
+                      progress,
+                    )!;
+
+                    return CustomPaint(
+                      size: const Size(160, 190),
+                      painter: AdGuardShieldPainter(
+                        fillColor: currentFill,
+                        borderColor: currentBorder,
+                        gradientColors: progress > 0.1
+                            ? [
+                                Color.lerp(
+                                  offBgColor,
+                                  const Color(0xFF34D399),
+                                  progress,
+                                )!,
+                                Color.lerp(
+                                  offBgColor,
+                                  activeGreen,
+                                  progress,
+                                )!,
+                                Color.lerp(
+                                  offBgColor,
+                                  activeGreenDark,
+                                  progress,
+                                )!,
+                              ]
+                            : null,
+                      ),
+                      child: child,
+                    );
+                  },
+                  child: Center(
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 250),
+                      child: Column(
+                        key: ValueKey(isStart),
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const SizedBox(height: 8),
+                          Icon(
+                            isStart
+                                ? Icons.verified_user_rounded
+                                : Icons.shield_outlined,
+                            size: 60,
+                            color: isStart
+                                ? Colors.white
+                                : (isDark
+                                    ? const Color(0xFF94A3B8)
+                                    : const Color(0xFF64748B)),
+                          ),
+                          const SizedBox(height: 6),
+                          Icon(
+                            Icons.power_settings_new_rounded,
+                            size: 20,
+                            color: isStart
+                                ? Colors.white.withValues(alpha: 0.9)
+                                : (isDark
+                                    ? const Color(0xFF64748B)
+                                    : const Color(0xFF94A3B8)),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
 
         const SizedBox(height: 24),
 
-        // Status Main Heading Text
-        Text(
-          statusTitle,
-          style: TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.w800,
-            letterSpacing: 0.3,
-            color: isDark ? Colors.white : const Color(0xFF0F172A),
+        // Status Main Heading Text (Smooth cross-fade)
+        AnimatedSwitcher(
+          duration: const Duration(milliseconds: 200),
+          child: Text(
+            statusTitle,
+            key: ValueKey(statusTitle),
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 0.3,
+              color: isDark ? Colors.white : const Color(0xFF0F172A),
+            ),
           ),
         ),
         const SizedBox(height: 6),
 
-        // Status Subtitle Text
-        Text(
-          statusSubtitle,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w500,
-            color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
+        // Status Subtitle Text (Fixed height wrapper to prevent text shift)
+        SizedBox(
+          height: 20,
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 200),
+            child: Text(
+              statusSubtitle,
+              key: ValueKey(statusSubtitle),
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
+                color:
+                    isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
+              ),
+            ),
           ),
         ),
       ],
