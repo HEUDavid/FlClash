@@ -244,13 +244,13 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
             mainAxisSize: MainAxisSize.min,
             children: [
               _buildSwissTab(
-                label: 'LIGHT',
+                label: '极简',
                 isSelected: isLightMode,
                 onTap: () => ref.read(customMvpProvider.notifier).setEnabled(true),
                 isDark: isDark,
               ),
               _buildSwissTab(
-                label: 'PRO',
+                label: '高级',
                 isSelected: !isLightMode,
                 onTap: () => ref.read(customMvpProvider.notifier).setEnabled(false),
                 isDark: isDark,
