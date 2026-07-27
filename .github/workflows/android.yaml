@@ -62,7 +62,7 @@ jobs:
           flutter pub get
 
       - name: Apply Branding (Update Display Text)
-        run: dart tool/apply_branding.dart "${{ secrets.APP_NAME || 'Block Ad' }}"
+        run: dart lib/custom/apply_branding.dart "${{ secrets.APP_NAME || 'Block Ad' }}"
 
       - name: Setup
         run: dart setup.dart android --env stable -v
