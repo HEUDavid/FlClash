@@ -123,7 +123,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     }
   }
 
-  Future<void> _handleImportSubscription() async {
+  Future<void> _handleImportConfigZip() async {
     final url = _urlController.text.trim();
     if (url.isEmpty ||
         (!url.startsWith('http://') && !url.startsWith('https://'))) {
@@ -1169,7 +1169,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
           width: double.infinity,
           height: 44,
           child: FilledButton(
-            onPressed: _isImporting ? null : _handleImportSubscription,
+            onPressed: _isImporting ? null : _handleImportConfigZip,
             style: FilledButton.styleFrom(
               backgroundColor: activeGreen,
               shape: RoundedRectangleBorder(
