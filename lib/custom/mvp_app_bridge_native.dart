@@ -13,7 +13,8 @@ class MvpAppBridge {
 
   static bool? watchIsStart(WidgetRef ref) {
     try {
-      return ref.watch(isStartProvider);
+      final bool val = ref.watch(isStartProvider);
+      return val;
     } catch (e) {
       commonPrint.log('watchIsStart error: $e', logLevel: LogLevel.warning);
       return null;
@@ -22,7 +23,7 @@ class MvpAppBridge {
 
   static MvpCoreStatus? watchCoreStatus(WidgetRef ref) {
     try {
-      final realCoreStatus = ref.watch(coreStatusProvider);
+      final CoreStatus realCoreStatus = ref.watch(coreStatusProvider);
       return switch (realCoreStatus) {
         CoreStatus.connected => MvpCoreStatus.connected,
         CoreStatus.connecting => MvpCoreStatus.connecting,
