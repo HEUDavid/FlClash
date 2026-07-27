@@ -62,11 +62,8 @@ jobs:
           flutter --version
           flutter pub get
 
-      # - name: Apply Branding
-      #  run: dart lib/custom/apply_branding.dart "${{ env.APP_NAME }}"
-
       - name: Setup
-        run: dart setup.dart android ${{ env.IS_STABLE == 'true' && '--env stable' || '' }} -v
+        run: dart setup.dart android --env stable -v
 
       - name: Upload
         uses: actions/upload-artifact@v4
@@ -90,13 +87,11 @@ jobs:
           name: artifact-android
 
       - name: Generate sha256
-        if: ${{ env.IS_STABLE == 'true' }}
         run: |
           cd ./dist
           sha256sum ./* > SHA256SUMS
 
       - name: Release
-        if: ${{ env.IS_STABLE == 'true' }}
         uses: softprops/action-gh-release@v2
         with:
           files: ./dist/*
