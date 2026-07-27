@@ -1,11 +1,15 @@
+import 'dart:io';
+
+import 'package:archive/archive_io.dart';
 import 'package:dio/dio.dart';
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
 
-// 桌面/移动原生端：下载远程 backup.zip 压缩包并恢复全量数据
+// 桌面/移动原生端：下载远程 backup.zip 压缩包（支持 BlockAd2026 密码解压）并恢复全量数据
 Future<void> downloadAndRestoreBackup(String url) async {
+  final tempEncryptedPath = '${await appPath.backupFilePath}.download';
   final backupPath = await appPath.backupFilePath;
   final dio = Dio(
     BaseOptions(
@@ -15,9 +19,34 @@ Future<void> downloadAndRestoreBackup(String url) async {
     ),
   );
 
-  final response = await dio.download(url, backupPath);
+  final response = await dio.download(url, tempEncryptedPath);
 
   if (response.statusCode == 200) {
+    final tempFile = File(tempEncryptedPath);
+    try {
+      final zipDecoder = ZipDecoder();
+      late final Archive archive;
+      InputFileStream input = InputFileStream(tempEncryptedPath);
+      try {
+        archive = zipDecoder.decodeStream(input, password: 'BlockAd2026');
+      } catch (_) {
+        await input.close();
+        input = InputFileStream(tempEncryptedPath);
+        archive = zipDecoder.decodeStream(input);
+      }
+
+      final unencryptedBytes = ZipEncoder().encode(archive);
+      await input.close();
+
+      if (unencryptedBytes != null) {
+        await File(backupPath).writeAsBytes(unencryptedBytes);
+      }
+    } finally {
+      if (await tempFile.exists()) {
+        await tempFile.delete();
+      }
+    }
+
     await globalState.container
         .read(backupActionProvider.notifier)
         .restore(RestoreOption.all);
