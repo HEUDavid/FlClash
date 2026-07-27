@@ -62,8 +62,8 @@ jobs:
           flutter --version
           flutter pub get
 
-      - name: Apply Branding
-        run: dart lib/custom/apply_branding.dart "${{ env.APP_NAME }}"
+      # - name: Apply Branding
+      #  run: dart lib/custom/apply_branding.dart "${{ env.APP_NAME }}"
 
       - name: Setup
         run: dart setup.dart android ${{ env.IS_STABLE == 'true' && '--env stable' || '' }} -v
