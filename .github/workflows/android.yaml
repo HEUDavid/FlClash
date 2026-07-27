@@ -9,7 +9,7 @@ on:
 env:
   IS_STABLE: 'true'
   FLUTTER_VERSION: '3.44.4'
-  APP_NAME: 'BlockAd'
+  APP_NAME: 'FkAd'
 
 jobs:
   build:
