@@ -9,8 +9,6 @@ on:
 env:
   IS_STABLE: 'true'
   FLUTTER_VERSION: '3.44.4'
-  APP_NAME: 'BlockAd' # 可在此处修改你打包生成的 App 显示名称
-  PACKAGE_NAME: 'com.blockad.app' # 可在此处修改你的独立 Android 包名 (Application ID)
 
 jobs:
   build:
@@ -63,13 +61,11 @@ jobs:
           flutter --version
           flutter pub get
 
+      - name: Apply Branding (Update Display Text)
+        run: dart tool/apply_branding.dart "${{ secrets.APP_NAME || 'Block Ad' }}"
+
       - name: Setup
-        run: |
-          dart setup.dart android --env stable -v || {
-            echo "=== SETUP FAILED! RUNNING DIRECT FLUTTER BUILD FOR DIAGNOSTICS ==="
-            flutter build apk --split-per-abi --verbose --dart-define-from-file=env.json
-            exit 1
-          }
+        run: dart setup.dart android --env stable -v
 
       - name: Upload
         uses: actions/upload-artifact@v4
