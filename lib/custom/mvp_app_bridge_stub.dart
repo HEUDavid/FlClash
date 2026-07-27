@@ -9,5 +9,7 @@ class MvpAppBridge {
 
   static MvpProfileItem? watchActiveProfile(WidgetRef ref) => null;
 
+  static void ensureInitSettings(WidgetRef ref) {}
+
   static void toggleShield(WidgetRef ref, bool currentIsStart) {}
 }

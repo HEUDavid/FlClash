@@ -23,6 +23,12 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
   bool _isShieldToggling = false;
 
   @override
+  void initState() {
+    super.initState();
+    MvpAppBridge.ensureInitSettings(ref);
+  }
+
+  @override
   void dispose() {
     _urlController.dispose();
     super.dispose();

@@ -31,8 +31,13 @@ class MvpPrefInjector {
         appSettingProps['disclaimerAccepted'] = true;
         appSettingProps['crashlyticsTip'] = true;
         configMap['appSettingProps'] = appSettingProps;
+        configMap['appSetting'] = appSettingProps;
 
         await prefs.setString('config', json.encode(configMap));
+      }
+
+      if (prefs.getInt('version') == null || prefs.getInt('version') == 0) {
+        await prefs.setInt('version', 1);
       }
 
       // 如果当前上下文有 Riverpod ref，同步刷新内存中的 State
