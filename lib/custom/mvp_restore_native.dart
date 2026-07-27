@@ -26,7 +26,6 @@ Future<void> downloadAndRestoreBackup(String url) async {
       followRedirects: true,
       headers: {
         'X-HWID': hwid,
-        'X-Device-ID': hwid,
       },
     ),
   );
