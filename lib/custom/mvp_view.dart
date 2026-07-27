@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:fl_clash/common/common.dart';
+
 import 'mvp_app_bridge_helper.dart';
 import 'mvp_models.dart';
 import 'mvp_provider.dart';
@@ -1042,7 +1044,9 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    '在线配置集合',
+                    activeProfile.lastUpdateDate != null
+                        ? '更新于：${activeProfile.lastUpdateDate!.getLastUpdateTimeDesc(context)}'
+                        : '在线配置集合',
                     style: TextStyle(
                       fontSize: isCompactWidth ? 10.0 : 11.0,
                       color: isDark

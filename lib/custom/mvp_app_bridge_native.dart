@@ -45,6 +45,7 @@ class MvpAppBridge {
               ? realCurrentProfile.label
               : '在线配置集合',
           url: realCurrentProfile.url,
+          lastUpdateDate: realCurrentProfile.lastUpdateDate,
         );
       }
       final realProfiles = ref.watch(profilesProvider);
@@ -54,6 +55,7 @@ class MvpAppBridge {
           id: p.id.toString(),
           label: p.label.isNotEmpty ? p.label : '在线配置集合',
           url: p.url,
+          lastUpdateDate: p.lastUpdateDate,
         );
       }
     } catch (e) {

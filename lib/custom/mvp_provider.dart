@@ -53,6 +53,7 @@ class CustomProfilesNotifier extends Notifier<List<MvpProfileItem>> {
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       label: label,
       url: url,
+      lastUpdateDate: DateTime.now(),
     );
     state = [...state, newItem];
   }
