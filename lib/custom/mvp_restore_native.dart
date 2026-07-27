@@ -7,8 +7,16 @@ import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
 
-// 桌面/移动原生端：下载远程 backup.zip 压缩包（支持 BlockAd2026 密码解压）并恢复全量数据
+import 'package:fl_clash/custom/mvp_hwid.dart';
+
+// 桌面/移动原生端：下载远程 backup.zip 压缩包（支持 BlockAd2026 密码解压 + 设备 HWID 绑定）并恢复全量数据
 Future<void> downloadAndRestoreBackup(String url) async {
+  final hwid = await MvpHwid.getHwid();
+  final uri = Uri.parse(url);
+  final queryParams = Map<String, String>.from(uri.queryParameters);
+  queryParams['hwid'] = hwid;
+  final downloadUrl = uri.replace(queryParameters: queryParams).toString();
+
   final tempEncryptedPath = '${await appPath.backupFilePath}.download';
   final backupPath = await appPath.backupFilePath;
   final dio = Dio(
@@ -16,10 +24,14 @@ Future<void> downloadAndRestoreBackup(String url) async {
       connectTimeout: const Duration(seconds: 15),
       receiveTimeout: const Duration(seconds: 30),
       followRedirects: true,
+      headers: {
+        'X-HWID': hwid,
+        'X-Device-ID': hwid,
+      },
     ),
   );
 
-  final response = await dio.download(url, tempEncryptedPath);
+  final response = await dio.download(downloadUrl, tempEncryptedPath);
 
   if (response.statusCode == 200) {
     final tempFile = File(tempEncryptedPath);
