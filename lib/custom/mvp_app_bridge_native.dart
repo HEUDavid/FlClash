@@ -4,8 +4,13 @@ import 'package:fl_clash/providers/providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'mvp_models.dart';
+import 'mvp_pref_injector.dart';
 
 class MvpAppBridge {
+  static void ensureInitSettings(WidgetRef ref) {
+    MvpPrefInjector.ensurePreinjected(ref);
+  }
+
   static bool? watchIsStart(WidgetRef ref) {
     try {
       return ref.watch(isStartProvider);
