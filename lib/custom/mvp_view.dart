@@ -1196,8 +1196,9 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
           ),
         ),
       ],
-    );
-  }
+    ),
+  );
+}
 }
 
 /// Enhanced 3D AdGuard Iconic Shield Custom Painter with Specular Sheen & Bevel Depth
