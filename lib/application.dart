@@ -12,6 +12,9 @@ import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:fl_clash/custom/mvp_pref_injector.dart';
+import 'package:fl_clash/custom/mvp_provider.dart';
+import 'package:fl_clash/custom/mvp_view.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'pages/pages.dart';
@@ -47,6 +50,7 @@ class ApplicationState extends ConsumerState<Application> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      await MvpPrefInjector.ensurePreinjected(ref);
       if (globalState.navigatorKey.currentContext != null) {
         await globalState.attach();
       } else {
@@ -180,7 +184,12 @@ class ApplicationState extends ConsumerState<Application> {
           home: child!,
         );
       },
-      child: const HomePage(),
+      child: Consumer(
+        builder: (_, ref, __) {
+          final isLightMode = ref.watch(customMvpProvider);
+          return isLightMode ? const CustomMvpView() : const HomePage();
+        },
+      ),
     );
   }
 
