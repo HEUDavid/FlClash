@@ -994,9 +994,9 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     required Color activeGreen,
     required bool isCompactWidth,
   }) {
-    return ConstrainedBox(
+    return SizedBox(
       key: const ValueKey('active_profile_adguard'),
-      constraints: const BoxConstraints(minHeight: 82),
+      height: 100,
       child: Container(
         width: double.infinity,
         padding: EdgeInsets.symmetric(
@@ -1115,10 +1115,12 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     required Color activeGreen,
     required bool isCompactWidth,
   }) {
-    return Column(
+    return SizedBox(
       key: const ValueKey('import_input_adguard'),
-      mainAxisSize: MainAxisSize.min,
-      children: [
+      height: 100,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
         SizedBox(
           height: 44,
           child: TextField(
