@@ -69,7 +69,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
               Icon(Icons.check_circle_rounded, color: Colors.white, size: 18),
               SizedBox(width: 8),
               Text(
-                '配置与规则已更新至最新状态',
+                '配置集已同步至最新',
                 style: TextStyle(letterSpacing: 0.5, fontSize: 13),
               ),
             ],
