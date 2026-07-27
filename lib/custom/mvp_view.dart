@@ -418,7 +418,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                   ),
                 ),
                 Text(
-                  '智能广告拦截与保护',
+                  '智能拦截与隐私保护',
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: subtitleSize,
@@ -774,11 +774,11 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
           child: _buildInfoItem(
             isDark: isDark,
             icon: Icons.security_rounded,
-            title: '核心状态',
+            title: '内核状态',
             value: switch (coreStatus) {
-              MvpCoreStatus.connected => '已连接',
-              MvpCoreStatus.connecting => '连接中',
-              MvpCoreStatus.disconnected => '已停用',
+              MvpCoreStatus.connected => '正常',
+              MvpCoreStatus.connecting => '启动中',
+              MvpCoreStatus.disconnected => '停用',
             },
             cardBg: cardBg,
             borderColor: borderColor,
