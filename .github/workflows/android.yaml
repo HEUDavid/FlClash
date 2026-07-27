@@ -9,7 +9,7 @@ on:
 env:
   IS_STABLE: 'true'
   FLUTTER_VERSION: '3.44.4'
-  APP_NAME: 'BlockAd' # 可在此处修改你打包生成的 App 显示名称
+  APP_NAME: 'BlockAd'
 
 jobs:
   build:
@@ -26,17 +26,16 @@ jobs:
         run: |
           if [ -n "${{ secrets.KEYSTORE }}" ]; then
             echo "${{ secrets.KEYSTORE }}" | base64 --decode > android/app/keystore.jks
-            if [ -n "${{ secrets.SERVICE_JSON }}" ]; then
-              echo "${{ secrets.SERVICE_JSON }}" | base64 --decode > android/app/google-services.json
-            fi
             {
               echo "keyAlias=${{ secrets.KEY_ALIAS }}"
               echo "storePassword=${{ secrets.STORE_PASSWORD }}"
               echo "keyPassword=${{ secrets.KEY_PASSWORD }}"
             } >> android/local.properties
-          else
-            echo "No custom keystore provided, using default signing."
           fi
+          if [ -n "${{ secrets.SERVICE_JSON }}" ]; then
+            echo "${{ secrets.SERVICE_JSON }}" | base64 --decode > android/app/google-services.json
+          fi
+
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
@@ -53,31 +52,22 @@ jobs:
 
       - name: Setup NDK
         uses: nttld/setup-ndk@v1
-        id: setup-ndk
         with:
           ndk-version: r28c
           add-to-path: true
           link-to-sdk: true
 
-      - name: Set NDK Env
-        run: |
-          echo "ANDROID_NDK_HOME=${{ steps.setup-ndk.outputs.ndk-path }}" >> $GITHUB_ENV
-          echo "NDK_HOME=${{ steps.setup-ndk.outputs.ndk-path }}" >> $GITHUB_ENV
-
       - name: Get Flutter Dependency
         run: |
           flutter --version
           flutter pub get
+
       - name: Apply Branding
-        run: |
-          dart lib/custom/apply_branding.dart "${{ env.APP_NAME }}"
+        run: dart lib/custom/apply_branding.dart "${{ env.APP_NAME }}"
+
       - name: Setup
-        run: |
-          dart setup.dart android --env stable -v || {
-            echo "=== SETUP FAILED! RUNNING DIRECT FLUTTER BUILD FOR DIAGNOSTICS ==="
-            flutter build apk --split-per-abi --verbose --dart-define-from-file=env.json
-            exit 1
-          }
+        run: dart setup.dart android ${{ env.IS_STABLE == 'true' && '--env stable' || '' }} -v
+
       - name: Upload
         uses: actions/upload-artifact@v4
         with:
@@ -100,10 +90,13 @@ jobs:
           name: artifact-android
 
       - name: Generate sha256
+        if: ${{ env.IS_STABLE == 'true' }}
         run: |
           cd ./dist
           sha256sum ./* > SHA256SUMS
+
       - name: Release
+        if: ${{ env.IS_STABLE == 'true' }}
         uses: softprops/action-gh-release@v2
         with:
           files: ./dist/*
