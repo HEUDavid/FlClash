@@ -1180,7 +1180,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                     ),
                   )
                 : const Text(
-                    '下载并导入配置',
+                    '下载并导入',
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w700,
