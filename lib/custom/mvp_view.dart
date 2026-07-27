@@ -169,7 +169,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
               Icon(Icons.check_rounded, color: Colors.white, size: 18),
               SizedBox(width: 8),
               Text(
-                '配置文件导入成功',
+                '导入成功',
                 style: TextStyle(letterSpacing: 0.5, fontSize: 13),
               ),
             ],
