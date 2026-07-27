@@ -1046,7 +1046,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                   Text(
                     activeProfile.lastUpdateDate != null
                         ? '更新于：${activeProfile.lastUpdateDate!.getLastUpdateTimeDesc(context)}'
-                        : '在线配置集合',
+                        : '在线配置集',
                     style: TextStyle(
                       fontSize: isCompactWidth ? 10.0 : 11.0,
                       color: isDark
