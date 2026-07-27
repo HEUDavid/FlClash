@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:archive/archive_io.dart';
+import 'package:archive/archive.dart';
 import 'package:dio/dio.dart';
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
@@ -37,18 +37,15 @@ Future<void> downloadAndRestoreBackup(String url) async {
     final tempFile = File(tempEncryptedPath);
     try {
       final zipDecoder = ZipDecoder();
+      final bytes = await tempFile.readAsBytes();
       late final Archive archive;
-      InputFileStream input = InputFileStream(tempEncryptedPath);
       try {
-        archive = zipDecoder.decodeStream(input, password: 'BlockAd2026');
+        archive = zipDecoder.decodeBytes(bytes, password: 'BlockAd2026');
       } catch (_) {
-        await input.close();
-        input = InputFileStream(tempEncryptedPath);
-        archive = zipDecoder.decodeStream(input);
+        archive = zipDecoder.decodeBytes(bytes);
       }
 
       final unencryptedBytes = ZipEncoder().encode(archive);
-      await input.close();
 
       if (unencryptedBytes != null) {
         await File(backupPath).writeAsBytes(unencryptedBytes);
