@@ -25,3 +25,29 @@ enum MvpCoreStatus {
   connecting,
   connected,
 }
+
+extension MvpDateTimeExtension on DateTime {
+  String getLastUpdateTimeDesc(dynamic context) {
+    final difference = DateTime.now().difference(this);
+    final days = difference.inDays;
+    if (days >= 365) {
+      return '${(days / 365).floor()}年前';
+    }
+    if (days >= 30) {
+      return '${(days / 30).floor()}个月前';
+    }
+    if (days >= 1) {
+      return '${days}天前';
+    }
+    final hours = difference.inHours;
+    if (hours >= 1) {
+      return '${hours}小时前';
+    }
+    final minutes = difference.inMinutes;
+    if (minutes >= 1) {
+      return '${minutes}分钟前';
+    }
+    return '刚刚';
+  }
+}
+
