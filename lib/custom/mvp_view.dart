@@ -210,7 +210,9 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
       await downloadAndRestoreBackup(url);
       if (!mounted) return;
 
-      ref.read(customProfilesProvider.notifier).addProfileFromBackup(url);
+      if (MvpAppBridge.isMockSupported) {
+        ref.read(customProfilesProvider.notifier).addProfileFromBackup(url);
+      }
       _urlController.clear();
 
       setState(() {
@@ -285,10 +287,10 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
 
     // Dynamic dual-mode resolution (App Mode vs Web Preview Mode)
     final bool isStart =
-        MvpAppBridge.watchIsStart(ref) ?? ref.watch(customProxyStartProvider);
+        MvpAppBridge.watchIsStart(ref) ?? (MvpAppBridge.isMockSupported ? ref.watch(customProxyStartProvider) : false);
 
     final MvpCoreStatus coreStatus = MvpAppBridge.watchCoreStatus(ref) ??
-        ref.watch(customCoreStatusProvider);
+        (MvpAppBridge.isMockSupported ? ref.watch(customCoreStatusProvider) : MvpCoreStatus.disconnected);
 
     final realActiveProfile = MvpAppBridge.watchActiveProfile(ref);
     final MvpProfileItem activeProfile;
@@ -297,7 +299,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     if (realActiveProfile != null && realActiveProfile.id.isNotEmpty) {
       hasProfile = true;
       activeProfile = realActiveProfile;
-    } else {
+    } else if (MvpAppBridge.isMockSupported) {
       final mockProfiles = ref.watch(customProfilesProvider);
       final mockCurrentProfileId = ref.watch(customCurrentProfileIdProvider);
       final foundMock = mockProfiles.firstWhere(
@@ -308,6 +310,9 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
       );
       hasProfile = foundMock.id.isNotEmpty;
       activeProfile = foundMock;
+    } else {
+      hasProfile = false;
+      activeProfile = const MvpProfileItem(id: '', label: '', url: '');
     }
 
     // AdGuard Theme Design System Colors

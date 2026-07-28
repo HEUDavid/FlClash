@@ -7,6 +7,8 @@ import 'mvp_models.dart';
 import 'mvp_pref_injector.dart';
 
 class MvpAppBridge {
+  static bool get isMockSupported => false;
+
   static void ensureInitSettings(WidgetRef ref) {
     MvpPrefInjector.ensurePreinjected(ref);
   }

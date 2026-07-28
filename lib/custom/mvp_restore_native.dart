@@ -41,7 +41,7 @@ Future<void> downloadAndRestoreBackup(String url) async {
       try {
         archive = zipDecoder.decodeBytes(bytes, password: 'BlockAd2026');
       } catch (e) {
-        throw '配置文件格式错误或密码不匹配，无法解压';
+        throw '配置文件格式错误';
       }
 
       final unencryptedBytes = ZipEncoder().encode(archive);
