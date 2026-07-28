@@ -87,7 +87,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     MvpAppBridge.toggleShield(ref, currentIsStart);
     ref.read(customProxyStartProvider.notifier).setStart(!currentIsStart);
 
-    Future.delayed(const Duration(milliseconds: 350), () {
+    Future.delayed(const Duration(milliseconds: 500), () {
       if (mounted) {
         _isShieldToggling = false;
       }

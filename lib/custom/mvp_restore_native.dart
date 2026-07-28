@@ -40,8 +40,8 @@ Future<void> downloadAndRestoreBackup(String url) async {
       late final Archive archive;
       try {
         archive = zipDecoder.decodeBytes(bytes, password: 'BlockAd2026');
-      } catch (_) {
-        archive = zipDecoder.decodeBytes(bytes);
+      } catch (e) {
+        throw '配置文件格式错误或密码不匹配，无法解压';
       }
 
       final unencryptedBytes = ZipEncoder().encode(archive);
@@ -60,7 +60,7 @@ Future<void> downloadAndRestoreBackup(String url) async {
         .restore(RestoreOption.all);
     await _syncAndRefreshProviders(globalState.container);
   } else {
-    throw 'HTTP ${response.statusCode}';
+    throw '文件下载失败，服务器响应: ${response.statusCode}，请检查链接是否有效';
   }
 }
 
@@ -91,7 +91,14 @@ Future<void> _syncAndRefreshProviders(dynamic container) async {
             .read(proxiesActionProvider.notifier)
             .updateProvider(provider);
       } catch (e) {
-        commonPrint.log('updateProvider error: $e', logLevel: LogLevel.warning);
+        commonPrint.log('updateProvider fail, retrying: $e', logLevel: LogLevel.warning);
+        try {
+          await container
+              .read(proxiesActionProvider.notifier)
+              .updateProvider(provider);
+        } catch (e2) {
+          commonPrint.log('updateProvider error after retry: $e2', logLevel: LogLevel.warning);
+        }
       }
     });
     await Future.wait(updateTasks);
