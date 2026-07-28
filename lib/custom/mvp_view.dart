@@ -36,8 +36,54 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     super.dispose();
   }
 
-  void _handleToggleShield(bool currentIsStart) {
-    if (_isShieldToggling) return;
+  void _handleToggleShield(bool currentIsStart, bool hasProfile) {
+    if (_isShieldToggling || _isUpdating || _isImporting) {
+      if (_isUpdating || _isImporting) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Row(
+              children: [
+                Icon(Icons.hourglass_empty_rounded, color: Colors.white, size: 18),
+                SizedBox(width: 8),
+                Text('操作处理中，请稍候...', style: TextStyle(letterSpacing: 0.5, fontSize: 13)),
+              ],
+            ),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            backgroundColor: const Color(0xFFF59E0B),
+            duration: const Duration(seconds: 1),
+          ),
+        );
+      }
+      return;
+    }
+
+    if (!hasProfile) {
+      setState(() {
+        _showInputArea = true;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Row(
+            children: [
+              Icon(Icons.info_outline_rounded, color: Colors.white, size: 18),
+              SizedBox(width: 8),
+              Text(
+                '请先导入配置文件',
+                style: TextStyle(letterSpacing: 0.5, fontSize: 13),
+              ),
+            ],
+          ),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          backgroundColor: const Color(0xFF1E293B),
+        ),
+      );
+      return;
+    }
+
     _isShieldToggling = true;
 
     MvpAppBridge.toggleShield(ref, currentIsStart);
@@ -109,6 +155,14 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
             borderRadius: BorderRadius.circular(10),
           ),
           backgroundColor: Colors.redAccent.shade700,
+          action: SnackBarAction(
+            label: '复制',
+            textColor: Colors.white,
+            onPressed: () {
+              Clipboard.setData(ClipboardData(text: '更新失败: $e'));
+            },
+          ),
+          duration: const Duration(seconds: 4),
         ),
       );
     }
@@ -149,6 +203,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
       return;
     }
 
+    FocusManager.instance.primaryFocus?.unfocus();
     setState(() {
       _isImporting = true;
     });
@@ -211,6 +266,14 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
             borderRadius: BorderRadius.circular(10),
           ),
           backgroundColor: Colors.redAccent.shade700,
+          action: SnackBarAction(
+            label: '复制',
+            textColor: Colors.white,
+            onPressed: () {
+              Clipboard.setData(ClipboardData(text: '导入失败: $e'));
+            },
+          ),
+          duration: const Duration(seconds: 4),
         ),
       );
     }
@@ -310,7 +373,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                           SizedBox(height: headerBottomGap),
                           const Spacer(flex: 1),
 
-                          // 2 & 3. Central Protection Shield Hero Widget
+                          // 2 & 3. Central Protection Shield Widget
                           _buildProtectionShieldHero(
                             isDark: isDark,
                             isStart: isStart,
@@ -320,6 +383,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                             inactiveGray: inactiveGray,
                             isCompactHeight: isCompactHeight,
                             isCompactWidth: isCompactWidth,
+                            hasProfile: hasProfile,
                           ),
 
                           const Spacer(flex: 1),
@@ -525,6 +589,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     required Color inactiveGray,
     required bool isCompactHeight,
     required bool isCompactWidth,
+    required bool hasProfile,
   }) {
     final statusTitle = isStart ? '广告防护已开启' : '广告防护已暂停';
     final statusSubtitle = isStart ? '防护运行中 · 智能拦截与隐私保护' : '点击上方盾牌一键开启防护';
@@ -550,7 +615,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
           onTapDown: (_) => setState(() => _isShieldPressed = true),
           onTapUp: (_) => setState(() => _isShieldPressed = false),
           onTapCancel: () => setState(() => _isShieldPressed = false),
-          onTap: () => _handleToggleShield(isStart),
+          onTap: () => _handleToggleShield(isStart, hasProfile),
           behavior: HitTestBehavior.opaque,
           child: AnimatedScale(
             scale: _isShieldPressed ? 0.95 : 1.0,
