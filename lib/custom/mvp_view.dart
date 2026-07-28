@@ -124,7 +124,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
-          backgroundColor: const Color(0xFF10B981),
+          backgroundColor: const Color(0xFF6666FB),
         ),
       );
     } catch (e) {
@@ -235,7 +235,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
-          backgroundColor: const Color(0xFF10B981),
+          backgroundColor: const Color(0xFF6666FB),
         ),
       );
     } catch (e) {
@@ -319,8 +319,8 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     final borderColor =
         isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0);
 
-    const activeGreen = Color(0xFF10B981);
-    const activeGreenDark = Color(0xFF047857);
+    const activeGreen = Color(0xFF6666FB);
+    const activeGreenDark = Color(0xFF336AB6);
     final inactiveGray =
         isDark ? const Color(0xFF475569) : const Color(0xFFCBD5E1);
 
@@ -645,7 +645,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                           ),
                           BoxShadow(
                             color:
-                                const Color(0xFF34D399).withValues(alpha: 0.20),
+                                const Color(0xFF5CA8E9).withValues(alpha: 0.20),
                             blurRadius: isCompactHeight ? 40.0 : 52.0,
                             spreadRadius: isCompactHeight ? 6.0 : 10.0,
                           ),
@@ -670,7 +670,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                       )!;
                       final currentBorder = Color.lerp(
                         offBorderColor,
-                        const Color(0xFF6EE7B7),
+                        const Color(0xFF5CA8E9),
                         progress,
                       )!;
 
@@ -685,7 +685,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                               ? [
                                   Color.lerp(
                                     offBgColor,
-                                    const Color(0xFF4ADE80),
+                                    const Color(0xFF5CA8E9),
                                     progress,
                                   )!,
                                   Color.lerp(
@@ -1351,7 +1351,7 @@ class AdGuardShieldPainter extends CustomPainter {
     // 1. Draw Outer Ambient Drop Shadow
     final shadowPaint = Paint()
       ..color = (isStart
-          ? const Color(0xFF10B981).withValues(alpha: 0.30)
+          ? const Color(0xFF6666FB).withValues(alpha: 0.30)
           : Colors.black.withValues(alpha: isDark ? 0.40 : 0.12))
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 12.0);
     canvas.save();
