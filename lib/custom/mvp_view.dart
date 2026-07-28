@@ -21,6 +21,42 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
   bool _showInputArea = false;
   bool _isShieldPressed = false;
   bool _isShieldToggling = false;
+  int _minimalTapCount = 0;
+  DateTime? _lastMinimalTapTime;
+
+  void _handleMinimalTap() {
+    final now = DateTime.now();
+    if (_lastMinimalTapTime != null &&
+        now.difference(_lastMinimalTapTime!) > const Duration(seconds: 2)) {
+      _minimalTapCount = 0;
+    }
+    _lastMinimalTapTime = now;
+    _minimalTapCount++;
+
+    if (_minimalTapCount >= 5) {
+      _minimalTapCount = 0;
+      ref.read(customMvpProvider.notifier).setEnabled(false);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Row(
+              children: [
+                Icon(Icons.tune_rounded, color: Colors.white, size: 18),
+                SizedBox(width: 8),
+                Text('已切换至高级模式',
+                    style: TextStyle(letterSpacing: 0.5, fontSize: 13)),
+              ],
+            ),
+            behavior: SnackBarBehavior.floating,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            backgroundColor: const Color(0xFF1E293B),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
+    }
+  }
 
   @override
   void initState() {
@@ -513,84 +549,31 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
           ],
         ),
 
-        // Segmented Switcher [ 极简 | 高级 ]
-        Container(
-          height: isCompactWidth ? 34.0 : 36.0,
-          padding: const EdgeInsets.all(3),
-          decoration: BoxDecoration(
-            color: isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0),
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: borderColor, width: 1),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _buildSegmentTab(
-                label: '极简',
-                isSelected: isLightMode,
-                onTap: () =>
-                    ref.read(customMvpProvider.notifier).setEnabled(true),
-                isDark: isDark,
-                isCompactWidth: isCompactWidth,
+        // Mode Tag [ 极简 ] (Tap 5 times continuously to switch to Advanced mode)
+        GestureDetector(
+          onTap: _handleMinimalTap,
+          behavior: HitTestBehavior.opaque,
+          child: Container(
+            padding: EdgeInsets.symmetric(
+              horizontal: isCompactWidth ? 11.0 : 14.0,
+              vertical: 5.0,
+            ),
+            decoration: BoxDecoration(
+              color: isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: borderColor, width: 1),
+            ),
+            child: Text(
+              '极简',
+              style: TextStyle(
+                fontSize: isCompactWidth ? 10.5 : 11.0,
+                fontWeight: FontWeight.w700,
+                color: isDark ? Colors.white : const Color(0xFF0F172A),
               ),
-              _buildSegmentTab(
-                label: '高级',
-                isSelected: !isLightMode,
-                onTap: () =>
-                    ref.read(customMvpProvider.notifier).setEnabled(false),
-                isDark: isDark,
-                isCompactWidth: isCompactWidth,
-              ),
-            ],
+            ),
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildSegmentTab({
-    required String label,
-    required bool isSelected,
-    required VoidCallback onTap,
-    required bool isDark,
-    required bool isCompactWidth,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      behavior: HitTestBehavior.opaque,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 180),
-        curve: Curves.easeOutCubic,
-        padding: EdgeInsets.symmetric(
-          horizontal: isCompactWidth ? 11.0 : 14.0,
-          vertical: 4.0,
-        ),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? (isDark ? const Color(0xFF334155) : Colors.white)
-              : Colors.transparent,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: isSelected
-              ? [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.08),
-                    blurRadius: 4,
-                    offset: const Offset(0, 1),
-                  ),
-                ]
-              : null,
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            fontSize: isCompactWidth ? 10.5 : 11.0,
-            fontWeight: FontWeight.w700,
-            color: isSelected
-                ? (isDark ? Colors.white : const Color(0xFF0F172A))
-                : (isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B)),
-          ),
-        ),
-      ),
     );
   }
 
