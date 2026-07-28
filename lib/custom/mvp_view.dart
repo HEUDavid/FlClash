@@ -122,7 +122,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
-          backgroundColor: const Color(0xFF6666FB),
+          backgroundColor: const Color(0xFF6B6BEE),
         ),
       );
     } catch (e) {
@@ -235,7 +235,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
-          backgroundColor: const Color(0xFF6666FB),
+          backgroundColor: const Color(0xFF6B6BEE),
         ),
       );
     } catch (e) {
@@ -322,7 +322,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     final borderColor =
         isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0);
 
-    const activeColor = Color(0xFF6666FB);
+    const activeColor = Color(0xFF6B6BEE);
     const activeColorDark = Color(0xFF336AB6);
     final inactiveGray =
         isDark ? const Color(0xFF475569) : const Color(0xFFCBD5E1);
@@ -1364,7 +1364,7 @@ class AdGuardShieldPainter extends CustomPainter {
     // 1. Draw Outer Ambient Drop Shadow
     final shadowPaint = Paint()
       ..color = (isStart
-          ? const Color(0xFF6666FB).withValues(alpha: 0.30)
+          ? const Color(0xFF6B6BEE).withValues(alpha: 0.30)
           : Colors.black.withValues(alpha: isDark ? 0.40 : 0.12))
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 12.0);
     canvas.save();
