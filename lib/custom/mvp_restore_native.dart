@@ -58,9 +58,7 @@ Future<void> downloadAndRestoreBackup(String url) async {
     await globalState.container
         .read(backupActionProvider.notifier)
         .restore(RestoreOption.all);
-    await globalState.container
-        .read(setupActionProvider.notifier)
-        .applyProfile(force: true);
+    await _syncAndRefreshProviders(globalState.container);
   } else {
     throw 'HTTP ${response.statusCode}';
   }
@@ -73,7 +71,18 @@ Future<void> updateSubscriptionOrBackup(String url) async {
   // 1. 刷新订阅 Profile 文件
   await container.read(profilesActionProvider.notifier).updateProfiles();
 
-  // 2. 刷新所有规则集与外部 Provider (Rule / Proxy Providers)
+  // 2. 触发所有外部 Provider 的规则同步与核心配置应用
+  await _syncAndRefreshProviders(container);
+}
+
+Future<void> _syncAndRefreshProviders(dynamic container) async {
+  // 1. 首次应用 Profile 配置，让内核绑定并解析出配置文件中的 Provider 列表
+  await container.read(setupActionProvider.notifier).applyProfile(force: true);
+
+  // 2. 同步 Provider 列表，确保 Riverpod 获取到内核中初始注册的 Providers
+  await container.read(providersProvider.notifier).syncProviders();
+
+  // 3. 遍历拉取并下载所有的规则集与外部 Provider (Rule / Proxy Providers)
   final providers = container.read(providersProvider);
   if (providers.isNotEmpty) {
     final updateTasks = providers.map((provider) async {
@@ -86,9 +95,19 @@ Future<void> updateSubscriptionOrBackup(String url) async {
       }
     });
     await Future.wait(updateTasks);
+
+    // 4. 所有外部文件下载完毕后，再次同步，获取真实的完整规则条数（不为0）
+    await container.read(providersProvider.notifier).syncProviders();
+
+    // 5. 再次应用配置，确保刚下载完的外部规则被内核安全加载，杜绝警告
+    await container
+        .read(setupActionProvider.notifier)
+        .applyProfile(force: true);
   }
 
-  // 3. 重新同步并载入核心配置
-  await container.read(providersProvider.notifier).syncProviders();
-  await container.read(setupActionProvider.notifier).applyProfile(force: true);
+  // 6. 刷新并使当前的 clashConfig 缓存失效，保障 UI 立即反映正确的规则条数
+  final currentProfileId = container.read(currentProfileIdProvider);
+  if (currentProfileId != null) {
+    container.invalidate(clashConfigProvider(currentProfileId));
+  }
 }
