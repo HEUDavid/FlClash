@@ -37,15 +37,15 @@ extension MvpDateTimeExtension on DateTime {
       return '${(days / 30).floor()}个月前';
     }
     if (days >= 1) {
-      return '${days}天前';
+      return '$days天前';
     }
     final hours = difference.inHours;
     if (hours >= 1) {
-      return '${hours}小时前';
+      return '$hours小时前';
     }
     final minutes = difference.inMinutes;
     if (minutes >= 1) {
-      return '${minutes}分钟前';
+      return '$minutes分钟前';
     }
     return '刚刚';
   }

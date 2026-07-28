@@ -185,7 +185,7 @@ class ApplicationState extends ConsumerState<Application> {
         );
       },
       child: Consumer(
-        builder: (_, ref, __) {
+        builder: (_, ref, child) {
           final isLightMode = ref.watch(customMvpProvider);
           return isLightMode ? const CustomMvpView() : const HomePage();
         },

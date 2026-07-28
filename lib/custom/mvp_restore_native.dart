@@ -46,9 +46,7 @@ Future<void> downloadAndRestoreBackup(String url) async {
 
       final unencryptedBytes = ZipEncoder().encode(archive);
 
-      if (unencryptedBytes != null) {
-        await File(backupPath).writeAsBytes(unencryptedBytes);
-      }
+      await File(backupPath).writeAsBytes(unencryptedBytes);
     } finally {
       if (await tempFile.exists()) {
         await tempFile.delete();

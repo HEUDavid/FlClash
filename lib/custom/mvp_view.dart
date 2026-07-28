@@ -319,7 +319,6 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final isLightMode = ref.watch(customMvpProvider);
 
     // Dynamic dual-mode resolution (App Mode vs Web Preview Mode)
     final bool isStart =
