@@ -85,7 +85,7 @@ Future<void> _syncAndRefreshProviders(dynamic container) async {
   // 3. 遍历拉取并下载所有的规则集与外部 Provider (Rule / Proxy Providers)
   final providers = container.read(providersProvider);
   if (providers.isNotEmpty) {
-    final updateTasks = providers.map((provider) async {
+    final updateTasks = (providers as Iterable).map<Future<void>>((provider) async {
       try {
         await container
             .read(proxiesActionProvider.notifier)
