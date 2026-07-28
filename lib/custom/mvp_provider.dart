@@ -54,6 +54,10 @@ class CustomProfilesNotifier extends Notifier<List<MvpProfileItem>> {
       label: label,
       url: url,
       lastUpdateDate: DateTime.now(),
+      rulesCount: 15,
+      ruleProvidersCount: 3,
+      ruleProvidersTotalRules: 45280,
+      ruleProvidersCounts: const [9, 4, 13],
     );
     state = [...state, newItem];
   }

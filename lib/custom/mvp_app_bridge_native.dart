@@ -37,8 +37,20 @@ class MvpAppBridge {
 
   static MvpProfileItem? watchActiveProfile(WidgetRef ref) {
     try {
+      final loadedProviders = ref.watch(providersProvider);
+      final ruleProviders =
+          loadedProviders.where((item) => item.type == 'Rule').toList();
+      final int? ruleProvidersTotalRules = ruleProviders.isNotEmpty
+          ? ruleProviders.fold<int>(0, (sum, item) => sum + item.count)
+          : null;
+      final List<int>? ruleProvidersCounts = ruleProviders.isNotEmpty
+          ? ruleProviders.map((item) => item.count).toList()
+          : null;
+
       final realCurrentProfile = ref.watch(currentProfileProvider);
       if (realCurrentProfile != null) {
+        final clashConfig =
+            ref.watch(clashConfigProvider(realCurrentProfile.id)).value;
         return MvpProfileItem(
           id: realCurrentProfile.id.toString(),
           label: realCurrentProfile.label.isNotEmpty
@@ -46,16 +58,25 @@ class MvpAppBridge {
               : '在线配置集合',
           url: realCurrentProfile.url,
           lastUpdateDate: realCurrentProfile.lastUpdateDate,
+          rulesCount: clashConfig?.rules.length,
+          ruleProvidersCount: clashConfig?.ruleProviders.length,
+          ruleProvidersTotalRules: ruleProvidersTotalRules,
+          ruleProvidersCounts: ruleProvidersCounts,
         );
       }
       final realProfiles = ref.watch(profilesProvider);
       if (realProfiles.isNotEmpty) {
         final p = realProfiles.first;
+        final clashConfig = ref.watch(clashConfigProvider(p.id)).value;
         return MvpProfileItem(
           id: p.id.toString(),
           label: p.label.isNotEmpty ? p.label : '在线配置集合',
           url: p.url,
           lastUpdateDate: p.lastUpdateDate,
+          rulesCount: clashConfig?.rules.length,
+          ruleProvidersCount: clashConfig?.ruleProviders.length,
+          ruleProvidersTotalRules: ruleProvidersTotalRules,
+          ruleProvidersCounts: ruleProvidersCounts,
         );
       }
     } catch (e) {

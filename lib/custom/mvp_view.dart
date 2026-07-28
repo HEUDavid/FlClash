@@ -1054,6 +1054,50 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                           : const Color(0xFF64748B),
                     ),
                   ),
+                  const SizedBox(height: 2),
+                  Builder(
+                    builder: (context) {
+                      final rulesCount = activeProfile.rulesCount;
+                      if (rulesCount == null) {
+                        return Text(
+                          '规则获取中...',
+                          style: TextStyle(
+                            fontSize: isCompactWidth ? 10.0 : 11.0,
+                            color: isDark
+                                ? const Color(0xFF94A3B8)
+                                : const Color(0xFF64748B),
+                          ),
+                        );
+                      }
+                      String formatNum(int n) => n.toString().replaceAllMapped(
+                            RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+                            (Match m) => '${m[1]},',
+                          );
+                      final StringBuffer sb =
+                          StringBuffer('规则 ${formatNum(rulesCount)}');
+                      final providerCount = activeProfile.ruleProvidersCount;
+                      if (providerCount != null && providerCount > 0) {
+                        sb.write(', 子规则 ${formatNum(providerCount)}');
+                        final counts = activeProfile.ruleProvidersCounts;
+                        if (counts != null && counts.isNotEmpty) {
+                          final formattedCounts =
+                              counts.map(formatNum).join(' | ');
+                          sb.write(' <$formattedCounts>');
+                        }
+                      }
+                      return Text(
+                        sb.toString(),
+                        style: TextStyle(
+                          fontSize: isCompactWidth ? 10.0 : 11.0,
+                          color: isDark
+                              ? const Color(0xFF94A3B8)
+                              : const Color(0xFF64748B),
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      );
+                    },
+                  ),
                 ],
               ),
             ),
@@ -1268,10 +1312,22 @@ class AdGuardShieldPainter extends CustomPainter {
     sheenPath.moveTo(w * 0.20, h * 0.04);
     sheenPath.quadraticBezierTo(w * 0.50, 0, w * 0.80, h * 0.04);
     sheenPath.cubicTo(
-        w * 0.94, h * 0.06, w * 0.98, h * 0.20, w * 0.92, h * 0.38);
+      w * 0.94,
+      h * 0.06,
+      w * 0.98,
+      h * 0.20,
+      w * 0.92,
+      h * 0.38,
+    );
     sheenPath.quadraticBezierTo(w * 0.50, h * 0.26, w * 0.08, h * 0.38);
     sheenPath.cubicTo(
-        w * 0.02, h * 0.20, w * 0.06, h * 0.06, w * 0.20, h * 0.04);
+      w * 0.02,
+      h * 0.20,
+      w * 0.06,
+      h * 0.06,
+      w * 0.20,
+      h * 0.04,
+    );
     sheenPath.close();
 
     final sheenPaint = Paint()
