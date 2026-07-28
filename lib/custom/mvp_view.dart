@@ -430,6 +430,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
           },
         ),
       ),
+      ),
     );
   }
 
