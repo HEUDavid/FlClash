@@ -369,7 +369,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         behavior: HitTestBehavior.translucent,
         child: SafeArea(
-        child: LayoutBuilder(
+          child: LayoutBuilder(
           builder: (context, constraints) {
             final bool isCompactWidth = constraints.maxWidth < 360;
             final bool isWideWidth = constraints.maxWidth >= 600;
@@ -406,7 +406,6 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                           // 1. Top Header with AdGuard Logo & Mode Switcher
                           _buildAdGuardHeader(
                             isDark: isDark,
-                            isLightMode: isLightMode,
                             borderColor: borderColor,
                             activeColor: activeColor,
                             isCompactWidth: isCompactWidth,
@@ -473,7 +472,6 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
   // 1. AdGuard Header Bar
   Widget _buildAdGuardHeader({
     required bool isDark,
-    required bool isLightMode,
     required Color borderColor,
     required Color activeColor,
     required bool isCompactWidth,
@@ -489,66 +487,73 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         // App Identity with Shield Symbol
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: logoSize,
-              height: logoSize,
-              decoration: BoxDecoration(
-                color: activeColor.withValues(alpha: 0.12),
-                shape: BoxShape.circle,
-              ),
-              child: Center(
-                child: SizedBox(
-                  width: shieldWidth,
-                  height: shieldHeight,
-                  child: CustomPaint(
-                    painter: AdGuardShieldPainter(
-                      fillColor: activeColor,
-                      borderColor: Colors.transparent,
-                      isDark: isDark,
-                      isStart: true,
-                    ),
-                    child: Center(
-                      child: Icon(
-                        Icons.check_rounded,
-                        size: iconSize,
-                        color: Colors.white,
+        Expanded(
+          child: Row(
+            children: [
+              Container(
+                width: logoSize,
+                height: logoSize,
+                decoration: BoxDecoration(
+                  color: activeColor.withValues(alpha: 0.12),
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: SizedBox(
+                    width: shieldWidth,
+                    height: shieldHeight,
+                    child: CustomPaint(
+                      painter: AdGuardShieldPainter(
+                        fillColor: activeColor,
+                        borderColor: Colors.transparent,
+                        isDark: isDark,
+                        isStart: true,
+                      ),
+                      child: Center(
+                        child: Icon(
+                          Icons.check_rounded,
+                          size: iconSize,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-            SizedBox(width: isCompactWidth ? 8.0 : 10.0),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Block Ad',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w800,
-                    fontSize: titleSize,
-                    letterSpacing: 0.2,
-                    color: isDark ? Colors.white : const Color(0xFF0F172A),
-                  ),
+              SizedBox(width: isCompactWidth ? 8.0 : 10.0),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Block Ad',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w800,
+                        fontSize: titleSize,
+                        letterSpacing: 0.2,
+                        color: isDark ? Colors.white : const Color(0xFF0F172A),
+                      ),
+                    ),
+                    Text(
+                      '智能拦截与隐私保护',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: subtitleSize,
+                        color: isDark
+                            ? const Color(0xFF94A3B8)
+                            : const Color(0xFF64748B),
+                      ),
+                    ),
+                  ],
                 ),
-                Text(
-                  '智能拦截与隐私保护',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: subtitleSize,
-                    color: isDark
-                        ? const Color(0xFF94A3B8)
-                        : const Color(0xFF64748B),
-                  ),
-                ),
-              ],
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
-
+        SizedBox(width: isCompactWidth ? 8.0 : 12.0),
         // Mode Tag [ 极简 ] (Tap 5 times continuously to switch to Advanced mode)
         GestureDetector(
           onTap: _handleMinimalTap,
