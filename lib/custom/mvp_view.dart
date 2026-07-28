@@ -322,14 +322,17 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     final borderColor =
         isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0);
 
-    const activeGreen = Color(0xFF6666FB);
-    const activeGreenDark = Color(0xFF336AB6);
+    const activeColor = Color(0xFF6666FB);
+    const activeColorDark = Color(0xFF336AB6);
     final inactiveGray =
         isDark ? const Color(0xFF475569) : const Color(0xFFCBD5E1);
 
     return Scaffold(
       backgroundColor: bgPrimary,
-      body: SafeArea(
+      body: GestureDetector(
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        behavior: HitTestBehavior.translucent,
+        child: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
             final bool isCompactWidth = constraints.maxWidth < 360;
@@ -369,7 +372,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                             isDark: isDark,
                             isLightMode: isLightMode,
                             borderColor: borderColor,
-                            activeGreen: activeGreen,
+                            activeColor: activeColor,
                             isCompactWidth: isCompactWidth,
                           ),
 
@@ -381,8 +384,8 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                             isDark: isDark,
                             isStart: isStart,
                             coreStatus: coreStatus,
-                            activeGreen: activeGreen,
-                            activeGreenDark: activeGreenDark,
+                            activeColor: activeColor,
+                            activeColorDark: activeColorDark,
                             inactiveGray: inactiveGray,
                             isCompactHeight: isCompactHeight,
                             isCompactWidth: isCompactWidth,
@@ -399,7 +402,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                             coreStatus: coreStatus,
                             cardBg: cardBg,
                             borderColor: borderColor,
-                            activeGreen: activeGreen,
+                            activeColor: activeColor,
                             isCompactWidth: isCompactWidth,
                           ),
 
@@ -412,7 +415,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                             activeProfile: activeProfile,
                             cardBg: cardBg,
                             borderColor: borderColor,
-                            activeGreen: activeGreen,
+                            activeColor: activeColor,
                             isCompactWidth: isCompactWidth,
                           ),
 
@@ -435,7 +438,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     required bool isDark,
     required bool isLightMode,
     required Color borderColor,
-    required Color activeGreen,
+    required Color activeColor,
     required bool isCompactWidth,
   }) {
     final double logoSize = isCompactWidth ? 30.0 : 34.0;
@@ -454,12 +457,12 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
               width: logoSize,
               height: logoSize,
               decoration: BoxDecoration(
-                color: activeGreen.withValues(alpha: 0.12),
+                color: activeColor.withValues(alpha: 0.12),
                 shape: BoxShape.circle,
               ),
               child: CustomPaint(
                 painter: AdGuardShieldPainter(
-                  fillColor: activeGreen,
+                  fillColor: activeColor,
                   borderColor: Colors.transparent,
                   isDark: isDark,
                   isStart: true,
@@ -587,8 +590,8 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     required bool isDark,
     required bool isStart,
     required MvpCoreStatus coreStatus,
-    required Color activeGreen,
-    required Color activeGreenDark,
+    required Color activeColor,
+    required Color activeColorDark,
     required Color inactiveGray,
     required bool isCompactHeight,
     required bool isCompactWidth,
@@ -642,7 +645,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            color: activeGreen.withValues(alpha: 0.35),
+                            color: activeColor.withValues(alpha: 0.35),
                             blurRadius: isCompactHeight ? 30.0 : 38.0,
                             spreadRadius: isCompactHeight ? 2.0 : 4.0,
                           ),
@@ -668,7 +671,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                     builder: (context, progress, child) {
                       final currentFill = Color.lerp(
                         offBgColor,
-                        activeGreen,
+                        activeColor,
                         progress,
                       )!;
                       final currentBorder = Color.lerp(
@@ -693,12 +696,12 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                                   )!,
                                   Color.lerp(
                                     offBgColor,
-                                    activeGreen,
+                                    activeColor,
                                     progress,
                                   )!,
                                   Color.lerp(
                                     offBgColor,
-                                    activeGreenDark,
+                                    activeColorDark,
                                     progress,
                                   )!,
                                 ]
@@ -821,7 +824,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     required MvpCoreStatus coreStatus,
     required Color cardBg,
     required Color borderColor,
-    required Color activeGreen,
+    required Color activeColor,
     required bool isCompactWidth,
   }) {
     return Row(
@@ -834,7 +837,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
             value: isStart ? '已开启' : '未开启',
             cardBg: cardBg,
             borderColor: borderColor,
-            activeColor: activeGreen,
+            activeColor: activeColor,
             isActive: isStart,
             isCompactWidth: isCompactWidth,
           ),
@@ -852,7 +855,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
             },
             cardBg: cardBg,
             borderColor: borderColor,
-            activeColor: activeGreen,
+            activeColor: activeColor,
             isActive: isStart,
             isCompactWidth: isCompactWidth,
           ),
@@ -952,7 +955,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     required MvpProfileItem activeProfile,
     required Color cardBg,
     required Color borderColor,
-    required Color activeGreen,
+    required Color activeColor,
     required bool isCompactWidth,
   }) {
     return Container(
@@ -1024,7 +1027,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                       style: TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.w700,
-                        color: activeGreen,
+                        color: activeColor,
                       ),
                     ),
                   ),
@@ -1042,13 +1045,13 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                     isDark: isDark,
                     activeProfile: activeProfile,
                     borderColor: borderColor,
-                    activeGreen: activeGreen,
+                    activeColor: activeColor,
                     isCompactWidth: isCompactWidth,
                   )
                 : _buildImportInputDisplay(
                     isDark: isDark,
                     borderColor: borderColor,
-                    activeGreen: activeGreen,
+                    activeColor: activeColor,
                     isCompactWidth: isCompactWidth,
                   ),
           ),
@@ -1061,12 +1064,11 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     required bool isDark,
     required MvpProfileItem activeProfile,
     required Color borderColor,
-    required Color activeGreen,
+    required Color activeColor,
     required bool isCompactWidth,
   }) {
     return SizedBox(
       key: const ValueKey('active_profile_adguard'),
-      height: 100,
       child: Container(
         width: double.infinity,
         padding: EdgeInsets.symmetric(
@@ -1085,10 +1087,10 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
               height: 10,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: activeGreen,
+                color: activeColor,
                 boxShadow: [
                   BoxShadow(
-                    color: activeGreen.withValues(alpha: 0.4),
+                    color: activeColor.withValues(alpha: 0.4),
                     blurRadius: 6,
                   ),
                 ],
@@ -1181,11 +1183,11 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                 decoration: BoxDecoration(
                   color:
-                      activeGreen.withValues(alpha: _isUpdating ? 0.08 : 0.12),
+                      activeColor.withValues(alpha: _isUpdating ? 0.08 : 0.12),
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(
                     color:
-                        activeGreen.withValues(alpha: _isUpdating ? 0.2 : 0.3),
+                        activeColor.withValues(alpha: _isUpdating ? 0.2 : 0.3),
                     width: 1,
                   ),
                 ),
@@ -1198,13 +1200,13 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                             height: 12,
                             child: CircularProgressIndicator(
                               strokeWidth: 1.8,
-                              color: activeGreen,
+                              color: activeColor,
                             ),
                           )
                         : Icon(
                             Icons.sync_rounded,
                             size: 14,
-                            color: activeGreen,
+                            color: activeColor,
                           ),
                     const SizedBox(width: 4),
                     Text(
@@ -1212,7 +1214,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
-                        color: activeGreen,
+                        color: activeColor,
                       ),
                     ),
                   ],
@@ -1228,12 +1230,11 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
   Widget _buildImportInputDisplay({
     required bool isDark,
     required Color borderColor,
-    required Color activeGreen,
+    required Color activeColor,
     required bool isCompactWidth,
   }) {
     return SizedBox(
       key: const ValueKey('import_input_adguard'),
-      height: 100,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -1266,7 +1267,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(color: activeGreen, width: 1),
+                borderSide: BorderSide(color: activeColor, width: 1),
               ),
               filled: true,
               fillColor:
@@ -1283,7 +1284,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
           child: FilledButton(
             onPressed: _isImporting ? null : _handleImportConfigZip,
             style: FilledButton.styleFrom(
-              backgroundColor: activeGreen,
+              backgroundColor: activeColor,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),

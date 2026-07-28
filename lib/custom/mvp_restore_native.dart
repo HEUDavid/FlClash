@@ -92,6 +92,7 @@ Future<void> _syncAndRefreshProviders(dynamic container) async {
             .updateProvider(provider);
       } catch (e) {
         commonPrint.log('updateProvider fail, retrying: $e', logLevel: LogLevel.warning);
+        await Future.delayed(const Duration(seconds: 1));
         try {
           await container
               .read(proxiesActionProvider.notifier)

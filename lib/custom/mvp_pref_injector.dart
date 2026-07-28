@@ -36,9 +36,7 @@ class MvpPrefInjector {
         await prefs.setString('config', json.encode(configMap));
       }
 
-      if (prefs.getInt('version') == null || prefs.getInt('version') == 0) {
-        await prefs.setInt('version', 1);
-      }
+
 
       // 如果当前上下文有 Riverpod ref，同步刷新内存中的 State
       if (ref != null) {

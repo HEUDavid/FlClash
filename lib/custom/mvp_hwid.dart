@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'dart:math';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MvpHwid {
@@ -8,6 +10,20 @@ class MvpHwid {
   static Future<String> getHwid() async {
     if (_cachedHwid != null && _cachedHwid!.isNotEmpty) {
       return _cachedHwid!;
+    }
+
+    try {
+      if (Platform.isAndroid) {
+        final deviceInfoPlugin = DeviceInfoPlugin();
+        final androidInfo = await deviceInfoPlugin.androidInfo;
+        final androidId = androidInfo.id; // Usually returns ANDROID_ID (idempotent per signing key on Android 8+)
+        if (androidId.isNotEmpty) {
+          _cachedHwid = androidId;
+          return androidId;
+        }
+      }
+    } catch (_) {
+      // Ignore and fallback
     }
 
     try {
