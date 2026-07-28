@@ -443,9 +443,11 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     required bool isCompactWidth,
   }) {
     final double logoSize = isCompactWidth ? 30.0 : 34.0;
-    final double iconSize = isCompactWidth ? 14.0 : 16.0;
+    final double iconSize = isCompactWidth ? 12.0 : 13.5;
     final double titleSize = isCompactWidth ? 16.0 : 18.0;
     final double subtitleSize = isCompactWidth ? 9.5 : 10.0;
+    final double shieldHeight = logoSize * 0.85;
+    final double shieldWidth = shieldHeight * (185.0 / 220.0);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -461,18 +463,24 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                 color: activeColor.withValues(alpha: 0.12),
                 shape: BoxShape.circle,
               ),
-              child: CustomPaint(
-                painter: AdGuardShieldPainter(
-                  fillColor: activeColor,
-                  borderColor: Colors.transparent,
-                  isDark: isDark,
-                  isStart: true,
-                ),
-                child: Center(
-                  child: Icon(
-                    Icons.check_rounded,
-                    size: iconSize,
-                    color: Colors.white,
+              child: Center(
+                child: SizedBox(
+                  width: shieldWidth,
+                  height: shieldHeight,
+                  child: CustomPaint(
+                    painter: AdGuardShieldPainter(
+                      fillColor: activeColor,
+                      borderColor: Colors.transparent,
+                      isDark: isDark,
+                      isStart: true,
+                    ),
+                    child: Center(
+                      child: Icon(
+                        Icons.check_rounded,
+                        size: iconSize,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                 ),
               ),
