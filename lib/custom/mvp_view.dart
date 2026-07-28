@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:fl_clash/common/common.dart';
-
 import 'mvp_app_bridge_helper.dart';
 import 'mvp_models.dart';
 import 'mvp_provider.dart';
