@@ -1034,27 +1034,22 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
           const SizedBox(height: 12),
 
           // Animated Switcher between Active Profile view and Input View
-          AnimatedSize(
+          AnimatedSwitcher(
             duration: const Duration(milliseconds: 220),
-            curve: Curves.easeInOut,
-            alignment: Alignment.topCenter,
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 220),
-              child: (hasProfile && !_showInputArea)
-                  ? _buildActiveProfileDisplay(
-                      isDark: isDark,
-                      activeProfile: activeProfile,
-                      borderColor: borderColor,
-                      activeColor: activeColor,
-                      isCompactWidth: isCompactWidth,
-                    )
-                  : _buildImportInputDisplay(
-                      isDark: isDark,
-                      borderColor: borderColor,
-                      activeColor: activeColor,
-                      isCompactWidth: isCompactWidth,
-                    ),
-            ),
+            child: (hasProfile && !_showInputArea)
+                ? _buildActiveProfileDisplay(
+                    isDark: isDark,
+                    activeProfile: activeProfile,
+                    borderColor: borderColor,
+                    activeColor: activeColor,
+                    isCompactWidth: isCompactWidth,
+                  )
+                : _buildImportInputDisplay(
+                    isDark: isDark,
+                    borderColor: borderColor,
+                    activeColor: activeColor,
+                    isCompactWidth: isCompactWidth,
+                  ),
           ),
         ],
       ),
@@ -1070,6 +1065,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
   }) {
     return SizedBox(
       key: const ValueKey('active_profile_adguard'),
+      height: 100,
       child: Container(
         width: double.infinity,
         padding: EdgeInsets.symmetric(
@@ -1088,10 +1084,10 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
               height: 10,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: const Color(0xFF5CA8E9),
+                color: activeColor,
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFF5CA8E9).withValues(alpha: 0.4),
+                    color: activeColor.withValues(alpha: 0.4),
                     blurRadius: 6,
                   ),
                 ],
@@ -1236,6 +1232,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
   }) {
     return SizedBox(
       key: const ValueKey('import_input_adguard'),
+      height: 100,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
