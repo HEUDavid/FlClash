@@ -44,7 +44,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                 Icon(Icons.tune_rounded, color: Colors.white, size: 18),
                 SizedBox(width: 8),
                 Text('已切换至高级模式',
-                    style: TextStyle(letterSpacing: 0.5, fontSize: 13)),
+                    style: TextStyle(letterSpacing: 0.5, fontSize: 13, color: Colors.white)),
               ],
             ),
             behavior: SnackBarBehavior.floating,
@@ -79,7 +79,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
               children: [
                 Icon(Icons.hourglass_empty_rounded, color: Colors.white, size: 18),
                 SizedBox(width: 8),
-                Text('操作处理中，请稍候...', style: TextStyle(letterSpacing: 0.5, fontSize: 13)),
+                Text('操作处理中，请稍候...', style: TextStyle(letterSpacing: 0.5, fontSize: 13, color: Colors.white)),
               ],
             ),
             behavior: SnackBarBehavior.floating,
@@ -104,7 +104,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
               SizedBox(width: 8),
               Text(
                 '请先导入配置文件',
-                style: TextStyle(letterSpacing: 0.5, fontSize: 13),
+                style: TextStyle(letterSpacing: 0.5, fontSize: 13, color: Colors.white),
               ),
             ],
           ),
@@ -150,7 +150,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
               SizedBox(width: 8),
               Text(
                 '配置集已同步至最新',
-                style: TextStyle(letterSpacing: 0.5, fontSize: 13),
+                style: TextStyle(letterSpacing: 0.5, fontSize: 13, color: Colors.white),
               ),
             ],
           ),
@@ -179,7 +179,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
               Expanded(
                 child: Text(
                   '更新失败: $e',
-                  style: const TextStyle(letterSpacing: 0.5, fontSize: 13),
+                  style: const TextStyle(letterSpacing: 0.5, fontSize: 13, color: Colors.white),
                 ),
               ),
             ],
@@ -223,7 +223,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
               SizedBox(width: 8),
               Text(
                 '请输入有效的配置文件链接',
-                style: TextStyle(letterSpacing: 0.5, fontSize: 13),
+                style: TextStyle(letterSpacing: 0.5, fontSize: 13, color: Colors.white),
               ),
             ],
           ),
@@ -263,7 +263,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
               SizedBox(width: 8),
               Text(
                 '导入成功',
-                style: TextStyle(letterSpacing: 0.5, fontSize: 13),
+                style: TextStyle(letterSpacing: 0.5, fontSize: 13, color: Colors.white),
               ),
             ],
           ),
@@ -292,7 +292,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
               Expanded(
                 child: Text(
                   '导入失败: $e',
-                  style: const TextStyle(letterSpacing: 0.5, fontSize: 13),
+                  style: const TextStyle(letterSpacing: 0.5, fontSize: 13, color: Colors.white),
                 ),
               ),
             ],
@@ -1034,22 +1034,27 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
           const SizedBox(height: 12),
 
           // Animated Switcher between Active Profile view and Input View
-          AnimatedSwitcher(
+          AnimatedSize(
             duration: const Duration(milliseconds: 220),
-            child: (hasProfile && !_showInputArea)
-                ? _buildActiveProfileDisplay(
-                    isDark: isDark,
-                    activeProfile: activeProfile,
-                    borderColor: borderColor,
-                    activeColor: activeColor,
-                    isCompactWidth: isCompactWidth,
-                  )
-                : _buildImportInputDisplay(
-                    isDark: isDark,
-                    borderColor: borderColor,
-                    activeColor: activeColor,
-                    isCompactWidth: isCompactWidth,
-                  ),
+            curve: Curves.easeInOut,
+            alignment: Alignment.topCenter,
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 220),
+              child: (hasProfile && !_showInputArea)
+                  ? _buildActiveProfileDisplay(
+                      isDark: isDark,
+                      activeProfile: activeProfile,
+                      borderColor: borderColor,
+                      activeColor: activeColor,
+                      isCompactWidth: isCompactWidth,
+                    )
+                  : _buildImportInputDisplay(
+                      isDark: isDark,
+                      borderColor: borderColor,
+                      activeColor: activeColor,
+                      isCompactWidth: isCompactWidth,
+                    ),
+            ),
           ),
         ],
       ),
@@ -1083,10 +1088,10 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
               height: 10,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: activeColor,
+                color: const Color(0xFF5CA8E9),
                 boxShadow: [
                   BoxShadow(
-                    color: activeColor.withValues(alpha: 0.4),
+                    color: const Color(0xFF5CA8E9).withValues(alpha: 0.4),
                     blurRadius: 6,
                   ),
                 ],
