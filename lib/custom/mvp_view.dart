@@ -378,10 +378,10 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
             final double horizontalPadding =
                 isCompactWidth ? 14.0 : (isWideWidth ? 28.0 : 20.0);
             final double maxContentWidth = isWideWidth ? 580.0 : 540.0;
-            final double verticalEdgePadding = isCompactHeight ? 14.0 : 24.0;
-            final double headerBottomGap = isCompactHeight ? 10.0 : 16.0;
-            final double shieldBottomGap = isCompactHeight ? 14.0 : 20.0;
-            final double cardsBottomGap = isCompactHeight ? 12.0 : 14.0;
+            final double verticalEdgePadding = isCompactHeight ? 10.0 : 16.0;
+            final double headerBottomGap = isCompactHeight ? 8.0 : 12.0;
+            final double shieldBottomGap = isCompactHeight ? 10.0 : 14.0;
+            final double cardsBottomGap = isCompactHeight ? 8.0 : 10.0;
 
             return SingleChildScrollView(
               physics: const BouncingScrollPhysics(
@@ -478,19 +478,21 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     required Color activeColor,
     required bool isCompactWidth,
   }) {
-    final double logoSize = isCompactWidth ? 30.0 : 34.0;
-    final double iconSize = isCompactWidth ? 12.0 : 13.5;
-    final double titleSize = isCompactWidth ? 16.0 : 18.0;
+    final double logoSize = isCompactWidth ? 28.0 : 30.0;
+    final double iconSize = isCompactWidth ? 11.5 : 12.5;
+    final double titleSize = isCompactWidth ? 15.0 : 16.0;
     final double subtitleSize = isCompactWidth ? 9.5 : 10.0;
     final double shieldHeight = logoSize * 0.85;
     final double shieldWidth = shieldHeight * (185.0 / 220.0);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         // App Identity with Shield Symbol
         Expanded(
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
                 width: logoSize,
@@ -525,6 +527,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       'Block Ad',
@@ -561,21 +564,28 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
           onTap: _handleMinimalTap,
           behavior: HitTestBehavior.opaque,
           child: Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: isCompactWidth ? 11.0 : 14.0,
-              vertical: 5.0,
+            padding: const EdgeInsets.symmetric(
+              horizontal: 8.0,
+              vertical: 3.5,
             ),
             decoration: BoxDecoration(
-              color: isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: borderColor, width: 1),
+              color: isDark
+                  ? const Color(0xFF1E293B).withValues(alpha: 0.6)
+                  : const Color(0xFFE2E8F0).withValues(alpha: 0.7),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: borderColor.withValues(alpha: 0.6),
+                width: 1,
+              ),
             ),
             child: Text(
               '极简',
               style: TextStyle(
-                fontSize: isCompactWidth ? 10.5 : 11.0,
-                fontWeight: FontWeight.w700,
-                color: isDark ? Colors.white : const Color(0xFF0F172A),
+                fontSize: 10.0,
+                fontWeight: FontWeight.w600,
+                color: isDark
+                    ? const Color(0xFF94A3B8)
+                    : const Color(0xFF64748B),
               ),
             ),
           ),
@@ -604,13 +614,13 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     final offBorderColor =
         isDark ? const Color(0xFF475569) : const Color(0xFF94A3B8);
 
-    final double shieldWidth = isCompactHeight ? 155.0 : 185.0;
-    final double shieldHeight = isCompactHeight ? 185.0 : 220.0;
-    final double mainIconSize = isCompactHeight ? 52.0 : 62.0;
-    final double subIconSize = isCompactHeight ? 18.0 : 22.0;
-    final double titleFontSize = isCompactWidth ? 20.0 : 22.0;
-    final double subtitleFontSize = isCompactWidth ? 12.0 : 13.0;
-    final double titleGap = isCompactHeight ? 12.0 : 18.0;
+    final double shieldWidth = isCompactHeight ? 115.0 : 135.0;
+    final double shieldHeight = isCompactHeight ? 136.0 : 160.0;
+    final double mainIconSize = isCompactHeight ? 38.0 : 46.0;
+    final double subIconSize = isCompactHeight ? 14.0 : 16.0;
+    final double titleFontSize = isCompactWidth ? 18.0 : 19.0;
+    final double subtitleFontSize = isCompactWidth ? 11.0 : 12.0;
+    final double titleGap = isCompactHeight ? 8.0 : 12.0;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -645,14 +655,14 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                         boxShadow: [
                           BoxShadow(
                             color: activeColor.withValues(alpha: 0.35),
-                            blurRadius: isCompactHeight ? 30.0 : 38.0,
-                            spreadRadius: isCompactHeight ? 2.0 : 4.0,
+                            blurRadius: isCompactHeight ? 20.0 : 26.0,
+                            spreadRadius: isCompactHeight ? 1.0 : 2.0,
                           ),
                           BoxShadow(
                             color:
                                 const Color(0xFF5CA8E9).withValues(alpha: 0.20),
-                            blurRadius: isCompactHeight ? 40.0 : 52.0,
-                            spreadRadius: isCompactHeight ? 6.0 : 10.0,
+                            blurRadius: isCompactHeight ? 28.0 : 36.0,
+                            spreadRadius: isCompactHeight ? 4.0 : 6.0,
                           ),
                         ],
                       ),
@@ -723,7 +733,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                         child: Container(
                           key: ValueKey(isStart),
                           padding:
-                              EdgeInsets.all(isCompactHeight ? 12.0 : 14.0),
+                              EdgeInsets.all(isCompactHeight ? 8.0 : 10.0),
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             color: Colors.white.withValues(
