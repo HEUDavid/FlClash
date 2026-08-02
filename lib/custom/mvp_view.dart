@@ -564,28 +564,21 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
           onTap: _handleMinimalTap,
           behavior: HitTestBehavior.opaque,
           child: Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 8.0,
-              vertical: 3.5,
+            padding: EdgeInsets.symmetric(
+              horizontal: isCompactWidth ? 7.0 : 8.0,
+              vertical: 5.0,
             ),
             decoration: BoxDecoration(
-              color: isDark
-                  ? const Color(0xFF1E293B).withValues(alpha: 0.6)
-                  : const Color(0xFFE2E8F0).withValues(alpha: 0.7),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: borderColor.withValues(alpha: 0.6),
-                width: 1,
-              ),
+              color: isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: borderColor, width: 1),
             ),
             child: Text(
               '极简',
               style: TextStyle(
-                fontSize: 10.0,
-                fontWeight: FontWeight.w600,
-                color: isDark
-                    ? const Color(0xFF94A3B8)
-                    : const Color(0xFF64748B),
+                fontSize: isCompactWidth ? 10.5 : 11.0,
+                fontWeight: FontWeight.w700,
+                color: isDark ? Colors.white : const Color(0xFF0F172A),
               ),
             ),
           ),
