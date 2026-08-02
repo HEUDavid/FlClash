@@ -1158,20 +1158,14 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                           ),
                         );
                       }
-                      String formatNum(int n) => n.toString().replaceAllMapped(
-                            RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-                            (Match m) => '${m[1]},',
-                          );
                       final StringBuffer sb =
-                          StringBuffer('规则 ${formatNum(rulesCount)}');
+                          StringBuffer('规则 $rulesCount');
                       final providerCount = activeProfile.ruleProvidersCount;
                       if (providerCount != null && providerCount > 0) {
-                        sb.write(', 子规则 ${formatNum(providerCount)}');
+                        sb.write('，子规则 $providerCount');
                         final counts = activeProfile.ruleProvidersCounts;
                         if (counts != null && counts.isNotEmpty) {
-                          final formattedCounts =
-                              counts.map(formatNum).join(' | ');
-                          sb.write(' <$formattedCounts>');
+                          sb.write(' <${counts.join(' | ')}>');
                         }
                       }
                       return Text(
