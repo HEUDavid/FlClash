@@ -572,16 +572,19 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
               vertical: 5.0,
             ),
             decoration: BoxDecoration(
-              color: isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: borderColor, width: 1),
+              color: isDark
+                  ? const Color(0xFF334155)
+                  : const Color(0xFFF1F5F9),
+              borderRadius: BorderRadius.circular(10),
             ),
             child: Text(
               '极简',
               style: TextStyle(
                 fontSize: isCompactWidth ? 10.5 : 11.0,
                 fontWeight: FontWeight.w700,
-                color: isDark ? Colors.white : const Color(0xFF0F172A),
+                color: isDark
+                    ? const Color(0xFF94A3B8)
+                    : const Color(0xFF64748B),
               ),
             ),
           ),
