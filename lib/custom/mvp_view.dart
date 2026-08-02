@@ -446,11 +446,13 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                           // 5. AdGuard Style Subscription / Profile Card
                           _buildProfileConfigCard(
                             isDark: isDark,
+                            isStart: isStart,
                             hasProfile: hasProfile,
                             activeProfile: activeProfile,
                             cardBg: cardBg,
                             borderColor: borderColor,
                             activeColor: activeColor,
+                            inactiveGray: inactiveGray,
                             isCompactWidth: isCompactWidth,
                           ),
 
@@ -948,11 +950,13 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
   // 4. AdGuard Style Profile Config Card
   Widget _buildProfileConfigCard({
     required bool isDark,
+    required bool isStart,
     required bool hasProfile,
     required MvpProfileItem activeProfile,
     required Color cardBg,
     required Color borderColor,
     required Color activeColor,
+    required Color inactiveGray,
     required bool isCompactWidth,
   }) {
     return Container(
@@ -1040,9 +1044,11 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
             child: (hasProfile && !_showInputArea)
                 ? _buildActiveProfileDisplay(
                     isDark: isDark,
+                    isStart: isStart,
                     activeProfile: activeProfile,
                     borderColor: borderColor,
                     activeColor: activeColor,
+                    inactiveGray: inactiveGray,
                     isCompactWidth: isCompactWidth,
                   )
                 : _buildImportInputDisplay(
@@ -1059,9 +1065,11 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
 
   Widget _buildActiveProfileDisplay({
     required bool isDark,
+    required bool isStart,
     required MvpProfileItem activeProfile,
     required Color borderColor,
     required Color activeColor,
+    required Color inactiveGray,
     required bool isCompactWidth,
   }) {
     return SizedBox(
@@ -1085,13 +1093,15 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
               height: 10,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: activeColor,
-                boxShadow: [
-                  BoxShadow(
-                    color: activeColor.withValues(alpha: 0.4),
-                    blurRadius: 6,
-                  ),
-                ],
+                color: isStart ? activeColor : inactiveGray,
+                boxShadow: isStart
+                    ? [
+                        BoxShadow(
+                          color: activeColor.withValues(alpha: 0.4),
+                          blurRadius: 6,
+                        ),
+                      ]
+                    : null,
               ),
             ),
             SizedBox(width: isCompactWidth ? 8.0 : 12.0),
