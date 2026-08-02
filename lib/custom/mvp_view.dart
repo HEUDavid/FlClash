@@ -478,11 +478,11 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     required Color activeColor,
     required bool isCompactWidth,
   }) {
-    final double logoSize = isCompactWidth ? 28.0 : 30.0;
-    final double iconSize = isCompactWidth ? 11.5 : 12.5;
+    final double logoSize = isCompactWidth ? 32.0 : 36.0;
+    final double iconSize = isCompactWidth ? 13.0 : 14.5;
     final double titleSize = isCompactWidth ? 15.0 : 16.0;
     final double subtitleSize = isCompactWidth ? 9.5 : 10.0;
-    final double shieldHeight = logoSize * 0.85;
+    final double shieldHeight = logoSize * 0.82;
     final double shieldWidth = shieldHeight * (185.0 / 220.0);
 
     return Row(
@@ -536,10 +536,12 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                       style: TextStyle(
                         fontWeight: FontWeight.w800,
                         fontSize: titleSize,
+                        height: 1.15,
                         letterSpacing: 0.2,
                         color: isDark ? Colors.white : const Color(0xFF0F172A),
                       ),
                     ),
+                    const SizedBox(height: 2),
                     Text(
                       '智能拦截与隐私保护',
                       maxLines: 1,
@@ -547,6 +549,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
                         fontSize: subtitleSize,
+                        height: 1.15,
                         color: isDark
                             ? const Color(0xFF94A3B8)
                             : const Color(0xFF64748B),
