@@ -38,19 +38,6 @@ void main(List<String> args) {
     ],
   );
 
-  // 2. 替换桌面端 URL Protocol 注册 Scheme
-  if (customScheme != 'flclash') {
-    _replaceInFile(
-      path: 'lib/common/window.dart',
-      replacements: [
-        (
-          RegExp(r"protocol\.register\('flclash'\);"),
-          "protocol.register('$customScheme');",
-        ),
-      ],
-    );
-  }
-
   // 3. 替换 Android 主 Application 与 Tile 开关 Label 以及添加 DeepLink Scheme
   _replaceInFile(
     path: 'android/app/src/main/AndroidManifest.xml',
