@@ -568,7 +568,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
           behavior: HitTestBehavior.opaque,
           child: Container(
             padding: EdgeInsets.symmetric(
-              horizontal: isCompactWidth ? 7.0 : 8.0,
+              horizontal: isCompactWidth ? 10.0 : 12.0,
               vertical: 5.0,
             ),
             decoration: BoxDecoration(
