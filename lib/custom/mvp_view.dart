@@ -205,8 +205,9 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
   Future<void> _handlePaste() async {
     final data = await Clipboard.getData(Clipboard.kTextPlain);
     if (!mounted) return;
-    if (data?.text != null && data!.text!.isNotEmpty) {
-      _urlController.text = data.text!.trim();
+    final text = data?.text;
+    if (text != null && text.isNotEmpty) {
+      _urlController.text = text.trim();
       setState(() {});
     }
   }
