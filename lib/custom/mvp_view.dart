@@ -567,10 +567,11 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
           onTap: _handleMinimalTap,
           behavior: HitTestBehavior.opaque,
           child: Container(
+            height: isCompactWidth ? 26.0 : 28.0,
             padding: EdgeInsets.symmetric(
               horizontal: isCompactWidth ? 10.0 : 12.0,
-              vertical: 6.5,
             ),
+            alignment: Alignment.center,
             decoration: BoxDecoration(
               color: isDark
                   ? const Color(0xFF1E293B)
@@ -582,6 +583,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
               style: TextStyle(
                 fontSize: isCompactWidth ? 10.5 : 11.0,
                 fontWeight: FontWeight.w700,
+                height: 1.15,
                 color: isDark
                     ? const Color(0xFFCBD5E1)
                     : const Color(0xFF334155),
@@ -1021,10 +1023,9 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                   },
                   behavior: HitTestBehavior.opaque,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 4,
-                    ),
+                    height: 24.0,
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    alignment: Alignment.center,
                     decoration: BoxDecoration(
                       color: isDark
                           ? const Color(0xFF334155)
@@ -1037,6 +1038,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                       style: TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.w700,
+                        height: 1.15,
                         color: activeColor,
                       ),
                     ),
