@@ -569,12 +569,12 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
           child: Container(
             padding: EdgeInsets.symmetric(
               horizontal: isCompactWidth ? 10.0 : 12.0,
-              vertical: 5.0,
+              vertical: 6.5,
             ),
             decoration: BoxDecoration(
               color: isDark
-                  ? const Color(0xFF334155)
-                  : const Color(0xFFF1F5F9),
+                  ? const Color(0xFF1E293B)
+                  : const Color(0xFFE2E8F0),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Text(
@@ -583,8 +583,8 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                 fontSize: isCompactWidth ? 10.5 : 11.0,
                 fontWeight: FontWeight.w700,
                 color: isDark
-                    ? const Color(0xFF94A3B8)
-                    : const Color(0xFF64748B),
+                    ? const Color(0xFFCBD5E1)
+                    : const Color(0xFF334155),
               ),
             ),
           ),
