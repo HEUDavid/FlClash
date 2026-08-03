@@ -33,6 +33,16 @@ Future<void> downloadAndRestoreBackup(String url) async {
   final response = await dio.download(downloadUrl, tempEncryptedPath);
 
   if (response.statusCode == 200) {
+    // 预先检查 Header 中的文件名，判断是不是 fk 接口
+    final contentDisposition = response.headers.value('content-disposition') ?? '';
+    if (!contentDisposition.contains('fk-config.zip')) {
+      final tempFile = File(tempEncryptedPath);
+      if (await tempFile.exists()) {
+        await tempFile.delete();
+      }
+      throw '配置文件链接无效';
+    }
+
     final tempFile = File(tempEncryptedPath);
     try {
       final zipDecoder = ZipDecoder();
