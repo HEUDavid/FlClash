@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:archive/archive.dart';
 import 'package:dio/dio.dart';
 import 'package:fl_clash/common/common.dart';
@@ -33,18 +35,14 @@ Future<void> downloadAndRestoreBackup(String url) async {
   final response = await dio.download(downloadUrl, tempEncryptedPath);
 
   if (response.statusCode == 200) {
-    // 预先检查 Header 中的文件名，判断是不是 fk 接口
-    final contentDisposition = response.headers.value('content-disposition') ?? '';
-    if (!contentDisposition.contains('fk-config.zip')) {
-      final tempFile = File(tempEncryptedPath);
-      if (await tempFile.exists()) {
-        await tempFile.delete();
-      }
-      throw '配置文件链接无效';
-    }
-
     final tempFile = File(tempEncryptedPath);
     try {
+      // 预先检查 Header 中的文件名，判断是不是 fk 接口
+      final contentDisposition = response.headers.value('content-disposition') ?? '';
+      if (!contentDisposition.contains('fk-config.zip')) {
+        throw '配置文件链接无效';
+      }
+
       final zipDecoder = ZipDecoder();
       final bytes = await tempFile.readAsBytes();
       late final Archive archive;
@@ -82,7 +80,7 @@ Future<void> updateSubscriptionOrBackup(String url) async {
   await _syncAndRefreshProviders(container);
 }
 
-Future<void> _syncAndRefreshProviders(dynamic container) async {
+Future<void> _syncAndRefreshProviders(ProviderContainer container) async {
   // 1. 首次应用 Profile 配置，让内核绑定并解析出配置文件中的 Provider 列表
   await container.read(setupActionProvider.notifier).applyProfile(force: true);
 
