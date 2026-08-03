@@ -45,7 +45,7 @@ Future<void> downloadAndRestoreBackup(String url) async {
       }
 
       final unencryptedBytes = ZipEncoder().encode(archive);
-      if (unencryptedBytes == null || unencryptedBytes.isEmpty) {
+      if (unencryptedBytes.isEmpty) {
         throw '配置文件内容为空，请检查链接是否有效';
       }
 
