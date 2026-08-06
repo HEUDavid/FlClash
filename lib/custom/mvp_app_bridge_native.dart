@@ -1,6 +1,7 @@
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/providers/providers.dart';
+import 'package:fl_clash/state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'mvp_models.dart';
@@ -97,6 +98,18 @@ class MvpAppBridge {
           );
     } catch (e) {
       commonPrint.log('toggleShield error: $e', logLevel: LogLevel.warning);
+    }
+  }
+
+  static Future<bool> exportLogs(WidgetRef ref) async {
+    try {
+      final res = await globalState.safeRun<bool>(() async {
+        return ref.read(logsProvider.notifier).exportLogs();
+      }, title: '导出日志');
+      return res == true;
+    } catch (e) {
+      commonPrint.log('exportLogs error: $e', logLevel: LogLevel.warning);
+      return false;
     }
   }
 }

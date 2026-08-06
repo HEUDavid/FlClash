@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:fl_clash/providers/providers.dart';
-import 'package:fl_clash/state.dart';
-
 import 'mvp_app_bridge_helper.dart';
 import 'mvp_models.dart';
 import 'mvp_provider.dart';
@@ -63,9 +60,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
 
   Future<void> _handleExportLogs() async {
     try {
-      final res = await globalState.safeRun<bool>(() async {
-        return ref.read(logsProvider.notifier).exportLogs();
-      }, title: '导出日志');
+      final res = await MvpAppBridge.exportLogs(ref);
 
       if (res == true && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

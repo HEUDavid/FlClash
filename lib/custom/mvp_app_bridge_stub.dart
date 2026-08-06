@@ -14,4 +14,8 @@ class MvpAppBridge {
   static void ensureInitSettings(WidgetRef ref) {}
 
   static void toggleShield(WidgetRef ref, bool currentIsStart) {}
+
+  static Future<bool> exportLogs(WidgetRef ref) async {
+    return false;
+  }
 }
