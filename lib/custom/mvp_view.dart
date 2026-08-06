@@ -520,29 +520,33 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
-                width: logoSize,
-                height: logoSize,
-                decoration: BoxDecoration(
-                  color: activeColor.withValues(alpha: 0.12),
-                  shape: BoxShape.circle,
-                ),
-                child: Center(
-                  child: SizedBox(
-                    width: shieldWidth,
-                    height: shieldHeight,
-                    child: CustomPaint(
-                      painter: AdGuardShieldPainter(
-                        fillColor: activeColor,
-                        borderColor: Colors.transparent,
-                        isDark: isDark,
-                        isStart: true,
-                      ),
-                      child: Center(
-                        child: Icon(
-                          Icons.check_rounded,
-                          size: iconSize,
-                          color: Colors.white,
+              GestureDetector(
+                onTap: _handleMinimalTap,
+                behavior: HitTestBehavior.opaque,
+                child: Container(
+                  width: logoSize,
+                  height: logoSize,
+                  decoration: BoxDecoration(
+                    color: activeColor.withValues(alpha: 0.12),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: SizedBox(
+                      width: shieldWidth,
+                      height: shieldHeight,
+                      child: CustomPaint(
+                        painter: AdGuardShieldPainter(
+                          fillColor: activeColor,
+                          borderColor: Colors.transparent,
+                          isDark: isDark,
+                          isStart: true,
+                        ),
+                        child: Center(
+                          child: Icon(
+                            Icons.check_rounded,
+                            size: iconSize,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
@@ -595,7 +599,6 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
           child: Container(
             height: isCompactWidth ? 26.0 : 28.0,
             width: isCompactWidth ? 26.0 : 28.0,
-            margin: const EdgeInsets.only(right: 8.0),
             alignment: Alignment.center,
             decoration: BoxDecoration(
               color: isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0),
@@ -605,35 +608,6 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
               Icons.description_outlined,
               size: isCompactWidth ? 14.0 : 16.0,
               color: isDark ? const Color(0xFFCBD5E1) : const Color(0xFF334155),
-            ),
-          ),
-        ),
-        // Mode Tag [ 极简 ] (Tap 5 times continuously to switch to Advanced mode)
-        GestureDetector(
-          onTap: _handleMinimalTap,
-          behavior: HitTestBehavior.opaque,
-          child: Container(
-            height: isCompactWidth ? 26.0 : 28.0,
-            padding: EdgeInsets.symmetric(
-              horizontal: isCompactWidth ? 10.0 : 12.0,
-            ),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: isDark
-                  ? const Color(0xFF1E293B)
-                  : const Color(0xFFE2E8F0),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Text(
-              '极简',
-              style: TextStyle(
-                fontSize: isCompactWidth ? 10.5 : 11.0,
-                fontWeight: FontWeight.w700,
-                height: 1.15,
-                color: isDark
-                    ? const Color(0xFFCBD5E1)
-                    : const Color(0xFF334155),
-              ),
             ),
           ),
         ),
