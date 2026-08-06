@@ -58,7 +58,7 @@ class MvpAppBridge {
           id: realCurrentProfile.id.toString(),
           label: realCurrentProfile.label.isNotEmpty
               ? realCurrentProfile.label
-              : '在线配置集合',
+              : '在线配置集',
           url: realCurrentProfile.url,
           lastUpdateDate: realCurrentProfile.lastUpdateDate,
           rulesCount: clashConfig?.rules.length,
@@ -73,7 +73,7 @@ class MvpAppBridge {
         final clashConfig = ref.watch(clashConfigProvider(p.id)).value;
         return MvpProfileItem(
           id: p.id.toString(),
-          label: p.label.isNotEmpty ? p.label : '在线配置集合',
+          label: p.label.isNotEmpty ? p.label : '在线配置集',
           url: p.url,
           lastUpdateDate: p.lastUpdateDate,
           rulesCount: clashConfig?.rules.length,

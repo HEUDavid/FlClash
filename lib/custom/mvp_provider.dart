@@ -48,7 +48,7 @@ class CustomProfilesNotifier extends Notifier<List<MvpProfileItem>> {
   }
 
   void addProfileFromBackup(String url) {
-    final label = '在线配置集合 (${DateTime.now().month}/${DateTime.now().day})';
+    final label = '在线配置集 (${DateTime.now().month}/${DateTime.now().day})';
     final newItem = MvpProfileItem(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       label: label,
