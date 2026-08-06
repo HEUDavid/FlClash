@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:fl_clash/providers/providers.dart';
+import 'package:fl_clash/state.dart';
+
 import 'mvp_app_bridge_helper.dart';
 import 'mvp_models.dart';
 import 'mvp_provider.dart';
@@ -55,6 +58,34 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
           ),
         );
       }
+    }
+  }
+
+  Future<void> _handleExportLogs() async {
+    try {
+      final res = await globalState.safeRun<bool>(() async {
+        return ref.read(logsProvider.notifier).exportLogs();
+      }, title: '导出日志');
+
+      if (res == true && mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Row(
+              children: [
+                Icon(Icons.check_circle_rounded, color: Colors.white, size: 18),
+                SizedBox(width: 8),
+                Text('日志导出成功', style: TextStyle(letterSpacing: 0.5, fontSize: 13, color: Colors.white)),
+              ],
+            ),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            backgroundColor: const Color(0xFF6B6BEE),
+            duration: const Duration(seconds: 3),
+          ),
+        );
+      }
+    } catch (e) {
+      // Ignored
     }
   }
 
@@ -562,6 +593,26 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
           ),
         ),
         SizedBox(width: isCompactWidth ? 8.0 : 12.0),
+        // Export Logs Icon Button
+        GestureDetector(
+          onTap: _handleExportLogs,
+          behavior: HitTestBehavior.opaque,
+          child: Container(
+            height: isCompactWidth ? 26.0 : 28.0,
+            width: isCompactWidth ? 26.0 : 28.0,
+            margin: const EdgeInsets.only(right: 8.0),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(
+              Icons.description_outlined,
+              size: isCompactWidth ? 14.0 : 16.0,
+              color: isDark ? const Color(0xFFCBD5E1) : const Color(0xFF334155),
+            ),
+          ),
+        ),
         // Mode Tag [ 极简 ] (Tap 5 times continuously to switch to Advanced mode)
         GestureDetector(
           onTap: _handleMinimalTap,
