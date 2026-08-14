@@ -76,6 +76,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Icon(
               switch (type) {
@@ -94,6 +95,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                 style: const TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w500,
+                  height: 1.2,
                   color: Colors.white,
                 ),
               ),
@@ -688,6 +690,7 @@ class _MvpQuickInfoCards extends StatelessWidget {
         border: Border.all(color: MvpTheme.borderColor, width: 1),
       ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
             width: 32,
@@ -805,6 +808,7 @@ class _MvpProfileCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Icon(
                     Icons.tune_rounded,
@@ -817,6 +821,7 @@ class _MvpProfileCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
+                      height: 1.1,
                       color: MvpTheme.textPrimary,
                     ),
                   ),
@@ -836,6 +841,8 @@ class _MvpProfileCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Icon(
                           Icons.delete_outline_rounded,
@@ -848,6 +855,7 @@ class _MvpProfileCard extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w600,
+                            height: 1.1,
                             color: MvpTheme.dangerText,
                           ),
                         ),
@@ -869,6 +877,8 @@ class _MvpProfileCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Icon(
                           Icons.keyboard_arrow_up_rounded,
@@ -881,6 +891,7 @@ class _MvpProfileCard extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w600,
+                            height: 1.1,
                             color: MvpTheme.textSecondary,
                           ),
                         ),
@@ -997,6 +1008,7 @@ class _MvpProfileCard extends StatelessWidget {
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 if (isUpdating) ...[
                   const SizedBox(
@@ -1021,6 +1033,7 @@ class _MvpProfileCard extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
+                    height: 1.1,
                     color: Colors.white,
                   ),
                 ),
@@ -1099,6 +1112,7 @@ class _MvpProfileCard extends StatelessWidget {
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 if (isImporting) ...[
                   const SizedBox(
@@ -1123,6 +1137,7 @@ class _MvpProfileCard extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.bold,
+                    height: 1.1,
                     color: Colors.white,
                   ),
                 ),
