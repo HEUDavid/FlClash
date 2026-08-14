@@ -889,12 +889,32 @@ class _MvpProfileCard extends StatelessWidget {
             color: MvpTheme.borderColor,
           ),
           const SizedBox(height: 14),
-          // Content: Loaded State vs Import State
-          AnimatedSwitcher(
-            duration: const Duration(milliseconds: 250),
-            child: isLoadedMode
-                ? _buildLoadedState(context)
-                : _buildImportState(context),
+          // Content: Fixed height Stack matching iOS ZStack
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                IgnorePointer(
+                  ignoring: !isLoadedMode,
+                  child: AnimatedOpacity(
+                    opacity: isLoadedMode ? 1.0 : 0.0,
+                    duration: const Duration(milliseconds: 250),
+                    curve: Curves.easeInOut,
+                    child: _buildLoadedState(context),
+                  ),
+                ),
+                IgnorePointer(
+                  ignoring: isLoadedMode,
+                  child: AnimatedOpacity(
+                    opacity: isLoadedMode ? 0.0 : 1.0,
+                    duration: const Duration(milliseconds: 250),
+                    curve: Curves.easeInOut,
+                    child: _buildImportState(context),
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
