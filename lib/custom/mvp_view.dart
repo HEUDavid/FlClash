@@ -814,7 +814,7 @@ class _MvpProfileCard extends StatelessWidget {
                     padding: EdgeInsets.only(top: 1.2),
                     child: Icon(
                       Icons.tune_rounded,
-                      size: 17,
+                      size: 16,
                       color: MvpTheme.textPrimary,
                     ),
                   ),
@@ -1141,7 +1141,7 @@ class _MvpProfileCard extends StatelessWidget {
                     padding: EdgeInsets.only(top: 1.2),
                     child: Icon(
                       Icons.download_rounded,
-                      size: 17,
+                      size: 16,
                       color: Colors.white,
                     ),
                   ),
