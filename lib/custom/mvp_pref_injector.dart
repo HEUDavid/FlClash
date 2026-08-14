@@ -31,7 +31,6 @@ class MvpPrefInjector {
         appSettingProps['disclaimerAccepted'] = true;
         appSettingProps['crashlyticsTip'] = true;
         configMap['appSettingProps'] = appSettingProps;
-        configMap['appSetting'] = appSettingProps;
 
         await prefs.setString('config', json.encode(configMap));
       }

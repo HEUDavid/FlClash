@@ -178,7 +178,6 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     _isConnectionToggling = true;
 
     MvpAppBridge.toggleShield(ref, currentIsStart);
-    ref.read(customProxyStartProvider.notifier).setStart(!currentIsStart);
 
     Future.delayed(const Duration(milliseconds: 500), () {
       if (mounted) {
@@ -916,31 +915,17 @@ class _MvpProfileCard extends StatelessWidget {
             color: MvpTheme.borderColor,
           ),
           const SizedBox(height: 14),
-          // Content: Fixed height Stack matching iOS ZStack
+          // Content: Smooth crossfade height transition
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 4),
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                IgnorePointer(
-                  ignoring: !isLoadedMode,
-                  child: AnimatedOpacity(
-                    opacity: isLoadedMode ? 1.0 : 0.0,
-                    duration: const Duration(milliseconds: 250),
-                    curve: Curves.easeInOut,
-                    child: _buildLoadedState(context),
-                  ),
-                ),
-                IgnorePointer(
-                  ignoring: isLoadedMode,
-                  child: AnimatedOpacity(
-                    opacity: isLoadedMode ? 0.0 : 1.0,
-                    duration: const Duration(milliseconds: 250),
-                    curve: Curves.easeInOut,
-                    child: _buildImportState(context),
-                  ),
-                ),
-              ],
+            child: AnimatedCrossFade(
+              firstChild: _buildLoadedState(context),
+              secondChild: _buildImportState(context),
+              crossFadeState: isLoadedMode
+                  ? CrossFadeState.showFirst
+                  : CrossFadeState.showSecond,
+              duration: const Duration(milliseconds: 250),
+              sizeCurve: Curves.easeInOut,
             ),
           ),
         ],

@@ -70,7 +70,7 @@ Future<void> downloadAndRestoreBackup(String url) async {
 }
 
 // 原生端：触发更新订阅 URL 文件以及规则集（Rule Providers），并应用生效
-Future<void> updateSubscriptionOrBackup(String url) async {
+Future<void> updateSubscriptionOrBackup([String? url]) async {
   final container = globalState.container;
 
   // 1. 刷新订阅 Profile 文件
@@ -90,21 +90,32 @@ Future<void> _syncAndRefreshProviders(ProviderContainer container) async {
   // 3. 遍历拉取并下载所有的规则集与外部 Provider (Rule / Proxy Providers)
   final providers = container.read(providersProvider);
   if (providers.isNotEmpty) {
-    final updateTasks = (providers as Iterable).map<Future<void>>((provider) async {
+    final updateTasks = providers.map<Future<void>>((provider) async {
       try {
-        await container
+        var message = await container
             .read(proxiesActionProvider.notifier)
             .updateProvider(provider);
-      } catch (e) {
-        commonPrint.log('updateProvider fail, retrying: $e', logLevel: LogLevel.warning);
-        await Future.delayed(const Duration(seconds: 1));
-        try {
-          await container
+        if (message.isNotEmpty) {
+          commonPrint.log(
+            'updateProvider fail ($message), retrying...',
+            logLevel: LogLevel.warning,
+          );
+          await Future.delayed(const Duration(seconds: 1));
+          message = await container
               .read(proxiesActionProvider.notifier)
               .updateProvider(provider);
-        } catch (e2) {
-          commonPrint.log('updateProvider error after retry: $e2', logLevel: LogLevel.warning);
+          if (message.isNotEmpty) {
+            commonPrint.log(
+              'updateProvider error after retry: $message',
+              logLevel: LogLevel.warning,
+            );
+          }
         }
+      } catch (e) {
+        commonPrint.log(
+          'updateProvider exception: $e',
+          logLevel: LogLevel.warning,
+        );
       }
     });
     await Future.wait(updateTasks);
@@ -124,3 +135,4 @@ Future<void> _syncAndRefreshProviders(ProviderContainer container) async {
     container.invalidate(clashConfigProvider(currentProfileId));
   }
 }
+
