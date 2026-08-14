@@ -659,7 +659,7 @@ class _MvpQuickInfoCards extends StatelessWidget {
         const SizedBox(width: 16),
         Expanded(
           child: _buildInfoItem(
-            icon: Icons.memory_rounded,
+            icon: Icons.security_rounded,
             title: '内核状态',
             value: coreStatusText,
             isActive: isStart,
