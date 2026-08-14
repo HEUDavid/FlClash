@@ -83,8 +83,10 @@ class MvpAppBridge {
         );
       }
     } catch (e) {
-      commonPrint.log('watchActiveProfile error: $e',
-          logLevel: LogLevel.warning);
+      commonPrint.log(
+        'watchActiveProfile error: $e',
+        logLevel: LogLevel.warning,
+      );
     }
     return null;
   }
@@ -103,9 +105,12 @@ class MvpAppBridge {
 
   static Future<bool> exportLogs(WidgetRef ref) async {
     try {
-      final res = await globalState.safeRun<bool>(() async {
-        return ref.read(logsProvider.notifier).exportLogs();
-      }, title: '导出日志');
+      final res = await globalState.safeRun<bool>(
+        () async {
+          return ref.read(logsProvider.notifier).exportLogs();
+        },
+        title: '导出日志',
+      );
       return res == true;
     } catch (e) {
       commonPrint.log('exportLogs error: $e', logLevel: LogLevel.warning);
@@ -113,3 +118,4 @@ class MvpAppBridge {
     }
   }
 }
+

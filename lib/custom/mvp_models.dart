@@ -1,3 +1,10 @@
+enum MvpToastType {
+  info,
+  success,
+  error,
+  warning,
+}
+
 class MvpProfileItem {
   final String id;
   final String label;
@@ -27,6 +34,27 @@ enum MvpCoreStatus {
 }
 
 extension MvpDateTimeExtension on DateTime {
+  String get formattedUpdateDate {
+    final now = DateTime.now();
+    final isToday = year == now.year && month == now.month && day == now.day;
+    final yesterday = now.subtract(const Duration(days: 1));
+    final isYesterday =
+        year == yesterday.year && month == yesterday.month && day == yesterday.day;
+
+    final hourStr = hour.toString().padLeft(2, '0');
+    final minuteStr = minute.toString().padLeft(2, '0');
+
+    if (isToday) {
+      return '今天 $hourStr:$minuteStr';
+    } else if (isYesterday) {
+      return '昨天 $hourStr:$minuteStr';
+    } else {
+      final monthStr = month.toString().padLeft(2, '0');
+      final dayStr = day.toString().padLeft(2, '0');
+      return '$monthStr-$dayStr $hourStr:$minuteStr';
+    }
+  }
+
   String getLastUpdateTimeDesc(dynamic context) {
     final difference = DateTime.now().difference(this);
     final days = difference.inDays;
@@ -50,4 +78,3 @@ extension MvpDateTimeExtension on DateTime {
     return '刚刚';
   }
 }
-

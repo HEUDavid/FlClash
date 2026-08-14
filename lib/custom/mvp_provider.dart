@@ -32,7 +32,8 @@ class CustomProxyStartNotifier extends Notifier<bool> {
 
 final customProxyStartProvider =
     NotifierProvider<CustomProxyStartNotifier, bool>(
-        CustomProxyStartNotifier.new);
+  CustomProxyStartNotifier.new,
+);
 
 // 代理连接状态 Provider
 final customCoreStatusProvider = Provider<MvpCoreStatus>((ref) {
@@ -65,7 +66,8 @@ class CustomProfilesNotifier extends Notifier<List<MvpProfileItem>> {
 
 final customProfilesProvider =
     NotifierProvider<CustomProfilesNotifier, List<MvpProfileItem>>(
-        CustomProfilesNotifier.new);
+  CustomProfilesNotifier.new,
+);
 
 // 当前选中的订阅配置 ID
 class CustomCurrentProfileIdNotifier extends Notifier<String?> {
@@ -78,4 +80,6 @@ class CustomCurrentProfileIdNotifier extends Notifier<String?> {
 
 final customCurrentProfileIdProvider =
     NotifierProvider<CustomCurrentProfileIdNotifier, String?>(
-        CustomCurrentProfileIdNotifier.new);
+  CustomCurrentProfileIdNotifier.new,
+);
+
