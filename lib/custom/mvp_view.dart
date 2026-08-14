@@ -811,7 +811,7 @@ class _MvpProfileCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(top: 1.0),
+                    padding: EdgeInsets.only(top: 1.2),
                     child: Icon(
                       Icons.tune_rounded,
                       size: 17,
@@ -1031,7 +1031,7 @@ class _MvpProfileCard extends StatelessWidget {
                   const SizedBox(width: 6),
                 ] else ...[
                   const Padding(
-                    padding: EdgeInsets.only(top: 0.8),
+                    padding: EdgeInsets.only(top: 1.0),
                     child: Icon(
                       Icons.sync_rounded,
                       size: 15,
@@ -1138,7 +1138,7 @@ class _MvpProfileCard extends StatelessWidget {
                   const SizedBox(width: 8),
                 ] else ...[
                   const Padding(
-                    padding: EdgeInsets.only(top: 1.0),
+                    padding: EdgeInsets.only(top: 1.2),
                     child: Icon(
                       Icons.download_rounded,
                       size: 17,
