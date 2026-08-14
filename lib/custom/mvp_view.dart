@@ -811,7 +811,7 @@ class _MvpProfileCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(top: 0.5),
+                    padding: EdgeInsets.only(top: 0.6),
                     child: Icon(
                       Icons.tune_rounded,
                       size: 18,
@@ -822,7 +822,7 @@ class _MvpProfileCard extends StatelessWidget {
                   Text(
                     '配置文件',
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 17,
                       fontWeight: FontWeight.bold,
                       height: 1.1,
                       color: MvpTheme.textPrimary,
@@ -848,10 +848,10 @@ class _MvpProfileCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(top: 0.5),
+                          padding: EdgeInsets.only(top: 0.6),
                           child: Icon(
                             Icons.delete_outline_rounded,
-                            size: 14,
+                            size: 15,
                             color: MvpTheme.dangerText,
                           ),
                         ),
@@ -859,7 +859,7 @@ class _MvpProfileCard extends StatelessWidget {
                         Text(
                           '重置',
                           style: TextStyle(
-                            fontSize: 13,
+                            fontSize: 15,
                             fontWeight: FontWeight.w600,
                             height: 1.1,
                             color: MvpTheme.dangerText,
@@ -887,7 +887,7 @@ class _MvpProfileCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(top: 0.8),
+                          padding: EdgeInsets.only(top: 0.6),
                           child: Icon(
                             Icons.keyboard_arrow_up_rounded,
                             size: 15,
@@ -898,7 +898,7 @@ class _MvpProfileCard extends StatelessWidget {
                         Text(
                           '收起',
                           style: TextStyle(
-                            fontSize: 13,
+                            fontSize: 15,
                             fontWeight: FontWeight.w600,
                             height: 1.1,
                             color: MvpTheme.textSecondary,
@@ -1031,7 +1031,7 @@ class _MvpProfileCard extends StatelessWidget {
                   const SizedBox(width: 6),
                 ] else ...[
                   const Padding(
-                    padding: EdgeInsets.only(top: 0.5),
+                    padding: EdgeInsets.only(top: 0.6),
                     child: Icon(
                       Icons.sync_rounded,
                       size: 15,
@@ -1043,7 +1043,7 @@ class _MvpProfileCard extends StatelessWidget {
                 const Text(
                   '更新',
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 15,
                     fontWeight: FontWeight.bold,
                     height: 1.1,
                     color: Colors.white,
@@ -1138,7 +1138,7 @@ class _MvpProfileCard extends StatelessWidget {
                   const SizedBox(width: 8),
                 ] else ...[
                   const Padding(
-                    padding: EdgeInsets.only(top: 0.5),
+                    padding: EdgeInsets.only(top: 0.8),
                     child: Icon(
                       Icons.download_rounded,
                       size: 17,
@@ -1150,7 +1150,7 @@ class _MvpProfileCard extends StatelessWidget {
                 const Text(
                   '下载并导入',
                   style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 17,
                     fontWeight: FontWeight.bold,
                     height: 1.1,
                     color: Colors.white,
