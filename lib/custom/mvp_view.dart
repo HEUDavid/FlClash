@@ -764,18 +764,25 @@ class _MvpProfileCard extends StatelessWidget {
   });
 
   String _computeRuleCountStr(MvpProfileItem profile) {
-    final rules = profile.rulesCount;
-    final totalRules = profile.ruleProvidersTotalRules;
-    if (rules != null && rules > 0) {
+    final rulesCount = profile.rulesCount;
+    if (rulesCount == null) {
+      final totalRules = profile.ruleProvidersTotalRules;
       if (totalRules != null && totalRules > 0) {
-        return '${rules + totalRules} 条';
+        return '规则 $totalRules';
       }
-      return '$rules 条';
+      return '规则获取中...';
     }
-    if (totalRules != null && totalRules > 0) {
-      return '$totalRules 条';
+
+    final StringBuffer sb = StringBuffer('规则 $rulesCount');
+    final providerCount = profile.ruleProvidersCount;
+    if (providerCount != null && providerCount > 0) {
+      sb.write('，子规则 $providerCount');
+      final counts = profile.ruleProvidersCounts;
+      if (counts != null && counts.isNotEmpty) {
+        sb.write(' <${counts.join(' | ')}>');
+      }
     }
-    return '0 条';
+    return sb.toString();
   }
 
   @override
@@ -957,7 +964,9 @@ class _MvpProfileCard extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text(
-                '规则：$ruleCountStr',
+                ruleCountStr,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                   fontSize: 13,
                   color: MvpTheme.textSecondary,
