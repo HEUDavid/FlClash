@@ -698,7 +698,7 @@ class _MvpQuickInfoCards extends StatelessWidget {
             ),
             child: Icon(
               icon,
-              size: 15,
+              size: 20,
               color: iconColor,
             ),
           ),
