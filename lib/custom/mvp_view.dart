@@ -814,7 +814,7 @@ class _MvpProfileCard extends StatelessWidget {
                     padding: EdgeInsets.only(top: 0.6),
                     child: Icon(
                       Icons.tune_rounded,
-                      size: 18,
+                      size: 17,
                       color: MvpTheme.textPrimary,
                     ),
                   ),
@@ -822,7 +822,7 @@ class _MvpProfileCard extends StatelessWidget {
                   Text(
                     '配置文件',
                     style: TextStyle(
-                      fontSize: 17,
+                      fontSize: 15,
                       fontWeight: FontWeight.bold,
                       height: 1.1,
                       color: MvpTheme.textPrimary,
@@ -859,7 +859,7 @@ class _MvpProfileCard extends StatelessWidget {
                         Text(
                           '重置',
                           style: TextStyle(
-                            fontSize: 15,
+                            fontSize: 13,
                             fontWeight: FontWeight.w600,
                             height: 1.1,
                             color: MvpTheme.dangerText,
@@ -898,7 +898,7 @@ class _MvpProfileCard extends StatelessWidget {
                         Text(
                           '收起',
                           style: TextStyle(
-                            fontSize: 15,
+                            fontSize: 13,
                             fontWeight: FontWeight.w600,
                             height: 1.1,
                             color: MvpTheme.textSecondary,
@@ -1043,7 +1043,7 @@ class _MvpProfileCard extends StatelessWidget {
                 const Text(
                   '更新',
                   style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 14,
                     fontWeight: FontWeight.bold,
                     height: 1.1,
                     color: Colors.white,
@@ -1150,7 +1150,7 @@ class _MvpProfileCard extends StatelessWidget {
                 const Text(
                   '下载并导入',
                   style: TextStyle(
-                    fontSize: 17,
+                    fontSize: 15,
                     fontWeight: FontWeight.bold,
                     height: 1.1,
                     color: Colors.white,
