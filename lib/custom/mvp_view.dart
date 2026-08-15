@@ -704,7 +704,20 @@ class _MvpProfileCard extends StatelessWidget {
     final providerCount = profile.ruleProvidersCount;
     if (providerCount != null && providerCount > 0) {
       sb.write('，子规则 $providerCount');
-      final counts = profile.r    return Container(
+      final counts = profile.ruleProvidersCounts;
+      if (counts != null && counts.isNotEmpty) {
+        sb.write(' <${counts.join(' | ')}>');
+      }
+    }
+    return sb.toString();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final bool isLoadedMode =
+        hasProfile && !showInputArea && activeProfile != null;
+
+    return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: MvpTheme.cardBg,
@@ -858,8 +871,7 @@ class _MvpProfileCard extends StatelessWidget {
 
   Widget _buildLoadedState(BuildContext context, MvpProfileItem profile) {
     final activeTitle = profile.label.isNotEmpty ? profile.label : 'Block Ad';
-    final updateDateStr =
-        profile.lastUpdateDate?.formattedUpdateDate ?? '未知';
+    final updateDateStr = profile.lastUpdateDate?.formattedUpdateDate ?? '未知';
     final ruleCountStr = _computeRuleCountStr(profile);
 
     return SizedBox(
@@ -1081,23 +1093,6 @@ class _MvpProfileCard extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
- '下载并导入',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      height: 1.0,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
