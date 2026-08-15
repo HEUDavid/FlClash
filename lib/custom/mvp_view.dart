@@ -1072,10 +1072,10 @@ class _MvpProfileCard extends StatelessWidget {
                       const SizedBox(width: 8),
                     ] else ...[
                       Transform.translate(
-                        offset: const Offset(0, 2.0),
+                        offset: const Offset(0, 1.8),
                         child: const Icon(
                           Icons.download_rounded,
-                          size: 15.5,
+                          size: 16,
                           color: Colors.white,
                         ),
                       ),
