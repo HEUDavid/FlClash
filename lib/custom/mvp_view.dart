@@ -704,20 +704,7 @@ class _MvpProfileCard extends StatelessWidget {
     final providerCount = profile.ruleProvidersCount;
     if (providerCount != null && providerCount > 0) {
       sb.write('，子规则 $providerCount');
-      final counts = profile.ruleProvidersCounts;
-      if (counts != null && counts.isNotEmpty) {
-        sb.write(' <${counts.join(' | ')}>');
-      }
-    }
-    return sb.toString();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final bool isLoadedMode =
-        hasProfile && !showInputArea && activeProfile != null;
-
-    return Container(
+      final counts = profile.r    return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: MvpTheme.cardBg,
@@ -728,127 +715,140 @@ class _MvpProfileCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.tune_rounded,
-                    size: 17,
-                    color: MvpTheme.textPrimary,
-                  ),
-                  SizedBox(width: 7),
-                  Text(
-                    '配置文件',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      height: 1.0,
+          SizedBox(
+            height: 28,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.tune_rounded,
+                      size: 17,
                       color: MvpTheme.textPrimary,
                     ),
-                  ),
-                ],
-              ),
-              if (isLoadedMode)
-                GestureDetector(
-                  onTap: () => onToggleInputArea(true),
-                  behavior: HitTestBehavior.opaque,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 6,
+                    SizedBox(width: 7),
+                    Text(
+                      '配置文件',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        height: 1.0,
+                        color: MvpTheme.textPrimary,
+                      ),
                     ),
-                    decoration: BoxDecoration(
-                      color: MvpTheme.dangerColor.withValues(alpha: 0.05),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Transform.translate(
-                          offset: const Offset(0, -0.2),
-                          child: const Icon(
-                            Icons.delete_outline_rounded,
-                            size: 14.5,
-                            color: MvpTheme.dangerText,
-                          ),
-                        ),
-                        const SizedBox(width: 4),
-                        const Text(
-                          '重置',
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
-                            height: 1.0,
-                            color: MvpTheme.dangerText,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-              else if (hasProfile)
-                GestureDetector(
-                  onTap: () => onToggleInputArea(false),
-                  behavior: HitTestBehavior.opaque,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 6,
-                    ),
-                    decoration: BoxDecoration(
-                      color: MvpTheme.inactiveBadgeBg.withValues(alpha: 0.4),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Transform.translate(
-                          offset: const Offset(0, 0.5),
-                          child: const Icon(
-                            Icons.keyboard_arrow_up_rounded,
-                            size: 15.5,
-                            color: MvpTheme.textSecondary,
-                          ),
-                        ),
-                        const SizedBox(width: 4),
-                        const Text(
-                          '收起',
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
-                            height: 1.0,
-                            color: MvpTheme.textSecondary,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  ],
                 ),
-            ],
+                if (isLoadedMode)
+                  GestureDetector(
+                    onTap: () => onToggleInputArea(true),
+                    behavior: HitTestBehavior.opaque,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 5,
+                      ),
+                      decoration: BoxDecoration(
+                        color: MvpTheme.dangerColor.withValues(alpha: 0.05),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Transform.translate(
+                            offset: const Offset(0, -0.2),
+                            child: const Icon(
+                              Icons.delete_outline_rounded,
+                              size: 14.5,
+                              color: MvpTheme.dangerText,
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          const Text(
+                            '重置',
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                              height: 1.0,
+                              color: MvpTheme.dangerText,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                else if (hasProfile)
+                  GestureDetector(
+                    onTap: () => onToggleInputArea(false),
+                    behavior: HitTestBehavior.opaque,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 5,
+                      ),
+                      decoration: BoxDecoration(
+                        color: MvpTheme.inactiveBadgeBg.withValues(alpha: 0.4),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Transform.translate(
+                            offset: const Offset(0, 0.5),
+                            child: const Icon(
+                              Icons.keyboard_arrow_up_rounded,
+                              size: 15.5,
+                              color: MvpTheme.textSecondary,
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          const Text(
+                            '收起',
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                              height: 1.0,
+                              color: MvpTheme.textSecondary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+              ],
+            ),
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 12),
           Container(
             height: 1,
             color: MvpTheme.borderColor,
           ),
-          const SizedBox(height: 14),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4),
-            child: AnimatedCrossFade(
-              firstChild: activeProfile != null
+          const SizedBox(height: 12),
+          SizedBox(
+            height: 108,
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 220),
+              switchInCurve: Curves.easeInOut,
+              switchOutCurve: Curves.easeInOut,
+              layoutBuilder: (
+                Widget? currentChild,
+                List<Widget> previousChildren,
+              ) {
+                return Stack(
+                  alignment: Alignment.center,
+                  children: <Widget>[
+                    ...previousChildren,
+                    if (currentChild != null) currentChild,
+                  ],
+                );
+              },
+              child: isLoadedMode
                   ? _buildLoadedState(context, activeProfile!)
-                  : const SizedBox.shrink(),
-              secondChild: _buildImportState(context),
-              crossFadeState: isLoadedMode
-                  ? CrossFadeState.showFirst
-                  : CrossFadeState.showSecond,
-              duration: const Duration(milliseconds: 250),
-              sizeCurve: Curves.easeInOut,
+                  : _buildImportState(context),
             ),
           ),
         ],
@@ -858,207 +858,234 @@ class _MvpProfileCard extends StatelessWidget {
 
   Widget _buildLoadedState(BuildContext context, MvpProfileItem profile) {
     final activeTitle = profile.label.isNotEmpty ? profile.label : 'Block Ad';
-    final updateDateStr = profile.lastUpdateDate?.formattedUpdateDate ?? '未知';
+    final updateDateStr =
+        profile.lastUpdateDate?.formattedUpdateDate ?? '未知';
     final ruleCountStr = _computeRuleCountStr(profile);
 
-    return Container(
+    return SizedBox(
       key: const ValueKey('loaded_state'),
-      constraints: const BoxConstraints(minHeight: 108),
-      alignment: Alignment.center,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  activeTitle,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                    color: MvpTheme.textPrimary,
+      height: 108,
+      child: Center(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    activeTitle,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold,
+                      color: MvpTheme.textPrimary,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  '更新于：$updateDateStr',
-                  style: const TextStyle(
-                    fontSize: 13,
-                    color: MvpTheme.textSecondary,
+                  const SizedBox(height: 6),
+                  Text(
+                    '更新于：$updateDateStr',
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: MvpTheme.textSecondary,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  ruleCountStr,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    color: MvpTheme.textSecondary,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 12),
-          GestureDetector(
-            onTap: isUpdating ? null : onUpdate,
-            behavior: HitTestBehavior.opaque,
-            child: Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 10,
-              ),
-              decoration: BoxDecoration(
-                color: MvpTheme.activeColor,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: MvpTheme.activeColor.withValues(alpha: 0.2),
-                    blurRadius: 12,
-                    offset: const Offset(0, 4),
+                  const SizedBox(height: 4),
+                  Text(
+                    ruleCountStr,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: MvpTheme.textSecondary,
+                    ),
                   ),
                 ],
               ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  if (isUpdating) ...[
-                    const SizedBox(
-                      width: 12,
-                      height: 12,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
+            ),
+            const SizedBox(width: 12),
+            GestureDetector(
+              onTap: isUpdating ? null : onUpdate,
+              behavior: HitTestBehavior.opaque,
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 10,
+                ),
+                decoration: BoxDecoration(
+                  color: MvpTheme.activeColor,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: MvpTheme.activeColor.withValues(alpha: 0.2),
+                      blurRadius: 12,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    if (isUpdating) ...[
+                      const SizedBox(
+                        width: 12,
+                        height: 12,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                    ] else ...[
+                      const Icon(
+                        Icons.sync_rounded,
+                        size: 15.5,
+                        color: Colors.white,
+                      ),
+                      const SizedBox(width: 6),
+                    ],
+                    const Text(
+                      '更新',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        height: 1.0,
                         color: Colors.white,
                       ),
                     ),
-                    const SizedBox(width: 6),
-                  ] else ...[
-                    const Icon(
-                      Icons.sync_rounded,
-                      size: 15.5,
-                      color: Colors.white,
-                    ),
-                    const SizedBox(width: 6),
                   ],
-                  const Text(
-                    '更新',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      height: 1.0,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildImportState(BuildContext context) {
-    return Container(
+    return SizedBox(
       key: const ValueKey('import_state'),
-      constraints: const BoxConstraints(minHeight: 108),
-      alignment: Alignment.center,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              color: MvpTheme.inputBg,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: MvpTheme.borderColor, width: 1),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: urlController,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: MvpTheme.textPrimary,
-                    ),
-                    decoration: const InputDecoration(
-                      hintText: '粘贴配置文件链接',
-                      hintStyle: TextStyle(
-                        fontSize: 14,
-                        color: MvpTheme.textSecondary,
-                      ),
-                      border: InputBorder.none,
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 14,
-                        vertical: 12,
-                      ),
-                    ),
-                  ),
-                ),
-                IconButton(
-                  icon: const Icon(
-                    Icons.content_paste_rounded,
-                    size: 15,
-                    color: MvpTheme.textSecondary,
-                  ),
-                  onPressed: onPaste,
-                  splashRadius: 18,
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 12),
-          GestureDetector(
-            onTap: isImporting ? null : onImport,
-            behavior: HitTestBehavior.opaque,
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 12),
+      height: 108,
+      child: Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
               decoration: BoxDecoration(
-                color: MvpTheme.activeColor,
+                color: MvpTheme.inputBg,
                 borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: MvpTheme.activeColor.withValues(alpha: 0.2),
-                    blurRadius: 12,
-                    offset: const Offset(0, 4),
+                border: Border.all(color: MvpTheme.borderColor, width: 1),
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: urlController,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: MvpTheme.textPrimary,
+                      ),
+                      decoration: const InputDecoration(
+                        hintText: '粘贴配置文件链接',
+                        hintStyle: TextStyle(
+                          fontSize: 14,
+                          color: MvpTheme.textSecondary,
+                        ),
+                        border: InputBorder.none,
+                        isDense: true,
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 14,
+                          vertical: 12,
+                        ),
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    constraints: const BoxConstraints(
+                      minWidth: 40,
+                      minHeight: 40,
+                    ),
+                    padding: EdgeInsets.zero,
+                    icon: const Icon(
+                      Icons.content_paste_rounded,
+                      size: 15,
+                      color: MvpTheme.textSecondary,
+                    ),
+                    onPressed: onPaste,
+                    splashRadius: 18,
                   ),
                 ],
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  if (isImporting) ...[
-                    const SizedBox(
-                      width: 15,
-                      height: 15,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: Colors.white,
-                      ),
+            ),
+            const SizedBox(height: 10),
+            GestureDetector(
+              onTap: isImporting ? null : onImport,
+              behavior: HitTestBehavior.opaque,
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: 11),
+                decoration: BoxDecoration(
+                  color: MvpTheme.activeColor,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: MvpTheme.activeColor.withValues(alpha: 0.2),
+                      blurRadius: 12,
+                      offset: const Offset(0, 4),
                     ),
-                    const SizedBox(width: 8),
-                  ] else ...[
-                    Transform.translate(
-                      offset: const Offset(0, -0.3),
-                      child: const Icon(
-                        Icons.download_rounded,
-                        size: 17,
-                        color: Colors.white,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
                   ],
-                  const Text(
-                    '下载并导入',
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    if (isImporting) ...[
+                      const SizedBox(
+                        width: 15,
+                        height: 15,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                    ] else ...[
+                      Transform.translate(
+                        offset: const Offset(0, -0.3),
+                        child: const Icon(
+                          Icons.download_rounded,
+                          size: 17,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                    ],
+                    const Text(
+                      '下载并导入',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        height: 1.0,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+ '下载并导入',
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
