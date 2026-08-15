@@ -44,15 +44,18 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
         content: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Icon(
-              switch (type) {
-                MvpToastType.info => Icons.info_rounded,
-                MvpToastType.success => Icons.check_circle_rounded,
-                MvpToastType.error => Icons.error_rounded,
-                MvpToastType.warning => Icons.warning_amber_rounded,
-              },
-              color: Colors.white,
-              size: 16,
+            Transform.translate(
+              offset: const Offset(0, -0.2),
+              child: Icon(
+                switch (type) {
+                  MvpToastType.info => Icons.info_rounded,
+                  MvpToastType.success => Icons.check_circle_rounded,
+                  MvpToastType.error => Icons.error_rounded,
+                  MvpToastType.warning => Icons.warning_amber_rounded,
+                },
+                color: Colors.white,
+                size: 16.5,
+              ),
             ),
             const SizedBox(width: 8),
             Expanded(
@@ -61,7 +64,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                 style: const TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w500,
-                  height: 1.2,
+                  height: 1.0,
                   color: Colors.white,
                 ),
               ),
@@ -618,10 +621,12 @@ class _MvpQuickInfoCards extends StatelessWidget {
               color: bgFill,
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Icon(
-              icon,
-              size: 16,
-              color: iconColor,
+            child: Center(
+              child: Icon(
+                icon,
+                size: 16.5,
+                color: iconColor,
+              ),
             ),
           ),
           const SizedBox(width: 12),
@@ -635,10 +640,11 @@ class _MvpQuickInfoCards extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
+                    height: 1.0,
                     color: MvpTheme.textSecondary,
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 5),
                 Text(
                   value,
                   maxLines: 1,
@@ -646,6 +652,7 @@ class _MvpQuickInfoCards extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
+                    height: 1.0,
                     color: MvpTheme.textPrimary,
                   ),
                 ),
@@ -727,21 +734,18 @@ class _MvpProfileCard extends StatelessWidget {
               const Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Padding(
-                    padding: EdgeInsets.only(top: 1.2),
-                    child: Icon(
-                      Icons.tune_rounded,
-                      size: 16,
-                      color: MvpTheme.textPrimary,
-                    ),
+                  Icon(
+                    Icons.tune_rounded,
+                    size: 17,
+                    color: MvpTheme.textPrimary,
                   ),
-                  SizedBox(width: 8),
+                  SizedBox(width: 7),
                   Text(
                     '配置文件',
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
-                      height: 1.1,
+                      height: 1.0,
                       color: MvpTheme.textPrimary,
                     ),
                   ),
@@ -764,11 +768,11 @@ class _MvpProfileCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Padding(
-                          padding: EdgeInsets.only(top: 0.8),
+                        Transform.translate(
+                          offset: Offset(0, -0.2),
                           child: Icon(
                             Icons.delete_outline_rounded,
-                            size: 15,
+                            size: 14.5,
                             color: MvpTheme.dangerText,
                           ),
                         ),
@@ -778,7 +782,7 @@ class _MvpProfileCard extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w600,
-                            height: 1.1,
+                            height: 1.0,
                             color: MvpTheme.dangerText,
                           ),
                         ),
@@ -803,11 +807,11 @@ class _MvpProfileCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Padding(
-                          padding: EdgeInsets.only(top: 0.8),
+                        Transform.translate(
+                          offset: Offset(0, 0.5),
                           child: Icon(
                             Icons.keyboard_arrow_up_rounded,
-                            size: 15,
+                            size: 15.5,
                             color: MvpTheme.textSecondary,
                           ),
                         ),
@@ -817,7 +821,7 @@ class _MvpProfileCard extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w600,
-                            height: 1.1,
+                            height: 1.0,
                             color: MvpTheme.textSecondary,
                           ),
                         ),
@@ -935,13 +939,10 @@ class _MvpProfileCard extends StatelessWidget {
                     ),
                     const SizedBox(width: 6),
                   ] else ...[
-                    const Padding(
-                      padding: EdgeInsets.only(top: 1.0),
-                      child: Icon(
-                        Icons.sync_rounded,
-                        size: 15,
-                        color: Colors.white,
-                      ),
+                    const Icon(
+                      Icons.sync_rounded,
+                      size: 15.5,
+                      color: Colors.white,
                     ),
                     const SizedBox(width: 6),
                   ],
@@ -950,7 +951,7 @@ class _MvpProfileCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
-                      height: 1.1,
+                      height: 1.0,
                       color: Colors.white,
                     ),
                   ),
@@ -1046,11 +1047,11 @@ class _MvpProfileCard extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                   ] else ...[
-                    const Padding(
-                      padding: EdgeInsets.only(top: 1.2),
+                    const Transform.translate(
+                      offset: Offset(0, -0.3),
                       child: Icon(
                         Icons.download_rounded,
-                        size: 16,
+                        size: 17,
                         color: Colors.white,
                       ),
                     ),
@@ -1061,7 +1062,7 @@ class _MvpProfileCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
-                      height: 1.1,
+                      height: 1.0,
                       color: Colors.white,
                     ),
                   ),
