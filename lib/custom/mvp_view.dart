@@ -764,20 +764,20 @@ class _MvpProfileCard extends StatelessWidget {
                       color: MvpTheme.dangerColor.withValues(alpha: 0.05),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Transform.translate(
-                          offset: Offset(0, -0.2),
-                          child: Icon(
+                          offset: const Offset(0, -0.2),
+                          child: const Icon(
                             Icons.delete_outline_rounded,
                             size: 14.5,
                             color: MvpTheme.dangerText,
                           ),
                         ),
-                        SizedBox(width: 4),
-                        Text(
+                        const SizedBox(width: 4),
+                        const Text(
                           '重置',
                           style: TextStyle(
                             fontSize: 13,
@@ -803,20 +803,20 @@ class _MvpProfileCard extends StatelessWidget {
                       color: MvpTheme.inactiveBadgeBg.withValues(alpha: 0.4),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Transform.translate(
-                          offset: Offset(0, 0.5),
-                          child: Icon(
+                          offset: const Offset(0, 0.5),
+                          child: const Icon(
                             Icons.keyboard_arrow_up_rounded,
                             size: 15.5,
                             color: MvpTheme.textSecondary,
                           ),
                         ),
-                        SizedBox(width: 4),
-                        Text(
+                        const SizedBox(width: 4),
+                        const Text(
                           '收起',
                           style: TextStyle(
                             fontSize: 13,
@@ -1047,9 +1047,9 @@ class _MvpProfileCard extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                   ] else ...[
-                    const Transform.translate(
-                      offset: Offset(0, -0.3),
-                      child: Icon(
+                    Transform.translate(
+                      offset: const Offset(0, -0.3),
+                      child: const Icon(
                         Icons.download_rounded,
                         size: 17,
                         color: Colors.white,
