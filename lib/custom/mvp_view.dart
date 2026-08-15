@@ -734,16 +734,19 @@ class _MvpProfileCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Row(
+                Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Icon(
-                      Icons.tune_rounded,
-                      size: 17,
-                      color: MvpTheme.textPrimary,
+                    Transform.translate(
+                      offset: const Offset(0, 0.6),
+                      child: const Icon(
+                        Icons.tune_rounded,
+                        size: 17,
+                        color: MvpTheme.textPrimary,
+                      ),
                     ),
-                    SizedBox(width: 7),
-                    Text(
+                    const SizedBox(width: 7),
+                    const Text(
                       '配置文件',
                       style: TextStyle(
                         fontSize: 15,
@@ -772,10 +775,10 @@ class _MvpProfileCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Transform.translate(
-                            offset: const Offset(0, -0.2),
+                            offset: const Offset(0, 0.2),
                             child: const Icon(
                               Icons.delete_outline_rounded,
-                              size: 14.5,
+                              size: 15,
                               color: MvpTheme.dangerText,
                             ),
                           ),
@@ -811,10 +814,10 @@ class _MvpProfileCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Transform.translate(
-                            offset: const Offset(0, 0.5),
+                            offset: const Offset(0, 0.2),
                             child: const Icon(
                               Icons.keyboard_arrow_up_rounded,
-                              size: 15.5,
+                              size: 15,
                               color: MvpTheme.textSecondary,
                             ),
                           ),
@@ -1069,7 +1072,7 @@ class _MvpProfileCard extends StatelessWidget {
                       const SizedBox(width: 8),
                     ] else ...[
                       Transform.translate(
-                        offset: const Offset(0, -0.3),
+                        offset: const Offset(0, 0.6),
                         child: const Icon(
                           Icons.download_rounded,
                           size: 17,
