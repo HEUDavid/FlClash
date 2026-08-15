@@ -23,7 +23,8 @@ void main(List<String> args) {
 
   stdout.writeln('Applying Branding Configuration:');
   stdout.writeln('  App Name:     $appName');
-  stdout.writeln('  Package Name: (unchanged, keeping original com.follow.clash)');
+  stdout.writeln(
+      '  Package Name: (unchanged, keeping original com.follow.clash)');
   stdout.writeln('  Custom Scheme:$customScheme');
   stdout.writeln();
 
@@ -185,5 +186,3 @@ void _replaceInFile({
     stdout.writeln('No changes needed: $path');
   }
 }
-
-

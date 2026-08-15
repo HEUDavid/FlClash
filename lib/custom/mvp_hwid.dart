@@ -27,8 +27,7 @@ class MvpHwid {
       bytes[6] = (bytes[6] & 0x0F) | 0x40; // Version 4
       bytes[8] = (bytes[8] & 0x3F) | 0x80; // Variant 10
 
-      final hwid =
-          bytes.map((b) => b.toRadixString(16).padLeft(2, '0')).join();
+      final hwid = bytes.map((b) => b.toRadixString(16).padLeft(2, '0')).join();
 
       await prefs.setString('custom_device_hwid', hwid);
       _cachedHwid = hwid;
@@ -38,4 +37,3 @@ class MvpHwid {
     }
   }
 }
-

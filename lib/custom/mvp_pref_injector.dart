@@ -35,8 +35,6 @@ class MvpPrefInjector {
         await prefs.setString('config', json.encode(configMap));
       }
 
-
-
       // 如果当前上下文有 Riverpod ref，同步刷新内存中的 State
       if (ref != null) {
         final currentSetting = ref.read(appSettingProvider);

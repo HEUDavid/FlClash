@@ -2,38 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'mvp_app_bridge_helper.dart';
+import 'mvp_bridge.dart';
 import 'mvp_models.dart';
 import 'mvp_provider.dart';
-import 'mvp_restore_helper.dart';
-
-/// MvpTheme defines the clean, light design system colors and styling tokens
-/// strictly matching the iOS CustomMvp implementation.
-abstract final class MvpTheme {
-  // Backgrounds & Surface Card Colors
-  static const bgPrimary = Color(0xFFF8FAFC); // #F8FAFC
-  static const cardBg = Color(0xFFFFFFFF); // #FFFFFF
-  static const borderColor = Color(0xFFE2E8F0); // #E2E8F0
-
-  // Primary Active & Accent Colors (Emerald Green #10B981)
-  static const activeColor = Color(0xFF10B981); // #10B981
-
-  // Inactive & Disabled Colors
-  static const inactiveGray = Color(0xFFD1D5DB); // #D1D5DB
-  static const inactiveBadgeBg = Color(0xFFE5E7EB); // #E5E7EB
-
-  // Additional UI Colors
-  static const dangerColor = Color(0xFFEF4444); // #EF4444
-  static const dangerText = Color(0xFFF87171); // #F87171 (soft red)
-  static const inputBg = Color(0xFFF9FAFB); // #F9FAFB
-
-  // Typography Colors
-  static const textPrimary = Color(0xFF0F172A); // #0F172A
-  static const textSecondary = Color(0xFF64748B); // #64748B
-
-  // Toast & Warning Colors
-  static const toastBg = Color(0xFF1E293B); // #1E293B
-}
+import 'mvp_theme.dart';
 
 class CustomMvpView extends ConsumerStatefulWidget {
   const CustomMvpView({super.key});
@@ -52,12 +24,6 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
 
   int _minimalTapCount = 0;
   DateTime? _lastMinimalTapTime;
-
-  @override
-  void initState() {
-    super.initState();
-    MvpAppBridge.ensureInitSettings(ref);
-  }
 
   @override
   void dispose() {
@@ -144,12 +110,11 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     });
 
     try {
-      final res = await MvpAppBridge.exportLogs(ref);
+      final res = await MvpBridge.exportLogs(ref);
       if (res == true && mounted) {
         _showMvpToast('日志导出成功', type: MvpToastType.success);
       }
     } catch (_) {
-      // Ignored
     } finally {
       if (mounted) {
         setState(() {
@@ -176,8 +141,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     }
 
     _isConnectionToggling = true;
-
-    MvpAppBridge.toggleShield(ref, currentIsStart);
+    MvpBridge.toggleShield(ref, currentIsStart);
 
     Future.delayed(const Duration(milliseconds: 500), () {
       if (mounted) {
@@ -195,7 +159,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     });
 
     try {
-      await updateSubscriptionOrBackup(url);
+      await MvpBridge.updateSubscription(ref, url);
       if (!mounted) return;
       _showMvpToast('已同步至最新', type: MvpToastType.success);
     } catch (e) {
@@ -239,14 +203,10 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     });
 
     try {
-      await downloadAndRestoreBackup(url);
+      await MvpBridge.importBackup(ref, url);
       if (!mounted) return;
 
-      if (MvpAppBridge.isMockSupported) {
-        ref.read(customProfilesProvider.notifier).addProfileFromBackup(url);
-      }
       _urlController.clear();
-
       setState(() {
         _showInputArea = false;
       });
@@ -270,38 +230,10 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
 
   @override
   Widget build(BuildContext context) {
-    final bool isStart = MvpAppBridge.watchIsStart(ref) ??
-        (MvpAppBridge.isMockSupported
-            ? ref.watch(customProxyStartProvider)
-            : false);
-
-    final MvpCoreStatus coreStatus = MvpAppBridge.watchCoreStatus(ref) ??
-        (MvpAppBridge.isMockSupported
-            ? ref.watch(customCoreStatusProvider)
-            : MvpCoreStatus.disconnected);
-
-    final realActiveProfile = MvpAppBridge.watchActiveProfile(ref);
-    final MvpProfileItem activeProfile;
-    final bool hasProfile;
-
-    if (realActiveProfile != null && realActiveProfile.id.isNotEmpty) {
-      hasProfile = true;
-      activeProfile = realActiveProfile;
-    } else if (MvpAppBridge.isMockSupported) {
-      final mockProfiles = ref.watch(customProfilesProvider);
-      final mockCurrentProfileId = ref.watch(customCurrentProfileIdProvider);
-      final foundMock = mockProfiles.firstWhere(
-        (element) => element.id == mockCurrentProfileId,
-        orElse: () => mockProfiles.isNotEmpty
-            ? mockProfiles.first
-            : const MvpProfileItem(id: '', label: '', url: ''),
-      );
-      hasProfile = foundMock.id.isNotEmpty;
-      activeProfile = foundMock;
-    } else {
-      hasProfile = false;
-      activeProfile = const MvpProfileItem(id: '', label: '', url: '');
-    }
+    final bool isStart = MvpBridge.watchIsStart(ref);
+    final MvpCoreStatus coreStatus = MvpBridge.watchCoreStatus(ref);
+    final MvpProfileItem? activeProfile = MvpBridge.watchActiveProfile(ref);
+    final bool hasProfile = activeProfile != null;
 
     return Scaffold(
       backgroundColor: MvpTheme.bgPrimary,
@@ -363,9 +295,11 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                               isImporting: _isImporting,
                               isUpdating: _isUpdating,
                               onImport: _handleImportConfigZip,
-                              onUpdate: () => _handleUpdateSubscription(
-                                activeProfile.url,
-                              ),
+                              onUpdate: () {
+                                if (activeProfile != null) {
+                                  _handleUpdateSubscription(activeProfile.url);
+                                }
+                              },
                               onPaste: _handlePaste,
                             ),
                             const SizedBox(height: 16),
@@ -383,8 +317,6 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     );
   }
 }
-
-// MARK: - Header Bar
 
 class _MvpHeaderBar extends StatelessWidget {
   final VoidCallback onMinimalTap;
@@ -404,7 +336,6 @@ class _MvpHeaderBar extends StatelessWidget {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          // Centered Title with 5-tap gesture
           GestureDetector(
             onTap: onMinimalTap,
             behavior: HitTestBehavior.opaque,
@@ -417,7 +348,6 @@ class _MvpHeaderBar extends StatelessWidget {
               ),
             ),
           ),
-          // Right action button
           Align(
             alignment: Alignment.centerRight,
             child: GestureDetector(
@@ -448,8 +378,6 @@ class _MvpHeaderBar extends StatelessWidget {
   }
 }
 
-// MARK: - Toggle Switch
-
 class _MvpToggleSwitch extends StatelessWidget {
   final bool isOn;
   final VoidCallback action;
@@ -473,7 +401,6 @@ class _MvpToggleSwitch extends StatelessWidget {
             alignment: Alignment.center,
             clipBehavior: Clip.none,
             children: [
-              // Capsule Track (130 x 56)
               AnimatedContainer(
                 duration: const Duration(milliseconds: 350),
                 curve: Curves.easeInOutCubic,
@@ -484,7 +411,6 @@ class _MvpToggleSwitch extends StatelessWidget {
                   borderRadius: BorderRadius.circular(28),
                 ),
               ),
-              // Thumb Container (154 width with oversized thumb)
               AnimatedAlign(
                 duration: const Duration(milliseconds: 350),
                 curve: Curves.easeOutBack,
@@ -512,7 +438,6 @@ class _MvpToggleSwitch extends StatelessWidget {
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
-                        // Active Checkmark
                         AnimatedOpacity(
                           duration: const Duration(milliseconds: 250),
                           opacity: isOn ? 1.0 : 0.0,
@@ -526,7 +451,6 @@ class _MvpToggleSwitch extends StatelessWidget {
                             ),
                           ),
                         ),
-                        // Inactive Circle Ring
                         AnimatedOpacity(
                           duration: const Duration(milliseconds: 250),
                           opacity: isOn ? 0.0 : 1.0,
@@ -558,8 +482,6 @@ class _MvpToggleSwitch extends StatelessWidget {
     );
   }
 }
-
-// MARK: - Status Hero
 
 class _MvpStatusHero extends StatelessWidget {
   final bool isStart;
@@ -627,8 +549,6 @@ class _MvpStatusHero extends StatelessWidget {
     );
   }
 }
-
-// MARK: - Quick Info Cards
 
 class _MvpQuickInfoCards extends StatelessWidget {
   final bool isStart;
@@ -738,11 +658,9 @@ class _MvpQuickInfoCards extends StatelessWidget {
   }
 }
 
-// MARK: - Profile Card
-
 class _MvpProfileCard extends StatelessWidget {
   final bool hasProfile;
-  final MvpProfileItem activeProfile;
+  final MvpProfileItem? activeProfile;
   final bool showInputArea;
   final ValueChanged<bool> onToggleInputArea;
   final TextEditingController urlController;
@@ -789,7 +707,8 @@ class _MvpProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isLoadedMode = hasProfile && !showInputArea;
+    final bool isLoadedMode =
+        hasProfile && !showInputArea && activeProfile != null;
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -802,7 +721,6 @@ class _MvpProfileCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Header Row
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -915,11 +833,12 @@ class _MvpProfileCard extends StatelessWidget {
             color: MvpTheme.borderColor,
           ),
           const SizedBox(height: 14),
-          // Content: Smooth crossfade height transition
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 4),
             child: AnimatedCrossFade(
-              firstChild: _buildLoadedState(context),
+              firstChild: activeProfile != null
+                  ? _buildLoadedState(context, activeProfile!)
+                  : const SizedBox.shrink(),
               secondChild: _buildImportState(context),
               crossFadeState: isLoadedMode
                   ? CrossFadeState.showFirst
@@ -933,12 +852,10 @@ class _MvpProfileCard extends StatelessWidget {
     );
   }
 
-  Widget _buildLoadedState(BuildContext context) {
-    final activeTitle =
-        activeProfile.label.isNotEmpty ? activeProfile.label : 'Block Ad';
-    final updateDateStr =
-        activeProfile.lastUpdateDate?.formattedUpdateDate ?? '未知';
-    final ruleCountStr = _computeRuleCountStr(activeProfile);
+  Widget _buildLoadedState(BuildContext context, MvpProfileItem profile) {
+    final activeTitle = profile.label.isNotEmpty ? profile.label : 'Block Ad';
+    final updateDateStr = profile.lastUpdateDate?.formattedUpdateDate ?? '未知';
+    final ruleCountStr = _computeRuleCountStr(profile);
 
     return Row(
       key: const ValueKey('loaded_state'),
