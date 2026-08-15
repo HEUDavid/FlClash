@@ -857,212 +857,220 @@ class _MvpProfileCard extends StatelessWidget {
     final updateDateStr = profile.lastUpdateDate?.formattedUpdateDate ?? '未知';
     final ruleCountStr = _computeRuleCountStr(profile);
 
-    return Row(
+    return Container(
       key: const ValueKey('loaded_state'),
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                activeTitle,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.bold,
-                  color: MvpTheme.textPrimary,
-                ),
-              ),
-              const SizedBox(height: 6),
-              Text(
-                '更新于：$updateDateStr',
-                style: const TextStyle(
-                  fontSize: 13,
-                  color: MvpTheme.textSecondary,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                ruleCountStr,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  fontSize: 13,
-                  color: MvpTheme.textSecondary,
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(width: 12),
-        GestureDetector(
-          onTap: isUpdating ? null : onUpdate,
-          behavior: HitTestBehavior.opaque,
-          child: Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 10,
-            ),
-            decoration: BoxDecoration(
-              color: MvpTheme.activeColor,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: MvpTheme.activeColor.withValues(alpha: 0.2),
-                  blurRadius: 12,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: Row(
+      constraints: const BoxConstraints(minHeight: 108),
+      alignment: Alignment.center,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                if (isUpdating) ...[
-                  const SizedBox(
-                    width: 12,
-                    height: 12,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(width: 6),
-                ] else ...[
-                  const Padding(
-                    padding: EdgeInsets.only(top: 1.0),
-                    child: Icon(
-                      Icons.sync_rounded,
-                      size: 15,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(width: 6),
-                ],
-                const Text(
-                  '更新',
-                  style: TextStyle(
-                    fontSize: 14,
+                Text(
+                  activeTitle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 17,
                     fontWeight: FontWeight.bold,
-                    height: 1.1,
-                    color: Colors.white,
+                    color: MvpTheme.textPrimary,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  '更新于：$updateDateStr',
+                  style: const TextStyle(
+                    fontSize: 13,
+                    color: MvpTheme.textSecondary,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  ruleCountStr,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    color: MvpTheme.textSecondary,
                   ),
                 ),
               ],
             ),
           ),
-        ),
-      ],
+          const SizedBox(width: 12),
+          GestureDetector(
+            onTap: isUpdating ? null : onUpdate,
+            behavior: HitTestBehavior.opaque,
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 10,
+              ),
+              decoration: BoxDecoration(
+                color: MvpTheme.activeColor,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: MvpTheme.activeColor.withValues(alpha: 0.2),
+                    blurRadius: 12,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  if (isUpdating) ...[
+                    const SizedBox(
+                      width: 12,
+                      height: 12,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                  ] else ...[
+                    const Padding(
+                      padding: EdgeInsets.only(top: 1.0),
+                      child: Icon(
+                        Icons.sync_rounded,
+                        size: 15,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                  ],
+                  const Text(
+                    '更新',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      height: 1.1,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
   Widget _buildImportState(BuildContext context) {
-    return Column(
+    return Container(
       key: const ValueKey('import_state'),
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            color: MvpTheme.inputBg,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: MvpTheme.borderColor, width: 1),
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: urlController,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: MvpTheme.textPrimary,
-                  ),
-                  decoration: const InputDecoration(
-                    hintText: '粘贴配置文件链接',
-                    hintStyle: TextStyle(
-                      fontSize: 14,
-                      color: MvpTheme.textSecondary,
-                    ),
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.symmetric(
-                      horizontal: 14,
-                      vertical: 12,
-                    ),
-                  ),
-                ),
-              ),
-              IconButton(
-                icon: const Icon(
-                  Icons.content_paste_rounded,
-                  size: 15,
-                  color: MvpTheme.textSecondary,
-                ),
-                onPressed: onPaste,
-                splashRadius: 18,
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 12),
-        GestureDetector(
-          onTap: isImporting ? null : onImport,
-          behavior: HitTestBehavior.opaque,
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 12),
+      constraints: const BoxConstraints(minHeight: 108),
+      alignment: Alignment.center,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
             decoration: BoxDecoration(
-              color: MvpTheme.activeColor,
+              color: MvpTheme.inputBg,
               borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: MvpTheme.activeColor.withValues(alpha: 0.2),
-                  blurRadius: 12,
-                  offset: const Offset(0, 4),
-                ),
-              ],
+              border: Border.all(color: MvpTheme.borderColor, width: 1),
             ),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                if (isImporting) ...[
-                  const SizedBox(
-                    width: 15,
-                    height: 15,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: Colors.white,
+                Expanded(
+                  child: TextField(
+                    controller: urlController,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: MvpTheme.textPrimary,
+                    ),
+                    decoration: const InputDecoration(
+                      hintText: '粘贴配置文件链接',
+                      hintStyle: TextStyle(
+                        fontSize: 14,
+                        color: MvpTheme.textSecondary,
+                      ),
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 12,
+                      ),
                     ),
                   ),
-                  const SizedBox(width: 8),
-                ] else ...[
-                  const Padding(
-                    padding: EdgeInsets.only(top: 1.2),
-                    child: Icon(
-                      Icons.download_rounded,
-                      size: 16,
-                      color: Colors.white,
-                    ),
+                ),
+                IconButton(
+                  icon: const Icon(
+                    Icons.content_paste_rounded,
+                    size: 15,
+                    color: MvpTheme.textSecondary,
                   ),
-                  const SizedBox(width: 8),
-                ],
-                const Text(
-                  '下载并导入',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    height: 1.1,
-                    color: Colors.white,
-                  ),
+                  onPressed: onPaste,
+                  splashRadius: 18,
                 ),
               ],
             ),
           ),
-        ),
-      ],
+          const SizedBox(height: 12),
+          GestureDetector(
+            onTap: isImporting ? null : onImport,
+            behavior: HitTestBehavior.opaque,
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              decoration: BoxDecoration(
+                color: MvpTheme.activeColor,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: MvpTheme.activeColor.withValues(alpha: 0.2),
+                    blurRadius: 12,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  if (isImporting) ...[
+                    const SizedBox(
+                      width: 15,
+                      height: 15,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                  ] else ...[
+                    const Padding(
+                      padding: EdgeInsets.only(top: 1.2),
+                      child: Icon(
+                        Icons.download_rounded,
+                        size: 16,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                  ],
+                  const Text(
+                    '下载并导入',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      height: 1.1,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
