@@ -858,7 +858,7 @@ class _MvpProfileCard extends StatelessWidget {
                   alignment: Alignment.center,
                   children: <Widget>[
                     ...previousChildren,
-                    if (currentChild != null) currentChild,
+                    ?currentChild,
                   ],
                 );
               },
