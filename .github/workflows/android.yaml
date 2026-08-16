@@ -2,8 +2,8 @@ name: build-android
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - beta
   workflow_dispatch:
 
 env:
