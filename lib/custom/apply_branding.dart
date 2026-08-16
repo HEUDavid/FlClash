@@ -15,16 +15,6 @@ void main(List<String> args) {
       'scheme',
       help: 'Custom URL scheme (default: lowercased app-name)',
     )
-    ..addOption(
-      'icon-res-dir',
-      defaultsTo: 'lib/custom/branding/res',
-      help: 'Directory containing custom Android res icon folders',
-    )
-    ..addOption(
-      'branding-dir',
-      defaultsTo: 'lib/custom/branding',
-      help: 'Directory containing branding assets like icon.png',
-    )
     ..addFlag(
       'help',
       abbr: 'h',
@@ -41,8 +31,6 @@ void main(List<String> args) {
   final appName = results['app-name'] as String;
   final customScheme = (results['scheme'] as String?) ??
       appName.toLowerCase().replaceAll(RegExp(r'[^a-z0-9]'), '');
-  final iconResDir = results['icon-res-dir'] as String;
-  final brandingDir = results['branding-dir'] as String;
 
   stdout.writeln('Applying Branding Configuration:');
   stdout.writeln('  App Name:      $appName');
@@ -50,8 +38,6 @@ void main(List<String> args) {
       '  Package Name:  (unchanged, keeping original com.follow.clash)',
   );
   stdout.writeln('  Custom Scheme: $customScheme');
-  stdout.writeln('  Icon Res Dir:  $iconResDir');
-  stdout.writeln('  Branding Dir:  $brandingDir');
   stdout.writeln();
 
   // 1. 替换 Flutter 侧应用名称常量
@@ -182,58 +168,7 @@ void main(List<String> args) {
     ],
   );
 
-  _copyDirectory(
-    sourcePath: iconResDir,
-    destinationPath: 'android/app/src/main/res',
-  );
-
-  _copyFileIfExists(
-    sourcePath: '$brandingDir/icon.png',
-    destinationPath: 'assets/images/icon.png',
-  );
-
-  _copyFileIfExists(
-    sourcePath: '$brandingDir/ic_launcher-playstore.png',
-    destinationPath: 'android/app/src/main/ic_launcher-playstore.png',
-  );
-
   stdout.writeln('Successfully applied branding changes!');
-}
-
-void _copyDirectory({
-  required String sourcePath,
-  required String destinationPath,
-}) {
-  final sourceDir = Directory(sourcePath);
-  if (!sourceDir.existsSync()) {
-    stdout.writeln('Warning: Icon source directory not found: $sourcePath');
-    return;
-  }
-
-  final destDir = Directory(destinationPath);
-  for (final entity in sourceDir.listSync(recursive: true)) {
-    if (entity is File) {
-      final relativePath = entity.path.substring(sourceDir.path.length + 1);
-      final targetFile = File('${destDir.path}/$relativePath');
-      targetFile.parent.createSync(recursive: true);
-      entity.copySync(targetFile.path);
-      stdout.writeln('Copied icon asset: $relativePath');
-    }
-  }
-}
-
-void _copyFileIfExists({
-  required String sourcePath,
-  required String destinationPath,
-}) {
-  final file = File(sourcePath);
-  if (!file.existsSync()) {
-    return;
-  }
-  final targetFile = File(destinationPath);
-  targetFile.parent.createSync(recursive: true);
-  file.copySync(targetFile.path);
-  stdout.writeln('Copied asset: $sourcePath -> $destinationPath');
 }
 
 void _replaceInFile({
