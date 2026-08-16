@@ -71,10 +71,7 @@ jobs:
         run: flutter test --reporter expanded
 
       - name: Apply Branding
-        run: |
-          python3 -m pip install --quiet --break-system-packages pillow
-          python3 lib/custom/branding/generate_icons.py
-          dart lib/custom/apply_branding.dart --app-name "${{ env.APP_NAME }}"
+        run: dart lib/custom/apply_branding.dart --app-name "${{ env.APP_NAME }}"
 
       - name: Setup
         run: dart setup.dart android --env stable -v
