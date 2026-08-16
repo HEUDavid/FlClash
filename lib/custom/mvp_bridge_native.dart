@@ -57,10 +57,10 @@ class MvpBridge {
   }
 
   static void toggleShield(WidgetRef ref, bool currentIsStart) {
-    final isInit = !ref.read(initProvider);
-    ref.read(setupActionProvider.notifier).updateStatus(
-          !currentIsStart,
-          isInit: isInit,
+    final running = !currentIsStart;
+    ref.read(setupActionProvider.notifier).setRunning(
+          running,
+          initialize: running && !ref.read(initProvider),
         );
   }
 
@@ -147,7 +147,7 @@ class MvpBridge {
     if (providers.isNotEmpty) {
       final updateTasks = providers.map<Future<void>>((provider) async {
         try {
-          var message = await container
+          final message = await container
               .read(proxiesActionProvider.notifier)
               .updateProvider(provider);
           if (message.isNotEmpty) {
