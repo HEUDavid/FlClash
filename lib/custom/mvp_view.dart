@@ -44,18 +44,15 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
         content: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Transform.translate(
-              offset: const Offset(0, -0.2),
-              child: Icon(
-                switch (type) {
-                  MvpToastType.info => Icons.info_rounded,
-                  MvpToastType.success => Icons.check_circle_rounded,
-                  MvpToastType.error => Icons.error_rounded,
-                  MvpToastType.warning => Icons.warning_amber_rounded,
-                },
-                color: Colors.white,
-                size: 16.5,
-              ),
+            Icon(
+              switch (type) {
+                MvpToastType.info => Icons.info_rounded,
+                MvpToastType.success => Icons.check_circle_rounded,
+                MvpToastType.error => Icons.error_rounded,
+                MvpToastType.warning => Icons.warning_amber_rounded,
+              },
+              color: Colors.white,
+              size: 16.5,
             ),
             const SizedBox(width: 8),
             Expanded(
@@ -64,7 +61,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                 style: const TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w500,
-                  height: 1.0,
+                  leadingDistribution: TextLeadingDistribution.even,
                   color: Colors.white,
                 ),
               ),
@@ -640,7 +637,7 @@ class _MvpQuickInfoCards extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
-                    height: 1.0,
+                    leadingDistribution: TextLeadingDistribution.even,
                     color: MvpTheme.textSecondary,
                   ),
                 ),
@@ -652,7 +649,7 @@ class _MvpQuickInfoCards extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
-                    height: 1.0,
+                    leadingDistribution: TextLeadingDistribution.even,
                     color: MvpTheme.textPrimary,
                   ),
                 ),
@@ -733,24 +730,21 @@ class _MvpProfileCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Row(
+                const Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Transform.translate(
-                      offset: const Offset(0, 1.2),
-                      child: const Icon(
-                        Icons.tune_rounded,
-                        size: 17,
-                        color: MvpTheme.textPrimary,
-                      ),
+                    Icon(
+                      Icons.tune_rounded,
+                      size: 17,
+                      color: MvpTheme.textPrimary,
                     ),
-                    const SizedBox(width: 7),
-                    const Text(
+                    SizedBox(width: 7),
+                    Text(
                       '配置文件',
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
-                        height: 1.0,
+                        leadingDistribution: TextLeadingDistribution.even,
                         color: MvpTheme.textPrimary,
                       ),
                     ),
@@ -769,25 +763,22 @@ class _MvpProfileCard extends StatelessWidget {
                         color: MvpTheme.dangerColor.withValues(alpha: 0.05),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: Row(
+                      child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Transform.translate(
-                            offset: const Offset(0, 0.5),
-                            child: const Icon(
-                              Icons.delete_outline_rounded,
-                              size: 15,
-                              color: MvpTheme.dangerText,
-                            ),
+                          Icon(
+                            Icons.delete_outline_rounded,
+                            size: 15,
+                            color: MvpTheme.dangerText,
                           ),
-                          const SizedBox(width: 4),
-                          const Text(
+                          SizedBox(width: 4),
+                          Text(
                             '重置',
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w600,
-                              height: 1.0,
+                              leadingDistribution: TextLeadingDistribution.even,
                               color: MvpTheme.dangerText,
                             ),
                           ),
@@ -808,25 +799,22 @@ class _MvpProfileCard extends StatelessWidget {
                         color: MvpTheme.inactiveBadgeBg.withValues(alpha: 0.4),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: Row(
+                      child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Transform.translate(
-                            offset: const Offset(0, 0.5),
-                            child: const Icon(
-                              Icons.keyboard_arrow_up_rounded,
-                              size: 15,
-                              color: MvpTheme.textSecondary,
-                            ),
+                          Icon(
+                            Icons.keyboard_arrow_up_rounded,
+                            size: 15,
+                            color: MvpTheme.textSecondary,
                           ),
-                          const SizedBox(width: 4),
-                          const Text(
+                          SizedBox(width: 4),
+                          Text(
                             '收起',
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w600,
-                              height: 1.0,
+                              leadingDistribution: TextLeadingDistribution.even,
                               color: MvpTheme.textSecondary,
                             ),
                           ),
@@ -966,7 +954,7 @@ class _MvpProfileCard extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
-                        height: 1.0,
+                        leadingDistribution: TextLeadingDistribution.even,
                         color: Colors.white,
                       ),
                     ),
@@ -1070,13 +1058,10 @@ class _MvpProfileCard extends StatelessWidget {
                       ),
                       const SizedBox(width: 8),
                     ] else ...[
-                      Transform.translate(
-                        offset: const Offset(0, 1.8),
-                        child: const Icon(
-                          Icons.download_rounded,
-                          size: 16,
-                          color: Colors.white,
-                        ),
+                      const Icon(
+                        Icons.download_rounded,
+                        size: 16,
+                        color: Colors.white,
                       ),
                       const SizedBox(width: 8),
                     ],
@@ -1085,7 +1070,7 @@ class _MvpProfileCard extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
-                        height: 1.0,
+                        leadingDistribution: TextLeadingDistribution.even,
                         color: Colors.white,
                       ),
                     ),
