@@ -61,6 +61,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                 style: const TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w500,
+                  height: 1.2,
                   leadingDistribution: TextLeadingDistribution.even,
                   color: Colors.white,
                 ),
@@ -637,7 +638,7 @@ class _MvpQuickInfoCards extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
-                    leadingDistribution: TextLeadingDistribution.even,
+                    height: 1.0,
                     color: MvpTheme.textSecondary,
                   ),
                 ),
@@ -649,7 +650,7 @@ class _MvpQuickInfoCards extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
-                    leadingDistribution: TextLeadingDistribution.even,
+                    height: 1.0,
                     color: MvpTheme.textPrimary,
                   ),
                 ),
@@ -744,6 +745,7 @@ class _MvpProfileCard extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
+                        height: 1.2,
                         leadingDistribution: TextLeadingDistribution.even,
                         color: MvpTheme.textPrimary,
                       ),
@@ -778,6 +780,7 @@ class _MvpProfileCard extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w600,
+                              height: 1.2,
                               leadingDistribution: TextLeadingDistribution.even,
                               color: MvpTheme.dangerText,
                             ),
@@ -814,6 +817,7 @@ class _MvpProfileCard extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w600,
+                              height: 1.2,
                               leadingDistribution: TextLeadingDistribution.even,
                               color: MvpTheme.textSecondary,
                             ),
@@ -954,6 +958,7 @@ class _MvpProfileCard extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
+                        height: 1.2,
                         leadingDistribution: TextLeadingDistribution.even,
                         color: Colors.white,
                       ),
@@ -1070,6 +1075,7 @@ class _MvpProfileCard extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
+                        height: 1.2,
                         leadingDistribution: TextLeadingDistribution.even,
                         color: Colors.white,
                       ),
