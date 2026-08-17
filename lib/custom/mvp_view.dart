@@ -736,7 +736,7 @@ class _MvpProfileCard extends StatelessWidget {
                   children: [
                     Icon(
                       Icons.tune_rounded,
-                      size: 15,
+                      size: 17,
                       color: MvpTheme.textPrimary,
                     ),
                     SizedBox(width: 7),
@@ -948,7 +948,7 @@ class _MvpProfileCard extends StatelessWidget {
                     ] else ...[
                       const Icon(
                         Icons.sync_rounded,
-                        size: 14,
+                        size: 16,
                         color: Colors.white,
                       ),
                       const SizedBox(width: 6),
@@ -1065,7 +1065,7 @@ class _MvpProfileCard extends StatelessWidget {
                     ] else ...[
                       const Icon(
                         Icons.download_rounded,
-                        size: 15,
+                        size: 17,
                         color: Colors.white,
                       ),
                       const SizedBox(width: 7),
