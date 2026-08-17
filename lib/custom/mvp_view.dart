@@ -785,10 +785,6 @@ class _MvpProfileCard extends StatelessWidget {
                           SizedBox(width: 4),
                           Text(
                             '重置',
-                            textHeightBehavior: const TextHeightBehavior(
-                              applyHeightToFirstAscent: false,
-                              applyHeightToLastDescent: false,
-                            ),
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w600,
@@ -826,10 +822,6 @@ class _MvpProfileCard extends StatelessWidget {
                           SizedBox(width: 4),
                           Text(
                             '收起',
-                            textHeightBehavior: const TextHeightBehavior(
-                              applyHeightToFirstAscent: false,
-                              applyHeightToLastDescent: false,
-                            ),
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w600,
