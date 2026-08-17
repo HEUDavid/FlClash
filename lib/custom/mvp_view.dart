@@ -736,7 +736,7 @@ class _MvpProfileCard extends StatelessWidget {
                   children: [
                     Icon(
                       Icons.tune_rounded,
-                      size: 17,
+                      size: 15,
                       color: MvpTheme.textPrimary,
                     ),
                     SizedBox(width: 7),
@@ -744,7 +744,7 @@ class _MvpProfileCard extends StatelessWidget {
                       '配置文件',
                       style: TextStyle(
                         fontSize: 15,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                         height: 1.2,
                         leadingDistribution: TextLeadingDistribution.even,
                         color: MvpTheme.textPrimary,
@@ -937,8 +937,8 @@ class _MvpProfileCard extends StatelessWidget {
                   children: [
                     if (isUpdating) ...[
                       const SizedBox(
-                        width: 12,
-                        height: 12,
+                        width: 14,
+                        height: 14,
                         child: CircularProgressIndicator(
                           strokeWidth: 2,
                           color: Colors.white,
@@ -948,7 +948,7 @@ class _MvpProfileCard extends StatelessWidget {
                     ] else ...[
                       const Icon(
                         Icons.sync_rounded,
-                        size: 15.5,
+                        size: 14,
                         color: Colors.white,
                       ),
                       const SizedBox(width: 6),
@@ -957,7 +957,7 @@ class _MvpProfileCard extends StatelessWidget {
                       '更新',
                       style: TextStyle(
                         fontSize: 14,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                         height: 1.2,
                         leadingDistribution: TextLeadingDistribution.even,
                         color: Colors.white,
@@ -1061,20 +1061,20 @@ class _MvpProfileCard extends StatelessWidget {
                           color: Colors.white,
                         ),
                       ),
-                      const SizedBox(width: 8),
+                      const SizedBox(width: 7),
                     ] else ...[
                       const Icon(
                         Icons.download_rounded,
-                        size: 16,
+                        size: 15,
                         color: Colors.white,
                       ),
-                      const SizedBox(width: 8),
+                      const SizedBox(width: 7),
                     ],
                     const Text(
                       '下载并导入',
                       style: TextStyle(
                         fontSize: 15,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                         height: 1.2,
                         leadingDistribution: TextLeadingDistribution.even,
                         color: Colors.white,
