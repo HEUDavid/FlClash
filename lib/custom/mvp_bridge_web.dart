@@ -14,7 +14,19 @@ final _webStartProvider =
 
 class _WebProfileNotifier extends Notifier<MvpProfileItem?> {
   @override
-  MvpProfileItem? build() => null;
+  MvpProfileItem? build() {
+    final now = DateTime.now();
+    return MvpProfileItem(
+      id: 'web_preview_profile',
+      label: '在线配置集 (${now.month}/${now.day})',
+      url: 'https://example.com/clash/config.yaml',
+      lastUpdateDate: now,
+      rulesCount: 15,
+      ruleProvidersCount: 3,
+      ruleProvidersTotalRules: 45280,
+      ruleProvidersCounts: const [9, 4, 13],
+    );
+  }
 
   void set(MvpProfileItem? value) => state = value;
 }
