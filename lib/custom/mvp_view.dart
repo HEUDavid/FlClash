@@ -692,24 +692,23 @@ class _MvpProfileCard extends StatelessWidget {
 
   String _computeRuleCountStr(MvpProfileItem profile) {
     final rulesCount = profile.rulesCount;
+    final counts = profile.ruleProvidersCounts;
+
     if (rulesCount == null) {
+      if (counts != null && counts.isNotEmpty) {
+        return '版本：v${counts.join('.')}';
+      }
       final totalRules = profile.ruleProvidersTotalRules;
       if (totalRules != null && totalRules > 0) {
-        return '规则 $totalRules';
+        return '版本：v$totalRules';
       }
-      return '规则获取中...';
+      return '版本获取中...';
     }
 
-    final StringBuffer sb = StringBuffer('规则 $rulesCount');
-    final providerCount = profile.ruleProvidersCount;
-    if (providerCount != null && providerCount > 0) {
-      sb.write('，子规则 $providerCount');
-      final counts = profile.ruleProvidersCounts;
-      if (counts != null && counts.isNotEmpty) {
-        sb.write(' <${counts.join(' | ')}>');
-      }
+    if (counts != null && counts.isNotEmpty) {
+      return '版本：v$rulesCount.${counts.join('.')}';
     }
-    return sb.toString();
+    return '版本：v$rulesCount';
   }
 
   @override
