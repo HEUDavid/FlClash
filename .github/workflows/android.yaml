@@ -76,6 +76,9 @@ jobs:
       - name: Setup
         run: dart setup.dart android --env stable -v
 
+      - name: Copy latest apk
+        run: cp dist/*android-arm64-v8a.apk dist/latest.apk
+
       - name: Release
         uses: softprops/action-gh-release@v3
         with:
