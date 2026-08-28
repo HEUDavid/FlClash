@@ -56,7 +56,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                       MvpToastType.warning => Icons.warning_amber_rounded,
                     },
                     color: Colors.white,
-                    size: 16,
+                    size: 14,
                   ),
                 ),
               ),
@@ -736,7 +736,7 @@ class _MvpProfileCard extends StatelessWidget {
                         alignment: PlaceholderAlignment.middle,
                         child: Icon(
                           Icons.tune_rounded,
-                          size: 16,
+                          size: 18,
                           color: MvpTheme.textPrimary,
                         ),
                       ),
@@ -772,7 +772,7 @@ class _MvpProfileCard extends StatelessWidget {
                               alignment: PlaceholderAlignment.middle,
                               child: Icon(
                                 Icons.delete_outline_rounded,
-                                size: 16,
+                                size: 14,
                                 color: MvpTheme.dangerText,
                               ),
                             ),
@@ -811,7 +811,7 @@ class _MvpProfileCard extends StatelessWidget {
                               alignment: PlaceholderAlignment.middle,
                               child: Icon(
                                 Icons.keyboard_arrow_up_rounded,
-                                size: 16,
+                                size: 14,
                                 color: MvpTheme.textSecondary,
                               ),
                             ),
@@ -889,7 +889,7 @@ class _MvpProfileCard extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
-                      fontSize: 17,
+                      fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: MvpTheme.textPrimary,
                     ),
