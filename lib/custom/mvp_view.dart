@@ -772,7 +772,7 @@ class _MvpProfileCard extends StatelessWidget {
                               alignment: PlaceholderAlignment.middle,
                               child: Icon(
                                 Icons.delete_outline_rounded,
-                                size: 12,
+                                size: 14,
                                 color: MvpTheme.dangerText,
                               ),
                             ),
@@ -811,7 +811,7 @@ class _MvpProfileCard extends StatelessWidget {
                               alignment: PlaceholderAlignment.middle,
                               child: Icon(
                                 Icons.keyboard_arrow_up_rounded,
-                                size: 12,
+                                size: 14,
                                 color: MvpTheme.textSecondary,
                               ),
                             ),
