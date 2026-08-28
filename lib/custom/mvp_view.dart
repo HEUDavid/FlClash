@@ -759,7 +759,7 @@ class _MvpProfileCard extends StatelessWidget {
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 8,
-                        vertical: 6,
+                        vertical: 8,
                       ),
                       decoration: BoxDecoration(
                         color: MvpTheme.dangerColor.withValues(alpha: 0.05),
@@ -798,7 +798,7 @@ class _MvpProfileCard extends StatelessWidget {
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 8,
-                        vertical: 6,
+                        vertical: 8,
                       ),
                       decoration: BoxDecoration(
                         color: MvpTheme.inactiveBadgeBg.withValues(alpha: 0.4),
