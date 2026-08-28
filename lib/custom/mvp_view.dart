@@ -64,7 +64,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
             ],
           ),
           style: const TextStyle(
-            fontSize: 13,
+            fontSize: 14,
             fontWeight: FontWeight.w500,
             color: Colors.white,
           ),
@@ -744,7 +744,7 @@ class _MvpProfileCard extends StatelessWidget {
                       TextSpan(
                         text: '配置文件',
                         style: TextStyle(
-                          fontSize: 15,
+                          fontSize: 16,
                           fontWeight: FontWeight.w600,
                           color: MvpTheme.textPrimary,
                         ),
@@ -780,7 +780,7 @@ class _MvpProfileCard extends StatelessWidget {
                             TextSpan(
                               text: '重置',
                               style: TextStyle(
-                                fontSize: 13,
+                                fontSize: 12,
                                 fontWeight: FontWeight.w600,
                                 color: MvpTheme.dangerText,
                               ),
@@ -819,7 +819,7 @@ class _MvpProfileCard extends StatelessWidget {
                             TextSpan(
                               text: '收起',
                               style: TextStyle(
-                                fontSize: 13,
+                                fontSize: 12,
                                 fontWeight: FontWeight.w600,
                                 color: MvpTheme.textSecondary,
                               ),
@@ -898,7 +898,7 @@ class _MvpProfileCard extends StatelessWidget {
                   Text(
                     '更新于：$updateDateStr',
                     style: const TextStyle(
-                      fontSize: 13,
+                      fontSize: 12,
                       color: MvpTheme.textSecondary,
                     ),
                   ),
@@ -908,7 +908,7 @@ class _MvpProfileCard extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
-                      fontSize: 13,
+                      fontSize: 12,
                       color: MvpTheme.textSecondary,
                     ),
                   ),
@@ -1075,7 +1075,7 @@ class _MvpProfileCard extends StatelessWidget {
                       const TextSpan(
                         text: '下载并导入',
                         style: TextStyle(
-                          fontSize: 15,
+                          fontSize: 16,
                           fontWeight: FontWeight.w600,
                           color: Colors.white,
                         ),
