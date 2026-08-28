@@ -58,15 +58,9 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
             Expanded(
               child: Text(
                 message,
-                textHeightBehavior: const TextHeightBehavior(
-                  applyHeightToFirstAscent: false,
-                  applyHeightToLastDescent: false,
-                ),
                 style: const TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w500,
-                  height: 1.2,
-                  leadingDistribution: TextLeadingDistribution.even,
                   color: Colors.white,
                 ),
               ),
@@ -639,15 +633,9 @@ class _MvpQuickInfoCards extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  textHeightBehavior: const TextHeightBehavior(
-                    applyHeightToFirstAscent: false,
-                    applyHeightToLastDescent: false,
-                  ),
                   style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
-                    height: 1.2,
-                    leadingDistribution: TextLeadingDistribution.even,
                     color: MvpTheme.textSecondary,
                   ),
                 ),
@@ -656,15 +644,9 @@ class _MvpQuickInfoCards extends StatelessWidget {
                   value,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  textHeightBehavior: const TextHeightBehavior(
-                    applyHeightToFirstAscent: false,
-                    applyHeightToLastDescent: false,
-                  ),
                   style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
-                    height: 1.2,
-                    leadingDistribution: TextLeadingDistribution.even,
                     color: MvpTheme.textPrimary,
                   ),
                 ),
@@ -756,15 +738,9 @@ class _MvpProfileCard extends StatelessWidget {
                     SizedBox(width: 6),
                     Text(
                       '配置文件',
-                      textHeightBehavior: TextHeightBehavior(
-                        applyHeightToFirstAscent: false,
-                        applyHeightToLastDescent: false,
-                      ),
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w600,
-                        height: 1.2,
-                        leadingDistribution: TextLeadingDistribution.even,
                         color: MvpTheme.textPrimary,
                       ),
                     ),
@@ -795,15 +771,9 @@ class _MvpProfileCard extends StatelessWidget {
                           SizedBox(width: 4),
                           Text(
                             '重置',
-                            textHeightBehavior: TextHeightBehavior(
-                              applyHeightToFirstAscent: false,
-                              applyHeightToLastDescent: false,
-                            ),
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w600,
-                              height: 1.2,
-                              leadingDistribution: TextLeadingDistribution.even,
                               color: MvpTheme.dangerText,
                             ),
                           ),
@@ -836,15 +806,9 @@ class _MvpProfileCard extends StatelessWidget {
                           SizedBox(width: 4),
                           Text(
                             '收起',
-                            textHeightBehavior: TextHeightBehavior(
-                              applyHeightToFirstAscent: false,
-                              applyHeightToLastDescent: false,
-                            ),
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w600,
-                              height: 1.2,
-                              leadingDistribution: TextLeadingDistribution.even,
                               color: MvpTheme.textSecondary,
                             ),
                           ),
@@ -981,15 +945,9 @@ class _MvpProfileCard extends StatelessWidget {
                     ],
                     const Text(
                       '更新',
-                      textHeightBehavior: TextHeightBehavior(
-                        applyHeightToFirstAscent: false,
-                        applyHeightToLastDescent: false,
-                      ),
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
-                        height: 1.2,
-                        leadingDistribution: TextLeadingDistribution.even,
                         color: Colors.white,
                       ),
                     ),
@@ -1102,15 +1060,9 @@ class _MvpProfileCard extends StatelessWidget {
                     ],
                     const Text(
                       '下载并导入',
-                      textHeightBehavior: TextHeightBehavior(
-                        applyHeightToFirstAscent: false,
-                        applyHeightToLastDescent: false,
-                      ),
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w600,
-                        height: 1.2,
-                        leadingDistribution: TextLeadingDistribution.even,
                         color: Colors.white,
                       ),
                     ),
