@@ -52,7 +52,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                 MvpToastType.warning => Icons.warning_amber_rounded,
               },
               color: Colors.white,
-              size: 18,
+              size: 16,
             ),
             const SizedBox(width: 8),
             Expanded(
@@ -740,7 +740,7 @@ class _MvpProfileCard extends StatelessWidget {
                   children: [
                     const Icon(
                       Icons.tune_rounded,
-                      size: 20,
+                      size: 18,
                       color: MvpTheme.textPrimary,
                     ),
                     const SizedBox(width: 6),
@@ -956,8 +956,8 @@ class _MvpProfileCard extends StatelessWidget {
                   children: [
                     isUpdating
                         ? const SizedBox(
-                            width: 18,
-                            height: 18,
+                            width: 16,
+                            height: 16,
                             child: CircularProgressIndicator(
                               strokeWidth: 2,
                               color: Colors.white,
@@ -965,7 +965,7 @@ class _MvpProfileCard extends StatelessWidget {
                           )
                         : const Icon(
                             Icons.sync_rounded,
-                            size: 18,
+                            size: 16,
                             color: Colors.white,
                           ),
                     const SizedBox(width: 6),
@@ -1075,8 +1075,8 @@ class _MvpProfileCard extends StatelessWidget {
                   children: [
                     isImporting
                         ? const SizedBox(
-                            width: 20,
-                            height: 20,
+                            width: 18,
+                            height: 18,
                             child: CircularProgressIndicator(
                               strokeWidth: 2,
                               color: Colors.white,
@@ -1084,7 +1084,7 @@ class _MvpProfileCard extends StatelessWidget {
                           )
                         : const Icon(
                             Icons.download_rounded,
-                            size: 20,
+                            size: 18,
                             color: Colors.white,
                           ),
                     const SizedBox(width: 6),
