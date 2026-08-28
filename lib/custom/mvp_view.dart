@@ -41,31 +41,33 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Icon(
-              switch (type) {
-                MvpToastType.info => Icons.info_rounded,
-                MvpToastType.success => Icons.check_circle_rounded,
-                MvpToastType.error => Icons.error_rounded,
-                MvpToastType.warning => Icons.warning_amber_rounded,
-              },
-              color: Colors.white,
-              size: 16,
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                message,
-                style: const TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white,
+        content: Text.rich(
+          TextSpan(
+            children: [
+              WidgetSpan(
+                alignment: PlaceholderAlignment.middle,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: Icon(
+                    switch (type) {
+                      MvpToastType.info => Icons.info_rounded,
+                      MvpToastType.success => Icons.check_circle_rounded,
+                      MvpToastType.error => Icons.error_rounded,
+                      MvpToastType.warning => Icons.warning_amber_rounded,
+                    },
+                    color: Colors.white,
+                    size: 16,
+                  ),
                 ),
               ),
-            ),
-          ],
+              TextSpan(text: message),
+            ],
+          ),
+          style: const TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w500,
+            color: Colors.white,
+          ),
         ),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
