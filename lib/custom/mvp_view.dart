@@ -736,7 +736,7 @@ class _MvpProfileCard extends StatelessWidget {
                         alignment: PlaceholderAlignment.middle,
                         child: Icon(
                           Icons.tune_rounded,
-                          size: 18,
+                          size: 16,
                           color: MvpTheme.textPrimary,
                         ),
                       ),
@@ -744,7 +744,7 @@ class _MvpProfileCard extends StatelessWidget {
                       TextSpan(
                         text: '配置文件',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 14,
                           fontWeight: FontWeight.w600,
                           color: MvpTheme.textPrimary,
                         ),
@@ -1058,8 +1058,8 @@ class _MvpProfileCard extends StatelessWidget {
                         alignment: PlaceholderAlignment.middle,
                         child: isImporting
                             ? const SizedBox(
-                                width: 18,
-                                height: 18,
+                                width: 16,
+                                height: 16,
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2,
                                   color: Colors.white,
@@ -1067,7 +1067,7 @@ class _MvpProfileCard extends StatelessWidget {
                               )
                             : const Icon(
                                 Icons.download_rounded,
-                                size: 18,
+                                size: 16,
                                 color: Colors.white,
                               ),
                       ),
@@ -1075,7 +1075,7 @@ class _MvpProfileCard extends StatelessWidget {
                       const TextSpan(
                         text: '下载并导入',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 14,
                           fontWeight: FontWeight.w600,
                           color: Colors.white,
                         ),
