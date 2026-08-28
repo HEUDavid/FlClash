@@ -727,24 +727,28 @@ class _MvpProfileCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.tune_rounded,
-                      size: 18,
-                      color: MvpTheme.textPrimary,
-                    ),
-                    SizedBox(width: 6),
-                    Text(
-                      '配置文件',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
-                        color: MvpTheme.textPrimary,
+                const Text.rich(
+                  TextSpan(
+                    children: [
+                      WidgetSpan(
+                        alignment: PlaceholderAlignment.middle,
+                        child: Icon(
+                          Icons.tune_rounded,
+                          size: 18,
+                          color: MvpTheme.textPrimary,
+                        ),
                       ),
-                    ),
-                  ],
+                      WidgetSpan(child: SizedBox(width: 6)),
+                      TextSpan(
+                        text: '配置文件',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color: MvpTheme.textPrimary,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 if (isLoadedMode)
                   GestureDetector(
@@ -759,25 +763,29 @@ class _MvpProfileCard extends StatelessWidget {
                         color: MvpTheme.dangerColor.withValues(alpha: 0.05),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.delete_outline_rounded,
-                            size: 14,
-                            color: MvpTheme.dangerText,
-                          ),
-                          SizedBox(width: 4),
-                          Text(
-                            '重置',
-                            style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600,
-                              color: MvpTheme.dangerText,
+                      child: const Text.rich(
+                        TextSpan(
+                          children: [
+                            WidgetSpan(
+                              alignment: PlaceholderAlignment.middle,
+                              child: Icon(
+                                Icons.delete_outline_rounded,
+                                size: 14,
+                                color: MvpTheme.dangerText,
+                              ),
                             ),
-                          ),
-                        ],
+                            WidgetSpan(child: SizedBox(width: 4)),
+                            TextSpan(
+                              text: '重置',
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                                color: MvpTheme.dangerText,
+                              ),
+                            ),
+                          ],
+                        ),
+                        textAlign: TextAlign.center,
                       ),
                     ),
                   )
@@ -794,25 +802,29 @@ class _MvpProfileCard extends StatelessWidget {
                         color: MvpTheme.inactiveBadgeBg.withValues(alpha: 0.4),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.keyboard_arrow_up_rounded,
-                            size: 14,
-                            color: MvpTheme.textSecondary,
-                          ),
-                          SizedBox(width: 4),
-                          Text(
-                            '收起',
-                            style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600,
-                              color: MvpTheme.textSecondary,
+                      child: const Text.rich(
+                        TextSpan(
+                          children: [
+                            WidgetSpan(
+                              alignment: PlaceholderAlignment.middle,
+                              child: Icon(
+                                Icons.keyboard_arrow_up_rounded,
+                                size: 14,
+                                color: MvpTheme.textSecondary,
+                              ),
                             ),
-                          ),
-                        ],
+                            WidgetSpan(child: SizedBox(width: 4)),
+                            TextSpan(
+                              text: '收起',
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                                color: MvpTheme.textSecondary,
+                              ),
+                            ),
+                          ],
+                        ),
+                        textAlign: TextAlign.center,
                       ),
                     ),
                   ),
@@ -921,37 +933,38 @@ class _MvpProfileCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    if (isUpdating) ...[
-                      const SizedBox(
-                        width: 16,
-                        height: 16,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
+                child: Text.rich(
+                  TextSpan(
+                    children: [
+                      WidgetSpan(
+                        alignment: PlaceholderAlignment.middle,
+                        child: isUpdating
+                            ? const SizedBox(
+                                width: 16,
+                                height: 16,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                ),
+                              )
+                            : const Icon(
+                                Icons.sync_rounded,
+                                size: 16,
+                                color: Colors.white,
+                              ),
+                      ),
+                      const WidgetSpan(child: SizedBox(width: 6)),
+                      const TextSpan(
+                        text: '更新',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
                           color: Colors.white,
                         ),
                       ),
-                      const SizedBox(width: 6),
-                    ] else ...[
-                      const Icon(
-                        Icons.sync_rounded,
-                        size: 16,
-                        color: Colors.white,
-                      ),
-                      const SizedBox(width: 6),
                     ],
-                    const Text(
-                      '更新',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
+                  ),
+                  textAlign: TextAlign.center,
                 ),
               ),
             ),
@@ -1036,37 +1049,38 @@ class _MvpProfileCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    if (isImporting) ...[
-                      const SizedBox(
-                        width: 18,
-                        height: 18,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
+                child: Text.rich(
+                  TextSpan(
+                    children: [
+                      WidgetSpan(
+                        alignment: PlaceholderAlignment.middle,
+                        child: isImporting
+                            ? const SizedBox(
+                                width: 18,
+                                height: 18,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                ),
+                              )
+                            : const Icon(
+                                Icons.download_rounded,
+                                size: 18,
+                                color: Colors.white,
+                              ),
+                      ),
+                      const WidgetSpan(child: SizedBox(width: 6)),
+                      const TextSpan(
+                        text: '下载并导入',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
                           color: Colors.white,
                         ),
                       ),
-                      const SizedBox(width: 6),
-                    ] else ...[
-                      const Icon(
-                        Icons.download_rounded,
-                        size: 18,
-                        color: Colors.white,
-                      ),
-                      const SizedBox(width: 6),
                     ],
-                    const Text(
-                      '下载并导入',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
+                  ),
+                  textAlign: TextAlign.center,
                 ),
               ),
             ),
