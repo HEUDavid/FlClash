@@ -52,7 +52,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                 MvpToastType.warning => Icons.warning_amber_rounded,
               },
               color: Colors.white,
-              size: 16.5,
+              size: 16,
             ),
             const SizedBox(width: 8),
             Expanded(
@@ -362,8 +362,8 @@ class _MvpHeaderBar extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
                 child: isExportingLogs
                     ? const SizedBox(
-                        width: 14,
-                        height: 14,
+                        width: 16,
+                        height: 16,
                         child: CircularProgressIndicator(
                           strokeWidth: 2,
                           color: MvpTheme.textSecondary,
@@ -626,7 +626,7 @@ class _MvpQuickInfoCards extends StatelessWidget {
             child: Center(
               child: Icon(
                 icon,
-                size: 16.5,
+                size: 18,
                 color: iconColor,
               ),
             ),
@@ -639,22 +639,32 @@ class _MvpQuickInfoCards extends StatelessWidget {
               children: [
                 Text(
                   title,
+                  textHeightBehavior: const TextHeightBehavior(
+                    applyHeightToFirstAscent: false,
+                    applyHeightToLastDescent: false,
+                  ),
                   style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
-                    height: 1.0,
+                    height: 1.2,
+                    leadingDistribution: TextLeadingDistribution.even,
                     color: MvpTheme.textSecondary,
                   ),
                 ),
-                const SizedBox(height: 5),
+                const SizedBox(height: 4),
                 Text(
                   value,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
+                  textHeightBehavior: const TextHeightBehavior(
+                    applyHeightToFirstAscent: false,
+                    applyHeightToLastDescent: false,
+                  ),
                   style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
-                    height: 1.0,
+                    height: 1.2,
+                    leadingDistribution: TextLeadingDistribution.even,
                     color: MvpTheme.textPrimary,
                   ),
                 ),
@@ -740,13 +750,13 @@ class _MvpProfileCard extends StatelessWidget {
                   children: [
                     Icon(
                       Icons.tune_rounded,
-                      size: 17,
+                      size: 18,
                       color: MvpTheme.textPrimary,
                     ),
-                    SizedBox(width: 7),
+                    SizedBox(width: 6),
                     Text(
                       '配置文件',
-                      textHeightBehavior: const TextHeightBehavior(
+                      textHeightBehavior: TextHeightBehavior(
                         applyHeightToFirstAscent: false,
                         applyHeightToLastDescent: false,
                       ),
@@ -779,12 +789,16 @@ class _MvpProfileCard extends StatelessWidget {
                         children: [
                           Icon(
                             Icons.delete_outline_rounded,
-                            size: 15,
+                            size: 14,
                             color: MvpTheme.dangerText,
                           ),
                           SizedBox(width: 4),
                           Text(
                             '重置',
+                            textHeightBehavior: TextHeightBehavior(
+                              applyHeightToFirstAscent: false,
+                              applyHeightToLastDescent: false,
+                            ),
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w600,
@@ -816,12 +830,16 @@ class _MvpProfileCard extends StatelessWidget {
                         children: [
                           Icon(
                             Icons.keyboard_arrow_up_rounded,
-                            size: 15,
+                            size: 14,
                             color: MvpTheme.textSecondary,
                           ),
                           SizedBox(width: 4),
                           Text(
                             '收起',
+                            textHeightBehavior: TextHeightBehavior(
+                              applyHeightToFirstAscent: false,
+                              applyHeightToLastDescent: false,
+                            ),
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w600,
@@ -945,8 +963,8 @@ class _MvpProfileCard extends StatelessWidget {
                   children: [
                     if (isUpdating) ...[
                       const SizedBox(
-                        width: 14,
-                        height: 14,
+                        width: 16,
+                        height: 16,
                         child: CircularProgressIndicator(
                           strokeWidth: 2,
                           color: Colors.white,
@@ -1033,7 +1051,7 @@ class _MvpProfileCard extends StatelessWidget {
                     padding: EdgeInsets.zero,
                     icon: const Icon(
                       Icons.content_paste_rounded,
-                      size: 15,
+                      size: 16,
                       color: MvpTheme.textSecondary,
                     ),
                     onPressed: onPaste,
@@ -1066,21 +1084,21 @@ class _MvpProfileCard extends StatelessWidget {
                   children: [
                     if (isImporting) ...[
                       const SizedBox(
-                        width: 15,
-                        height: 15,
+                        width: 18,
+                        height: 18,
                         child: CircularProgressIndicator(
                           strokeWidth: 2,
                           color: Colors.white,
                         ),
                       ),
-                      const SizedBox(width: 7),
+                      const SizedBox(width: 6),
                     ] else ...[
                       const Icon(
                         Icons.download_rounded,
-                        size: 17,
+                        size: 18,
                         color: Colors.white,
                       ),
-                      const SizedBox(width: 7),
+                      const SizedBox(width: 6),
                     ],
                     const Text(
                       '下载并导入',
