@@ -18,8 +18,8 @@ class _WebProfileNotifier extends Notifier<MvpProfileItem?> {
     final now = DateTime.now();
     return MvpProfileItem(
       id: 'web_preview_profile',
-      label: '在线配置集 (${now.month}/${now.day})',
-      url: 'https://example.com/clash/config.yaml',
+      label: '在线配置 (${now.month}/${now.day})',
+      url: 'https://example.com/config.yaml',
       lastUpdateDate: now,
       rulesCount: 15,
       ruleProvidersCount: 3,
@@ -65,7 +65,7 @@ class MvpBridge {
     ref.read(_webProfileProvider.notifier).set(
           MvpProfileItem(
             id: now.millisecondsSinceEpoch.toString(),
-            label: '在线配置集 (${now.month}/${now.day})',
+            label: '在线配置 (${now.month}/${now.day})',
             url: url,
             lastUpdateDate: now,
             rulesCount: 15,
