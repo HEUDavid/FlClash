@@ -85,14 +85,3 @@ jobs:
           name: Latest
           tag_name: latest
           files: ./dist/*
-
-#      - name: Upload latest APK to Gitee Release
-#        uses: wes-lin/action-gitee-release@v1
-#        with:
-#          token: ${{ secrets.GITEE_TOKEN }}
-#          repository: 'fk-ad/pub'
-#          name: Latest
-#          tag_name: latest
-#          body: 'Latest release build'
-#          files: dist/latest.apk
-#          branch: master
