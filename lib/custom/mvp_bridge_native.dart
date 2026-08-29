@@ -11,6 +11,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'mvp_hwid.dart';
 import 'mvp_models.dart';
 
+class MvpException implements Exception {
+  final String message;
+  MvpException(this.message);
+
+  @override
+  String toString() => message;
+}
+
 class MvpBridge {
   static bool watchIsStart(WidgetRef ref) {
     return ref.watch(isStartProvider);
@@ -95,7 +103,7 @@ class MvpBridge {
     final response = await dio.download(downloadUrl, tempEncryptedPath);
 
     if (response.statusCode != 200) {
-      throw Exception('文件下载失败，服务器响应: ${response.statusCode}，请检查链接是否有效');
+      throw MvpException('文件下载失败，服务器响应: ${response.statusCode}，请检查链接是否有效');
     }
 
     final tempFile = File(tempEncryptedPath);
@@ -103,7 +111,7 @@ class MvpBridge {
       final contentDisposition =
           response.headers.value('content-disposition') ?? '';
       if (!contentDisposition.contains('fk-config.zip')) {
-        throw Exception('配置文件链接无效');
+        throw MvpException('配置文件链接无效');
       }
 
       final zipDecoder = ZipDecoder();
@@ -112,7 +120,7 @@ class MvpBridge {
       try {
         archive = zipDecoder.decodeBytes(bytes, password: 'BlockAd2026');
       } catch (_) {
-        throw Exception('配置文件格式错误');
+        throw MvpException('配置文件格式错误');
       }
 
       final unencryptedBytes = ZipEncoder().encode(archive);
