@@ -56,11 +56,11 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                       MvpToastType.warning => Icons.warning_amber_rounded,
                     },
                     color: Colors.white,
-                    size: 14,
+                    size: 15,
                   ),
                 ),
               ),
-              TextSpan(text: message),
+              TextSpan(text: message.trim()),
             ],
           ),
           style: const TextStyle(
