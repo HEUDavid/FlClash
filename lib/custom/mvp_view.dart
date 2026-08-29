@@ -47,7 +47,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
               WidgetSpan(
                 alignment: PlaceholderAlignment.middle,
                 child: Transform.translate(
-                  offset: const Offset(0, -1),
+                  offset: const Offset(0, -0.5),
                   child: Icon(
                     switch (type) {
                       MvpToastType.info => Icons.info_rounded,
