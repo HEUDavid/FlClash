@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 enum MvpToastType {
   info,
   success,
@@ -59,11 +61,9 @@ enum MvpCoreStatus {
 extension MvpDateTimeExtension on DateTime {
   String get formattedUpdateDate {
     final now = DateTime.now();
-    final isToday = year == now.year && month == now.month && day == now.day;
+    final isToday = DateUtils.isSameDay(this, now);
     final yesterday = now.subtract(const Duration(days: 1));
-    final isYesterday = year == yesterday.year &&
-        month == yesterday.month &&
-        day == yesterday.day;
+    final isYesterday = DateUtils.isSameDay(this, yesterday);
 
     final hourStr = hour.toString().padLeft(2, '0');
     final minuteStr = minute.toString().padLeft(2, '0');
