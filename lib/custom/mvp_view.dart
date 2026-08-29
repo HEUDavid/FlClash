@@ -46,15 +46,18 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
             children: [
               WidgetSpan(
                 alignment: PlaceholderAlignment.middle,
-                child: Icon(
-                  switch (type) {
-                    MvpToastType.info => Icons.info_rounded,
-                    MvpToastType.success => Icons.check_circle_rounded,
-                    MvpToastType.error => Icons.error_rounded,
-                    MvpToastType.warning => Icons.warning_amber_rounded,
-                  },
-                  color: Colors.white,
-                  size: 16,
+                child: Transform.translate(
+                  offset: const Offset(0, -1),
+                  child: Icon(
+                    switch (type) {
+                      MvpToastType.info => Icons.info_rounded,
+                      MvpToastType.success => Icons.check_circle_rounded,
+                      MvpToastType.error => Icons.error_rounded,
+                      MvpToastType.warning => Icons.warning_amber_rounded,
+                    },
+                    color: Colors.white,
+                    size: 16,
+                  ),
                 ),
               ),
               const WidgetSpan(child: SizedBox(width: 4)),
