@@ -759,7 +759,7 @@ class _MvpProfileCard extends StatelessWidget {
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 8,
-                        vertical: 8,
+                        vertical: 6,
                       ),
                       decoration: BoxDecoration(
                         color: MvpTheme.dangerColor.withValues(alpha: 0.05),
@@ -772,7 +772,7 @@ class _MvpProfileCard extends StatelessWidget {
                               alignment: PlaceholderAlignment.middle,
                               child: Icon(
                                 Icons.delete_outline_rounded,
-                                size: 15,
+                                size: 14,
                                 color: MvpTheme.dangerText,
                               ),
                             ),
@@ -780,7 +780,7 @@ class _MvpProfileCard extends StatelessWidget {
                             TextSpan(
                               text: '重置',
                               style: TextStyle(
-                                fontSize: 12,
+                                fontSize: 13,
                                 fontWeight: FontWeight.w600,
                                 color: MvpTheme.dangerText,
                               ),
@@ -798,7 +798,7 @@ class _MvpProfileCard extends StatelessWidget {
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 8,
-                        vertical: 8,
+                        vertical: 6,
                       ),
                       decoration: BoxDecoration(
                         color: MvpTheme.inactiveBadgeBg.withValues(alpha: 0.4),
@@ -811,7 +811,7 @@ class _MvpProfileCard extends StatelessWidget {
                               alignment: PlaceholderAlignment.middle,
                               child: Icon(
                                 Icons.keyboard_arrow_up_rounded,
-                                size: 15,
+                                size: 14,
                                 color: MvpTheme.textSecondary,
                               ),
                             ),
@@ -819,7 +819,7 @@ class _MvpProfileCard extends StatelessWidget {
                             TextSpan(
                               text: '收起',
                               style: TextStyle(
-                                fontSize: 12,
+                                fontSize: 13,
                                 fontWeight: FontWeight.w600,
                                 color: MvpTheme.textSecondary,
                               ),
