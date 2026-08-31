@@ -24,7 +24,7 @@ class _WebProfileNotifier extends Notifier<MvpProfileItem?> {
       rulesCount: 15,
       ruleProvidersCount: 3,
       ruleProvidersTotalRules: 45280,
-      ruleProvidersCounts: const [9, 4, 13],
+      ruleProvidersCounts: const [9, 2, 44],
     );
   }
 
@@ -68,7 +68,7 @@ class MvpBridge {
             label: 'Block Ad',
             url: url,
             lastUpdateDate: now,
-            rulesCount: 15,
+            rulesCount: 1,
             ruleProvidersCount: 3,
             ruleProvidersTotalRules: 45280,
             ruleProvidersCounts: const [9, 2, 44],
