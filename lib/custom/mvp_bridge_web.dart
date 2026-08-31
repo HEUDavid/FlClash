@@ -65,13 +65,13 @@ class MvpBridge {
     ref.read(_webProfileProvider.notifier).set(
           MvpProfileItem(
             id: now.millisecondsSinceEpoch.toString(),
-            label: '在线配置 (${now.month}/${now.day})',
+            label: 'Block Ad',
             url: url,
             lastUpdateDate: now,
             rulesCount: 15,
             ruleProvidersCount: 3,
             ruleProvidersTotalRules: 45280,
-            ruleProvidersCounts: const [9, 4, 13],
+            ruleProvidersCounts: const [9, 2, 44],
           ),
         );
   }
