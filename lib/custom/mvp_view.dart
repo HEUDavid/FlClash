@@ -91,6 +91,51 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     );
   }
 
+  void _showPasswordDialog() {
+    final passwordController = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('切换至高级模式'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('此功能或导致无法联网，需密码验证'),
+              const SizedBox(height: 16),
+              TextField(
+                controller: passwordController,
+                obscureText: true,
+                decoration: const InputDecoration(
+                  hintText: '请输入密码',
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('取消'),
+            ),
+            TextButton(
+              onPressed: () {
+                if (passwordController.text == 'fkad666') {
+                  Navigator.of(context).pop();
+                  ref.read(customMvpProvider.notifier).setEnabled(false);
+                  _showMvpToast('已切换至高级模式', type: MvpToastType.info);
+                } else {
+                  Navigator.of(context).pop();
+                  _showMvpToast('密码错误', type: MvpToastType.error);
+                }
+              },
+              child: const Text('确认'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void _handleMinimalTap() {
     final now = DateTime.now();
     if (_lastMinimalTapTime != null &&
@@ -102,8 +147,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
 
     if (_minimalTapCount >= 5) {
       _minimalTapCount = 0;
-      ref.read(customMvpProvider.notifier).setEnabled(false);
-      _showMvpToast('已切换至高级模式', type: MvpToastType.info);
+      _showPasswordDialog();
     }
   }
 
@@ -396,7 +440,10 @@ class _MvpToggleSwitch extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 24),
       child: GestureDetector(
-        onTap: action,
+        onTap: () {
+          HapticFeedback.lightImpact();
+          action();
+        },
         behavior: HitTestBehavior.opaque,
         child: SizedBox(
           width: 154,
