@@ -908,14 +908,14 @@ class _MvpProfileCard extends StatelessWidget {
                   color: color,
                 ),
               ),
-              const WidgetSpan(child: SizedBox(width: 3)),
+              const WidgetSpan(child: SizedBox(width: 4)),
               TextSpan(
                 text: label,
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
                   color: color,
-                  height: 1.1,
+                  height: 1.15,
                   leadingDistribution: TextLeadingDistribution.even,
                 ),
               ),
