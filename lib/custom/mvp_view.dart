@@ -453,7 +453,7 @@ class _MvpToggleSwitch extends StatelessWidget {
             clipBehavior: Clip.none,
             children: [
               AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
+                duration: const Duration(milliseconds: 250),
                 curve: Curves.easeInOutCubic,
                 width: 130,
                 height: 56,
@@ -463,8 +463,8 @@ class _MvpToggleSwitch extends StatelessWidget {
                 ),
               ),
               AnimatedAlign(
-                duration: const Duration(milliseconds: 300),
-                curve: const Cubic(0.175, 0.885, 0.32, 1.18),
+                duration: const Duration(milliseconds: 250),
+                curve: const Cubic(0.175, 0.885, 0.32, 1.11),
                 alignment: isOn ? Alignment.centerRight : Alignment.centerLeft,
                 child: Container(
                   width: 86,
@@ -490,10 +490,10 @@ class _MvpToggleSwitch extends StatelessWidget {
                       alignment: Alignment.center,
                       children: [
                         AnimatedOpacity(
-                          duration: const Duration(milliseconds: 250),
+                          duration: const Duration(milliseconds: 200),
                           opacity: isOn ? 1.0 : 0.0,
                           child: AnimatedScale(
-                            duration: const Duration(milliseconds: 250),
+                            duration: const Duration(milliseconds: 200),
                             scale: isOn ? 1.0 : 0.5,
                             child: const Icon(
                               Icons.check_rounded,
@@ -503,10 +503,10 @@ class _MvpToggleSwitch extends StatelessWidget {
                           ),
                         ),
                         AnimatedOpacity(
-                          duration: const Duration(milliseconds: 250),
+                          duration: const Duration(milliseconds: 200),
                           opacity: isOn ? 0.0 : 1.0,
                           child: AnimatedScale(
-                            duration: const Duration(milliseconds: 250),
+                            duration: const Duration(milliseconds: 200),
                             scale: isOn ? 0.5 : 1.0,
                             child: Container(
                               width: 24,
