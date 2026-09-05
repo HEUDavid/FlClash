@@ -583,7 +583,7 @@ class _MvpStatusHero extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 12),
         AnimatedSwitcher(
           duration: const Duration(milliseconds: 200),
           child: Text(
