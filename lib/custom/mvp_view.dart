@@ -653,7 +653,7 @@ class _MvpQuickInfoCards extends StatelessWidget {
     final iconColor = isActive ? MvpTheme.activeColor : MvpTheme.textSecondary;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
         color: MvpTheme.cardBg,
         borderRadius: BorderRadius.circular(16),
@@ -773,7 +773,7 @@ class _MvpProfileCard extends StatelessWidget {
         hasProfile && !showInputArea && activeProfile != null;
 
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
         color: MvpTheme.cardBg,
         borderRadius: BorderRadius.circular(16),
