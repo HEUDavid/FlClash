@@ -810,7 +810,7 @@ class _MvpProfileCard extends StatelessWidget {
                           color: MvpTheme.textPrimary,
                         ),
                       ),
-                      WidgetSpan(child: SizedBox(width: 4)),
+                      WidgetSpan(child: SizedBox(width: 6)),
                       TextSpan(
                         text: '配置文件',
                         style: TextStyle(
@@ -908,7 +908,7 @@ class _MvpProfileCard extends StatelessWidget {
                   color: color,
                 ),
               ),
-              const WidgetSpan(child: SizedBox(width: 2)),
+              const WidgetSpan(child: SizedBox(width: 3)),
               TextSpan(
                 text: label,
                 style: TextStyle(
@@ -1015,7 +1015,7 @@ class _MvpProfileCard extends StatelessWidget {
                                 color: Colors.white,
                               ),
                       ),
-                      const WidgetSpan(child: SizedBox(width: 4)),
+                      const WidgetSpan(child: SizedBox(width: 6)),
                       const TextSpan(
                         text: '更新',
                         style: TextStyle(
@@ -1143,7 +1143,7 @@ class _MvpProfileCard extends StatelessWidget {
                                 color: Colors.white,
                               ),
                       ),
-                      const WidgetSpan(child: SizedBox(width: 4)),
+                      const WidgetSpan(child: SizedBox(width: 6)),
                       const TextSpan(
                         text: '下载并导入',
                         style: TextStyle(
