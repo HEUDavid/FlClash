@@ -1105,7 +1105,7 @@ class _MvpProfileCard extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 16),
             GestureDetector(
               onTap: isImporting ? null : onImport,
               behavior: HitTestBehavior.opaque,
