@@ -1150,7 +1150,7 @@ class _MvpProfileCard extends StatelessWidget {
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
                           color: Colors.white,
-                          height: 1.0,
+                          height: 1.1,
                           leadingDistribution: TextLeadingDistribution.even,
                         ),
                       ),
