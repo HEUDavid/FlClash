@@ -954,7 +954,7 @@ class _MvpProfileCard extends StatelessWidget {
                       color: MvpTheme.textPrimary,
                     ),
                   ),
-                  const SizedBox(height: 6),
+                  const SizedBox(height: 12),
                   Text(
                     '更新于：$updateDateStr',
                     style: const TextStyle(
@@ -962,7 +962,7 @@ class _MvpProfileCard extends StatelessWidget {
                       color: MvpTheme.textSecondary,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 6),
                   Text(
                     ruleCountStr,
                     maxLines: 1,
@@ -1105,13 +1105,13 @@ class _MvpProfileCard extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 12),
             GestureDetector(
               onTap: isImporting ? null : onImport,
               behavior: HitTestBehavior.opaque,
               child: Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 11),
+                padding: const EdgeInsets.symmetric(vertical: 12),
                 decoration: BoxDecoration(
                   color: MvpTheme.activeColor,
                   borderRadius: BorderRadius.circular(12),
