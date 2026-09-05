@@ -1083,15 +1083,15 @@ class _MvpProfileCard extends StatelessWidget {
                         isDense: true,
                         contentPadding: EdgeInsets.symmetric(
                           horizontal: 14,
-                          vertical: 8,
+                          vertical: 10,
                         ),
                       ),
                     ),
                   ),
                   IconButton(
                     constraints: const BoxConstraints(
-                      minWidth: 36,
-                      minHeight: 36,
+                      minWidth: 40,
+                      minHeight: 40,
                     ),
                     padding: EdgeInsets.zero,
                     icon: const Icon(
@@ -1105,13 +1105,13 @@ class _MvpProfileCard extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 12),
             GestureDetector(
               onTap: isImporting ? null : onImport,
               behavior: HitTestBehavior.opaque,
               child: Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 10),
+                padding: const EdgeInsets.symmetric(vertical: 12),
                 decoration: BoxDecoration(
                   color: MvpTheme.activeColor,
                   borderRadius: BorderRadius.circular(12),
