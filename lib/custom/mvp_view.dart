@@ -258,7 +258,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
         '更新失败: $e',
         type: MvpToastType.error,
         copyData: '更新失败: $e',
-        duration: const Duration(seconds: 4),
+        duration: const Duration(seconds: 5),
       );
     } finally {
       if (mounted) {
@@ -307,7 +307,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
         '导入失败: $e',
         type: MvpToastType.error,
         copyData: '导入失败: $e',
-        duration: const Duration(seconds: 4),
+        duration: const Duration(seconds: 5),
       );
     } finally {
       if (mounted) {
