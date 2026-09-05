@@ -805,7 +805,7 @@ class _MvpProfileCard extends StatelessWidget {
                   children: [
                     Icon(
                       Icons.tune_rounded,
-                      size: 18,
+                      size: 16,
                       color: MvpTheme.textPrimary,
                     ),
                     SizedBox(width: 6),
