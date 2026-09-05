@@ -41,52 +41,98 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text.rich(
-          TextSpan(
-            children: [
-              WidgetSpan(
-                alignment: PlaceholderAlignment.middle,
-                child: Transform.translate(
-                  offset: const Offset(0, -0.5),
-                  child: Icon(
-                    switch (type) {
-                      MvpToastType.info => Icons.info_rounded,
-                      MvpToastType.success => Icons.check_circle_rounded,
-                      MvpToastType.error => Icons.error_rounded,
-                      MvpToastType.warning => Icons.warning_amber_rounded,
-                    },
-                    color: Colors.white,
-                    size: 16,
-                  ),
-                ),
-              ),
-              const WidgetSpan(child: SizedBox(width: 4)),
-              TextSpan(
-                text: message.trim(),
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white,
-                ),
-              ),
-            ],
-          ),
-        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        backgroundColor: MvpTheme.toastBg,
+        padding: EdgeInsets.zero,
+        margin: const EdgeInsets.only(bottom: 24, left: 24, right: 24),
         duration: duration,
-        action: copyData != null
-            ? SnackBarAction(
-                label: '复制',
-                textColor: Colors.white,
-                onPressed: () {
-                  Clipboard.setData(ClipboardData(text: copyData));
-                },
-              )
-            : null,
+        content: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Flexible(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                decoration: BoxDecoration(
+                  color: MvpTheme.toastBg,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.1),
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Flexible(
+                      child: Text.rich(
+                        TextSpan(
+                          children: [
+                            WidgetSpan(
+                              alignment: PlaceholderAlignment.middle,
+                              child: Transform.translate(
+                                offset: const Offset(0, -0.5),
+                                child: Icon(
+                                  switch (type) {
+                                    MvpToastType.info => Icons.info_rounded,
+                                    MvpToastType.success => Icons.check_circle_rounded,
+                                    MvpToastType.error => Icons.error_rounded,
+                                    MvpToastType.warning => Icons.warning_amber_rounded,
+                                  },
+                                  color: Colors.white,
+                                  size: 16,
+                                ),
+                              ),
+                            ),
+                            const WidgetSpan(child: SizedBox(width: 4)),
+                            TextSpan(
+                              text: message.trim(),
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    if (copyData != null) ...[
+                      const SizedBox(width: 12),
+                      Container(
+                        width: 1,
+                        height: 14,
+                        color: Colors.white.withValues(alpha: 0.3),
+                      ),
+                      const SizedBox(width: 4),
+                      GestureDetector(
+                        onTap: () {
+                          Clipboard.setData(ClipboardData(text: copyData));
+                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                        },
+                        behavior: HitTestBehavior.opaque,
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                          child: Text(
+                            '复制',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
