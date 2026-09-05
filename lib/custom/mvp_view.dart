@@ -97,17 +97,17 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('切换至高级模式'),
+          title: const Text('切换高级模式'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text('此功能或导致无法联网，需密码验证'),
+              const Text('此功能或导致无法联网，需验证密码'),
               const SizedBox(height: 16),
               TextField(
                 controller: passwordController,
                 obscureText: true,
                 decoration: const InputDecoration(
-                  hintText: '请输入密码',
+                  hintText: '输入密码',
                 ),
               ),
             ],
