@@ -799,27 +799,28 @@ class _MvpProfileCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Row(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.tune_rounded,
-                      size: 16,
-                      color: MvpTheme.textPrimary,
-                    ),
-                    SizedBox(width: 6),
-                    Text(
-                      '配置文件',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: MvpTheme.textPrimary,
-                        height: 1.0,
-                        leadingDistribution: TextLeadingDistribution.even,
+                const Text.rich(
+                  TextSpan(
+                    children: [
+                      WidgetSpan(
+                        alignment: PlaceholderAlignment.middle,
+                        child: Icon(
+                          Icons.tune_rounded,
+                          size: 16,
+                          color: MvpTheme.textPrimary,
+                        ),
                       ),
-                    ),
-                  ],
+                      WidgetSpan(child: SizedBox(width: 6)),
+                      TextSpan(
+                        text: '配置文件',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: MvpTheme.textPrimary,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 if (isLoadedMode)
                   _buildHeaderButton(
