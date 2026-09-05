@@ -391,7 +391,7 @@ class _MvpHeaderBar extends StatelessWidget {
               'Block Ad',
               style: TextStyle(
                 fontSize: 16,
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.w500,
                 color: MvpTheme.textPrimary,
               ),
             ),
@@ -813,7 +813,7 @@ class _MvpProfileCard extends StatelessWidget {
                       '配置文件',
                       style: TextStyle(
                         fontSize: 14,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w500,
                         color: MvpTheme.textPrimary,
                         height: 1.1,
                         leadingDistribution: TextLeadingDistribution.even,
@@ -908,7 +908,7 @@ class _MvpProfileCard extends StatelessWidget {
               label,
               style: TextStyle(
                 fontSize: 13,
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.w500,
                 color: color,
                 height: 1.1,
                 leadingDistribution: TextLeadingDistribution.even,
