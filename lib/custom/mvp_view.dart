@@ -904,14 +904,14 @@ class _MvpProfileCard extends StatelessWidget {
           children: [
             Icon(
               icon,
-              size: 14,
+              size: 16,
               color: color,
             ),
             const SizedBox(width: 4),
             Text(
               label,
               style: TextStyle(
-                fontSize: 12,
+                fontSize: 14,
                 fontWeight: FontWeight.w600,
                 color: color,
                 height: 1.0,
