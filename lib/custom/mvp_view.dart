@@ -799,27 +799,26 @@ class _MvpProfileCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text.rich(
+                const Text.rich(
                   TextSpan(
                     children: [
                       WidgetSpan(
                         alignment: PlaceholderAlignment.middle,
-                        child: Transform.translate(
-                          offset: const Offset(0, -0.5),
-                          child: const Icon(
-                            Icons.tune_rounded,
-                            size: 16,
-                            color: MvpTheme.textPrimary,
-                          ),
+                        child: Icon(
+                          Icons.tune_rounded,
+                          size: 16,
+                          color: MvpTheme.textPrimary,
                         ),
                       ),
-                      const WidgetSpan(child: SizedBox(width: 6)),
-                      const TextSpan(
+                      WidgetSpan(child: SizedBox(width: 6)),
+                      TextSpan(
                         text: '配置文件',
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
                           color: MvpTheme.textPrimary,
+                          height: 1.0,
+                          leadingDistribution: TextLeadingDistribution.even,
                         ),
                       ),
                     ],
