@@ -1,9 +1,9 @@
 name: build-android
 
 on:
-  push:
-    branches:
-      - beta
+#  push:
+#    branches:
+#      - beta
   workflow_dispatch:
 
 env:
