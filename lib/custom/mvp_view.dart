@@ -826,7 +826,7 @@ class _MvpProfileCard extends StatelessWidget {
                 ),
                 if (isLoadedMode)
                   _buildHeaderButton(
-                    icon: Icons.delete_outline_rounded,
+                    icon: Icons.restart_alt_rounded,
                     label: '重置',
                     color: MvpTheme.dangerText,
                     backgroundColor:
