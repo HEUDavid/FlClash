@@ -898,27 +898,29 @@ class _MvpProfileCard extends StatelessWidget {
           color: backgroundColor,
           borderRadius: BorderRadius.circular(8),
         ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Icon(
-              icon,
-              size: 14,
-              color: color,
-            ),
-            const SizedBox(width: 2),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-                color: color,
-                height: 1.0,
-                leadingDistribution: TextLeadingDistribution.even,
+        child: Text.rich(
+          TextSpan(
+            children: [
+              WidgetSpan(
+                alignment: PlaceholderAlignment.middle,
+                child: Icon(
+                  icon,
+                  size: 14,
+                  color: color,
+                ),
               ),
-            ),
-          ],
+              const WidgetSpan(child: SizedBox(width: 2)),
+              TextSpan(
+                text: label,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: color,
+                ),
+              ),
+            ],
+          ),
+          textAlign: TextAlign.center,
         ),
       ),
     );
