@@ -1042,7 +1042,17 @@ class _MvpProfileCard extends StatelessWidget {
               decoration: BoxDecoration(
                 color: MvpTheme.inputBg,
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: MvpTheme.borderColor, width: 1),
+                border: Border.all(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  width: 0.5,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.02),
+                    blurRadius: 12,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
