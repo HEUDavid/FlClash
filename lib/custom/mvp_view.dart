@@ -836,7 +836,7 @@ class _MvpProfileCard extends StatelessWidget {
                     label: '收起',
                     color: MvpTheme.textSecondary,
                     backgroundColor:
-                        MvpTheme.inactiveBadgeBg.withValues(alpha: 0.4),
+                        MvpTheme.inactiveBadgeBg.withValues(alpha: 0.35),
                     onTap: () => onToggleInputArea(false),
                   ),
               ],
@@ -907,7 +907,7 @@ class _MvpProfileCard extends StatelessWidget {
             Text(
               label,
               style: TextStyle(
-                fontSize: 13,
+                fontSize: 12,
                 fontWeight: FontWeight.w600,
                 color: color,
                 height: 1.1,
