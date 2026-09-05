@@ -464,7 +464,7 @@ class _MvpToggleSwitch extends StatelessWidget {
               ),
               AnimatedAlign(
                 duration: const Duration(milliseconds: 250),
-                curve: const Cubic(0.175, 0.885, 0.32, 1.26),
+                curve: Curves.easeOutCubic,
                 alignment: isOn ? Alignment.centerRight : Alignment.centerLeft,
                 child: Container(
                   width: 86,
