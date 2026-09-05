@@ -453,7 +453,7 @@ class _MvpToggleSwitch extends StatelessWidget {
             clipBehavior: Clip.none,
             children: [
               AnimatedContainer(
-                duration: const Duration(milliseconds: 350),
+                duration: const Duration(milliseconds: 300),
                 curve: Curves.easeInOutCubic,
                 width: 130,
                 height: 56,
@@ -463,8 +463,8 @@ class _MvpToggleSwitch extends StatelessWidget {
                 ),
               ),
               AnimatedAlign(
-                duration: const Duration(milliseconds: 350),
-                curve: Curves.easeOutBack,
+                duration: const Duration(milliseconds: 300),
+                curve: const Cubic(0.175, 0.885, 0.32, 1.18),
                 alignment: isOn ? Alignment.centerRight : Alignment.centerLeft,
                 child: Container(
                   width: 86,
