@@ -794,111 +794,50 @@ class _MvpProfileCard extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           SizedBox(
-            height: 34,
+            height: 30,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Text.rich(
-                  TextSpan(
-                    children: [
-                      WidgetSpan(
-                        alignment: PlaceholderAlignment.middle,
-                        child: Icon(
-                          Icons.tune_rounded,
-                          size: 18,
-                          color: MvpTheme.textPrimary,
-                        ),
+                const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.tune_rounded,
+                      size: 18,
+                      color: MvpTheme.textPrimary,
+                    ),
+                    SizedBox(width: 6),
+                    Text(
+                      '配置文件',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: MvpTheme.textPrimary,
+                        height: 1.1,
+                        leadingDistribution: TextLeadingDistribution.even,
                       ),
-                      WidgetSpan(child: SizedBox(width: 6)),
-                      TextSpan(
-                        text: '配置文件',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: MvpTheme.textPrimary,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
                 if (isLoadedMode)
-                  GestureDetector(
+                  _buildHeaderButton(
+                    icon: Icons.delete_outline_rounded,
+                    label: '重置',
+                    color: MvpTheme.dangerText,
+                    backgroundColor:
+                        MvpTheme.dangerColor.withValues(alpha: 0.05),
                     onTap: () => onToggleInputArea(true),
-                    behavior: HitTestBehavior.opaque,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 6,
-                      ),
-                      decoration: BoxDecoration(
-                        color: MvpTheme.dangerColor.withValues(alpha: 0.05),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Text.rich(
-                        TextSpan(
-                          children: [
-                            WidgetSpan(
-                              alignment: PlaceholderAlignment.middle,
-                              child: Icon(
-                                Icons.delete_outline_rounded,
-                                size: 14,
-                                color: MvpTheme.dangerText,
-                              ),
-                            ),
-                            WidgetSpan(child: SizedBox(width: 4)),
-                            TextSpan(
-                              text: '重置',
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w600,
-                                color: MvpTheme.dangerText,
-                              ),
-                            ),
-                          ],
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
                   )
                 else if (hasProfile)
-                  GestureDetector(
+                  _buildHeaderButton(
+                    icon: Icons.keyboard_arrow_up_rounded,
+                    label: '收起',
+                    color: MvpTheme.textSecondary,
+                    backgroundColor:
+                        MvpTheme.inactiveBadgeBg.withValues(alpha: 0.4),
                     onTap: () => onToggleInputArea(false),
-                    behavior: HitTestBehavior.opaque,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 6,
-                      ),
-                      decoration: BoxDecoration(
-                        color: MvpTheme.inactiveBadgeBg.withValues(alpha: 0.4),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Text.rich(
-                        TextSpan(
-                          children: [
-                            WidgetSpan(
-                              alignment: PlaceholderAlignment.middle,
-                              child: Icon(
-                                Icons.keyboard_arrow_up_rounded,
-                                size: 14,
-                                color: MvpTheme.textSecondary,
-                              ),
-                            ),
-                            WidgetSpan(child: SizedBox(width: 4)),
-                            TextSpan(
-                              text: '收起',
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w600,
-                                color: MvpTheme.textSecondary,
-                              ),
-                            ),
-                          ],
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
                   ),
               ],
             ),
@@ -933,6 +872,50 @@ class _MvpProfileCard extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildHeaderButton({
+    required IconData icon,
+    required String label,
+    required Color color,
+    required Color backgroundColor,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        height: 30,
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              size: 14,
+              color: color,
+            ),
+            const SizedBox(width: 4),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: color,
+                height: 1.1,
+                leadingDistribution: TextLeadingDistribution.even,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
