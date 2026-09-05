@@ -1083,15 +1083,15 @@ class _MvpProfileCard extends StatelessWidget {
                         isDense: true,
                         contentPadding: EdgeInsets.symmetric(
                           horizontal: 14,
-                          vertical: 12,
+                          vertical: 8,
                         ),
                       ),
                     ),
                   ),
                   IconButton(
                     constraints: const BoxConstraints(
-                      minWidth: 40,
-                      minHeight: 40,
+                      minWidth: 36,
+                      minHeight: 36,
                     ),
                     padding: EdgeInsets.zero,
                     icon: const Icon(
