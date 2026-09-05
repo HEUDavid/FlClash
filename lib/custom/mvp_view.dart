@@ -1111,7 +1111,7 @@ class _MvpProfileCard extends StatelessWidget {
               behavior: HitTestBehavior.opaque,
               child: Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 12),
+                padding: const EdgeInsets.symmetric(vertical: 10),
                 decoration: BoxDecoration(
                   color: MvpTheme.activeColor,
                   borderRadius: BorderRadius.circular(12),
