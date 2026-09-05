@@ -122,7 +122,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                 if (passwordController.text == 'fkad666') {
                   Navigator.of(context).pop();
                   ref.read(customMvpProvider.notifier).setEnabled(false);
-                  _showMvpToast('已切换至高级模式', type: MvpToastType.info);
+                  _showMvpToast('已切换高级模式', type: MvpToastType.info);
                 } else {
                   Navigator.of(context).pop();
                   _showMvpToast('密码错误', type: MvpToastType.error);
