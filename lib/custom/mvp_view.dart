@@ -441,7 +441,7 @@ class _MvpToggleSwitch extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 24),
       child: GestureDetector(
         onTap: () {
-          HapticFeedback.lightImpact();
+          HapticFeedback.selectionClick();
           action();
         },
         behavior: HitTestBehavior.opaque,
