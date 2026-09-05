@@ -916,6 +916,8 @@ class _MvpProfileCard extends StatelessWidget {
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
                   color: color,
+                  height: 1.0,
+                  leadingDistribution: TextLeadingDistribution.even,
                 ),
               ),
             ],
