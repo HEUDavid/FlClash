@@ -47,22 +47,18 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
         padding: EdgeInsets.zero,
         margin: const EdgeInsets.only(bottom: 24, left: 24, right: 24),
         duration: duration,
-        content: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Flexible(
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                decoration: BoxDecoration(
-                  color: MvpTheme.toastBg,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.1),
-                      blurRadius: 8,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
+        content: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 400),
+            child: Material(
+              color: MvpTheme.toastBg,
+              borderRadius: BorderRadius.circular(12),
+              elevation: 4,
+              shadowColor: Colors.black.withValues(alpha: 0.15),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 10,
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -78,16 +74,18 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                                 child: Icon(
                                   switch (type) {
                                     MvpToastType.info => Icons.info_rounded,
-                                    MvpToastType.success => Icons.check_circle_rounded,
+                                    MvpToastType.success =>
+                                      Icons.check_circle_rounded,
                                     MvpToastType.error => Icons.error_rounded,
-                                    MvpToastType.warning => Icons.warning_amber_rounded,
+                                    MvpToastType.warning =>
+                                      Icons.warning_amber_rounded,
                                   },
                                   color: Colors.white,
                                   size: 16,
                                 ),
                               ),
                             ),
-                            const WidgetSpan(child: SizedBox(width: 4)),
+                            const WidgetSpan(child: SizedBox(width: 6)),
                             TextSpan(
                               text: message.trim(),
                               style: const TextStyle(
@@ -100,38 +98,36 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                         ),
                       ),
                     ),
-                    if (copyData != null) ...[
-                      const SizedBox(width: 12),
-                      Container(
-                        width: 1,
-                        height: 14,
-                        color: Colors.white.withValues(alpha: 0.3),
-                      ),
-                      const SizedBox(width: 4),
-                      GestureDetector(
-                        onTap: () {
-                          Clipboard.setData(ClipboardData(text: copyData));
-                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                        },
-                        behavior: HitTestBehavior.opaque,
-                        child: const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                          child: Text(
-                            '复制',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
+                    if (copyData != null)
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8),
+                        child: InkWell(
+                          onTap: () {
+                            Clipboard.setData(ClipboardData(text: copyData));
+                            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                          },
+                          borderRadius: BorderRadius.circular(4),
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 6,
+                              vertical: 2,
+                            ),
+                            child: Text(
+                              '复制',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ],
                   ],
                 ),
               ),
             ),
-          ],
+          ),
         ),
       ),
     );
