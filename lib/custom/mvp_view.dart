@@ -1233,10 +1233,10 @@ class _MvpProfileCard extends StatelessWidget {
                       const TextSpan(
                         text: '下载并导入',
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: 15,
                           fontWeight: FontWeight.w600,
                           color: Colors.white,
-                          height: 1.142,
+                          height: 1.06,
                           leadingDistribution: TextLeadingDistribution.even,
                         ),
                       ),
