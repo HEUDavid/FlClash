@@ -1095,7 +1095,10 @@ class _MvpProfileCard extends StatelessWidget {
                                 color: Colors.white,
                               ),
                       ),
-                      const WidgetSpan(child: SizedBox(width: 6)),
+                      const WidgetSpan(
+                        alignment: PlaceholderAlignment.middle,
+                        child: SizedBox(width: 6),
+                      ),
                       const TextSpan(
                         text: '更新',
                         style: TextStyle(
@@ -1223,7 +1226,10 @@ class _MvpProfileCard extends StatelessWidget {
                                 color: Colors.white,
                               ),
                       ),
-                      const WidgetSpan(child: SizedBox(width: 6)),
+                      const WidgetSpan(
+                        alignment: PlaceholderAlignment.middle,
+                        child: SizedBox(width: 6),
+                      ),
                       const TextSpan(
                         text: '下载并导入',
                         style: TextStyle(
