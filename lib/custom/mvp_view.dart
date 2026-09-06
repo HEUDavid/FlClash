@@ -613,28 +613,66 @@ class _MvpStatusHero extends StatelessWidget {
           action: onToggle,
         ),
         const SizedBox(height: 16),
-        AnimatedSwitcher(
-          duration: const Duration(milliseconds: 200),
-          child: Text(
-            statusTitle,
-            key: ValueKey(statusTitle),
-            style: const TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-              color: MvpTheme.textPrimary,
+        SizedBox(
+          height: 28,
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 200),
+            layoutBuilder: (
+              Widget? currentChild,
+              List<Widget> previousChildren,
+            ) {
+              return Stack(
+                alignment: Alignment.center,
+                children: <Widget>[
+                  ...previousChildren,
+                  if (currentChild != null) currentChild,
+                ],
+              );
+            },
+            child: Text(
+              statusTitle,
+              key: ValueKey(statusTitle),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                height: 1.2,
+                leadingDistribution: TextLeadingDistribution.even,
+                color: MvpTheme.textPrimary,
+              ),
             ),
           ),
         ),
-        const SizedBox(height: 12),
-        AnimatedSwitcher(
-          duration: const Duration(milliseconds: 200),
-          child: Text(
-            statusSubtitle,
-            key: ValueKey(statusSubtitle),
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: MvpTheme.textSecondary,
+        const SizedBox(height: 16),
+        SizedBox(
+          height: 20,
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 200),
+            layoutBuilder: (
+              Widget? currentChild,
+              List<Widget> previousChildren,
+            ) {
+              return Stack(
+                alignment: Alignment.center,
+                children: <Widget>[
+                  ...previousChildren,
+                  if (currentChild != null) currentChild,
+                ],
+              );
+            },
+            child: Text(
+              statusSubtitle,
+              key: ValueKey(statusSubtitle),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                height: 1.25,
+                leadingDistribution: TextLeadingDistribution.even,
+                color: MvpTheme.textSecondary,
+              ),
             ),
           ),
         ),
