@@ -1,0 +1,19 @@
+name: Delete old workflow
+
+on:
+  push:
+    branches:
+      - beta
+  workflow_dispatch:
+
+jobs:
+  clear:
+    permissions:
+      actions: write
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - uses: GitRML/delete-workflow-runs@main
+        with:
+          retain_days: 1
+          keep_minimum_runs: 1
