@@ -17,7 +17,6 @@ import 'package:fl_clash/widgets/focus.dart';
 import 'package:fl_clash/widgets/keyboard_inset_hold.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:fl_clash/custom/mvp_pref_injector.dart';
 import 'package:fl_clash/custom/mvp_provider.dart';
 import 'package:fl_clash/custom/mvp_view.dart';
