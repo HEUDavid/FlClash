@@ -6,6 +6,10 @@ on:
       - beta
   workflow_dispatch:
 
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   IS_STABLE: 'true'
   FLUTTER_VERSION: '3.47.1'
