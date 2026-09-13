@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'mvp_view.dart';
@@ -7,13 +7,13 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(
     const ProviderScope(
-      child: MvpPreviewApp(),
+      child: _MvpPreviewApp(),
     ),
   );
 }
 
-class MvpPreviewApp extends StatelessWidget {
-  const MvpPreviewApp({super.key});
+class _MvpPreviewApp extends StatelessWidget {
+  const _MvpPreviewApp();
 
   @override
   Widget build(BuildContext context) {
