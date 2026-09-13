@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -175,7 +175,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
           ],
         );
       },
-    );
+    ).then((_) => passwordController.dispose());
   }
 
   void _handleMinimalTap() {
@@ -1172,6 +1172,7 @@ class _MvpProfileCard extends StatelessWidget {
                     ),
                   ),
                   IconButton(
+                    tooltip: '粘贴',
                     constraints: const BoxConstraints(
                       minWidth: 40,
                       minHeight: 40,
