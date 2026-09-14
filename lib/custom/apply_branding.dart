@@ -84,8 +84,12 @@ void main(List<String> args) {
     path: 'android/common/src/main/res/values/strings.xml',
     replacements: [
       (
-        RegExp(r'<string name="FlClash">.*?</string>'),
-        '<string name="FlClash">$appName</string>',
+        RegExp(r'<string name="app_name">.*?</string>'),
+        '<string name="app_name">$appName</string>',
+      ),
+      (
+        RegExp(r'<string name="service_channel_name">.*?</string>'),
+        '<string name="service_channel_name">$appName Service</string>',
       ),
     ],
   );
@@ -139,8 +143,8 @@ void main(List<String> args) {
         'const val NOTIFICATION_CHANNEL = "$appName"',
       ),
       (
-        RegExp(r'Log\.d\("\[FlClash\]"'),
-        'Log.d("[$appName]"',
+        RegExp(r'Log\.d\("FlClash"'),
+        'Log.d("$appName"',
       ),
     ],
   );
