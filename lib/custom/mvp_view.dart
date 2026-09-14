@@ -1100,7 +1100,7 @@ class _MvpProfileCard extends StatelessWidget {
                         child: SizedBox(width: 6),
                       ),
                       const TextSpan(
-                        text: '更新',
+                        text: '同步',
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
