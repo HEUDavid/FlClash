@@ -455,7 +455,7 @@ class _MvpHeaderBar extends StatelessWidget {
                         ),
                       )
                     : Icon(
-                        Icons.receipt_long_outlined,
+                        Icons.article_outlined,
                         size: 16,
                         color: MvpTheme.textSecondary.withValues(alpha: 0.8),
                       ),
