@@ -434,7 +434,7 @@ class _MvpHeaderBar extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: MvpTheme.textPrimary.withValues(alpha: 0.9),
+                color: MvpTheme.textPrimary,
               ),
             ),
           ),
