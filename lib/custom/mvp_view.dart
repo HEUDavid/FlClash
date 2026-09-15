@@ -433,8 +433,8 @@ class _MvpHeaderBar extends StatelessWidget {
               'Block Ad',
               style: TextStyle(
                 fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color: MvpTheme.textPrimary,
+                fontWeight: FontWeight.w600,
+                color: MvpTheme.textPrimary.withValues(alpha: 0.9),
               ),
             ),
           ),
