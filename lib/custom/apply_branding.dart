@@ -51,24 +51,21 @@ void main(List<String> args) {
     ],
   );
 
-  // 3. 替换 Android 主 Application 与 Tile 开关 Label 以及添加 DeepLink Scheme
-  _replaceInFile(
-    path: 'android/app/src/main/AndroidManifest.xml',
-    replacements: [
-      (
-        RegExp(r'android:label="[^"]+"'),
-        'android:label="$appName"',
-      ),
-      if (customScheme != 'flclash')
+  // 2. 添加 Android 主清单 DeepLink Scheme (保持 android:label="@string/app_name" 规范资源引用)
+  if (customScheme != 'flclash') {
+    _replaceInFile(
+      path: 'android/app/src/main/AndroidManifest.xml',
+      replacements: [
         (
           RegExp(
               r'<data android:scheme="flclash"\s*/>(?!\s*<data android:scheme=)'),
           '<data android:scheme="flclash" />\n                <data android:scheme="$customScheme" />',
         ),
-    ],
-  );
+      ],
+    );
+  }
 
-  // 4. 替换 Android Debug 模式 Label
+  // 3. 替换 Android Debug 模式 Label
   _replaceInFile(
     path: 'android/app/src/debug/AndroidManifest.xml',
     replacements: [
@@ -79,7 +76,7 @@ void main(List<String> args) {
     ],
   );
 
-  // 5. 替换 Android 原生字符串资源
+  // 4. 替换 Android 原生字符串资源
   _replaceInFile(
     path: 'android/common/src/main/res/values/strings.xml',
     replacements: [
@@ -94,7 +91,7 @@ void main(List<String> args) {
     ],
   );
 
-  // 6. 替换前台通知服务标题
+  // 5. 替换前台通知服务标题
   _replaceInFile(
     path:
         'android/service/src/main/java/com/follow/clash/service/modules/NotificationModule.kt',
@@ -106,7 +103,7 @@ void main(List<String> args) {
     ],
   );
 
-  // 7. 替换通知默认参数标题与序列化读取默认值
+  // 6. 替换通知默认参数标题
   _replaceInFile(
     path:
         'android/service/src/main/java/com/follow/clash/service/models/NotificationParams.kt',
@@ -115,26 +112,10 @@ void main(List<String> args) {
         RegExp(r'val title:\s*String\s*=\s*"[^"]+"'),
         'val title: String = "$appName"',
       ),
-      (
-        RegExp(r'title\s*=\s*parcel\.readString\(\)\s*\?:\s*"[^"]+"'),
-        'title = parcel.readString() ?: "$appName"',
-      ),
     ],
   );
 
-  // 8. 替换 VPN 连接会话 Session 名称
-  _replaceInFile(
-    path:
-        'android/service/src/main/java/com/follow/clash/service/VpnService.kt',
-    replacements: [
-      (
-        RegExp(r'setSession\("[^"]+"\)'),
-        'setSession("$appName")',
-      ),
-    ],
-  );
-
-  // 9. 替换全局原生状态常量与日志 Prefix
+  // 7. 替换全局原生状态常量与日志 Prefix
   _replaceInFile(
     path: 'android/common/src/main/java/com/follow/clash/common/GlobalState.kt',
     replacements: [
@@ -149,19 +130,7 @@ void main(List<String> args) {
     ],
   );
 
-  // 10. 替换文件选择器提供者标题
-  _replaceInFile(
-    path:
-        'android/service/src/main/java/com/follow/clash/service/FilesProvider.kt',
-    replacements: [
-      (
-        RegExp(r'add\(DocumentsContract\.Root\.COLUMN_TITLE,\s*"[^"]+"\)'),
-        'add(DocumentsContract.Root.COLUMN_TITLE, "$appName")',
-      ),
-    ],
-  );
-
-  // 11. 替换原生 State 默认配置名称
+  // 8. 替换原生 State 默认配置名称
   _replaceInFile(
     path: 'android/app/src/main/kotlin/com/follow/clash/models/State.kt',
     replacements: [
