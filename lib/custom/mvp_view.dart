@@ -885,7 +885,7 @@ class _MvpProfileCard extends StatelessWidget {
                       WidgetSpan(
                         alignment: PlaceholderAlignment.middle,
                         child: Icon(
-                          Icons.rule_folder_outlined, // tune_rounded
+                          Icons.alt_route_rounded, // tune_rounded
                           size: 16,
                           color: MvpTheme.textPrimary,
                         ),
