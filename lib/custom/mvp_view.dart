@@ -971,7 +971,7 @@ class _MvpProfileCard extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       child: Container(
         height: 30,
-        padding: const EdgeInsets.only(left: 8, right: 12),
+        padding: const EdgeInsets.only(left: 8, right: 11),
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: backgroundColor,
