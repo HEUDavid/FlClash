@@ -7,7 +7,7 @@
         android:scaleX="1.45"
         android:scaleY="1.45"
         android:translateX="30.8"
-        android:translateY="32.6">
+        android:translateY="33.3">
         <!-- 纯白镂空剪影 (Android 13~16 Material You 动态主题壁纸取色专用) -->
         <path
             android:fillColor="#FFFFFF"
