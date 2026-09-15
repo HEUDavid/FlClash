@@ -59,8 +59,8 @@ with surface as canvas:
     
     # 2. Translate and scale
     canvas.save()
-    # Increase scale to 26 and shift down slightly for visual centering (X: 96, Y: 127)
-    canvas.translate(96, 127)
+    # Increase scale to 26 and shift down slightly for visual centering (X: 96, Y: 126)
+    canvas.translate(96, 126)
     canvas.scale(26, 26)
     
     # 3. Draw Shield
