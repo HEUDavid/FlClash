@@ -1222,7 +1222,7 @@ class _MvpProfileCard extends StatelessWidget {
                                 ),
                               )
                             : const Icon(
-                                Icons.download_rounded,
+                                Icons.cloud_download_rounded,
                                 size: 16,
                                 color: Colors.white,
                               ),
