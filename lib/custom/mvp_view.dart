@@ -910,7 +910,7 @@ class _MvpProfileCard extends StatelessWidget {
                     label: '重置',
                     color: MvpTheme.dangerText,
                     backgroundColor:
-                        MvpTheme.dangerColor.withValues(alpha: 0.04),
+                        MvpTheme.dangerColor.withValues(alpha: 0.05),
                     onTap: () => onToggleInputArea(true),
                   )
                 else if (hasProfile)
