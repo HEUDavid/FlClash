@@ -975,7 +975,7 @@ class _MvpProfileCard extends StatelessWidget {
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: backgroundColor,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(12),
         ),
         child: Text.rich(
           TextSpan(
