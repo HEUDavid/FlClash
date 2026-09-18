@@ -432,7 +432,7 @@ class _MvpHeaderBar extends StatelessWidget {
             child: const Text(
               'Block Ad',
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 14,
                 fontWeight: FontWeight.w600,
                 color: MvpTheme.textPrimary,
               ),
@@ -454,10 +454,10 @@ class _MvpHeaderBar extends StatelessWidget {
                           color: MvpTheme.textSecondary,
                         ),
                       )
-                    : Icon(
+                    : const Icon(
                         Icons.description_outlined,
                         size: 16,
-                        color: MvpTheme.textSecondary.withValues(alpha: 0.8),
+                        color: MvpTheme.textMuted,
                       ),
               ),
             ),

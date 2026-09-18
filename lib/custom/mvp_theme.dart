@@ -16,6 +16,7 @@ abstract final class MvpTheme {
 
   static const textPrimary = Color(0xFF0F172A);
   static const textSecondary = Color(0xFF64748B);
+  static const textMuted = Color(0xFF94A3B8);
 
   static const toastBg = Color(0xFF1E293B);
 }
