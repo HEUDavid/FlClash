@@ -596,7 +596,7 @@ class _MvpStatusHero extends StatelessWidget {
 
     if (isStart) {
       statusTitle = '防护已开启';
-      statusSubtitle = '防护运行中 · 智能拦截与隐私保护';
+      statusSubtitle = '防护运行中 · 智能拦截与防跟踪';
     } else if (isConnecting) {
       statusTitle = '防护启动中';
       statusSubtitle = '正在启动防护服务...';
