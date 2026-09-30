@@ -1075,7 +1075,7 @@ class _MvpProfileCard extends StatelessWidget {
                                 ),
                               )
                             : const Icon(
-                                Icons.sync_rounded,
+                                Icons.refresh_rounded,
                                 size: 16,
                                 color: Colors.white,
                               ),
