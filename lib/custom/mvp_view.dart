@@ -882,10 +882,10 @@ class _MvpProfileCard extends StatelessWidget {
                 const Text(
                   '配置文件',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 15,
                     fontWeight: FontWeight.w600,
                     color: MvpTheme.textPrimary,
-                    height: 1.12,
+                    height: 1.1,
                     leadingDistribution: TextLeadingDistribution.even,
                   ),
                 ),
