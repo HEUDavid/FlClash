@@ -66,39 +66,38 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Flexible(
-                      child: Text.rich(
-                        TextSpan(
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          GlyphIcon(
+                            switch (type) {
+                              MvpToastType.info => AppGlyphs.info,
+                              MvpToastType.success => AppGlyphs.checkCircle,
+                              MvpToastType.error => AppGlyphs.error,
+                              MvpToastType.warning => AppGlyphs.warning,
+                            },
                             color: Colors.white,
-                            height: 1.25,
-                            leadingDistribution: TextLeadingDistribution.even,
+                            size: 16,
                           ),
-                          children: [
-                            WidgetSpan(
-                              alignment: PlaceholderAlignment.middle,
-                              child: GlyphIcon(
-                                switch (type) {
-                                  MvpToastType.info => AppGlyphs.info,
-                                  MvpToastType.success =>
-                                    AppGlyphs.checkCircle,
-                                  MvpToastType.error => AppGlyphs.error,
-                                  MvpToastType.warning => AppGlyphs.warning,
-                                },
-                                color: Colors.white,
-                                size: 16,
+                          const SizedBox(width: 6),
+                          Flexible(
+                            child: Transform.translate(
+                              offset: const Offset(0, 0.5),
+                              child: Text(
+                                message.trim(),
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white,
+                                  height: 1.25,
+                                  leadingDistribution:
+                                      TextLeadingDistribution.even,
+                                ),
                               ),
                             ),
-                            const WidgetSpan(
-                              alignment: PlaceholderAlignment.middle,
-                              child: SizedBox(width: 6),
-                            ),
-                            TextSpan(
-                              text: message.trim(),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                     if (copyData != null)
@@ -888,23 +887,27 @@ class _MvpProfileCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Row(
+                Row(
                   mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    GlyphIcon(
+                    const GlyphIcon(
                       AppGlyphs.sliders,
                       size: 18,
                       color: MvpTheme.textPrimary,
                     ),
                     const SizedBox(width: 6),
-                    const Text(
-                      '配置文件',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
-                        color: MvpTheme.textPrimary,
-                        height: 1.1,
-                        leadingDistribution: TextLeadingDistribution.even,
+                    Transform.translate(
+                      offset: const Offset(0, 0.6),
+                      child: const Text(
+                        '配置文件',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color: MvpTheme.textPrimary,
+                          height: 1.1,
+                          leadingDistribution: TextLeadingDistribution.even,
+                        ),
                       ),
                     ),
                   ],
@@ -982,32 +985,30 @@ class _MvpProfileCard extends StatelessWidget {
           color: backgroundColor,
           shape: AppShape.all(10),
         ),
-        child: Text.rich(
-          TextSpan(
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            GlyphIcon(
+              icon,
+              size: 14,
               color: color,
-              height: 1.15,
-              leadingDistribution: TextLeadingDistribution.even,
             ),
-            children: [
-              WidgetSpan(
-                alignment: PlaceholderAlignment.middle,
-                child: GlyphIcon(
-                  icon,
-                  size: 14,
+            const SizedBox(width: 4),
+            Transform.translate(
+              offset: const Offset(0, 0.6),
+              child: Text(
+                label,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
                   color: color,
+                  height: 1.15,
+                  leadingDistribution: TextLeadingDistribution.even,
                 ),
               ),
-              const WidgetSpan(
-                alignment: PlaceholderAlignment.middle,
-                child: SizedBox(width: 4),
-              ),
-              TextSpan(text: label),
-            ],
-          ),
-          textAlign: TextAlign.center,
+            ),
+          ],
         ),
       ),
     );
@@ -1081,41 +1082,39 @@ class _MvpProfileCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                child: Text.rich(
-                  TextSpan(
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                      height: 1.15,
-                      leadingDistribution: TextLeadingDistribution.even,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    isUpdating
+                        ? const SizedBox(
+                            width: 16,
+                            height: 16,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.white,
+                            ),
+                          )
+                        : const GlyphIcon(
+                            AppGlyphs.sync,
+                            size: 16,
+                            color: Colors.white,
+                          ),
+                    const SizedBox(width: 6),
+                    const Transform.translate(
+                      offset: Offset(0, 0.8),
+                      child: Text(
+                        '同步',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                          height: 1.15,
+                          leadingDistribution: TextLeadingDistribution.even,
+                        ),
+                      ),
                     ),
-                    children: [
-                      WidgetSpan(
-                        alignment: PlaceholderAlignment.middle,
-                        child: isUpdating
-                            ? const SizedBox(
-                                width: 16,
-                                height: 16,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  color: Colors.white,
-                                ),
-                              )
-                            : const GlyphIcon(
-                                AppGlyphs.sync,
-                                size: 16,
-                                color: Colors.white,
-                              ),
-                      ),
-                      const WidgetSpan(
-                        alignment: PlaceholderAlignment.middle,
-                        child: SizedBox(width: 6),
-                      ),
-                      const TextSpan(text: '同步'),
-                    ],
-                  ),
-                  textAlign: TextAlign.center,
+                  ],
                 ),
               ),
             ),
@@ -1212,41 +1211,40 @@ class _MvpProfileCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                child: Text.rich(
-                  TextSpan(
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                      height: 1.15,
-                      leadingDistribution: TextLeadingDistribution.even,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    isImporting
+                        ? const SizedBox(
+                            width: 16,
+                            height: 16,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.white,
+                            ),
+                          )
+                        : const GlyphIcon(
+                            AppGlyphs.arrowDown,
+                            size: 16,
+                            color: Colors.white,
+                          ),
+                    const SizedBox(width: 6),
+                    const Transform.translate(
+                      offset: Offset(0, 0.8),
+                      child: Text(
+                        '下载并导入',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                          height: 1.15,
+                          leadingDistribution: TextLeadingDistribution.even,
+                        ),
+                      ),
                     ),
-                    children: [
-                      WidgetSpan(
-                        alignment: PlaceholderAlignment.middle,
-                        child: isImporting
-                            ? const SizedBox(
-                                width: 16,
-                                height: 16,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  color: Colors.white,
-                                ),
-                              )
-                            : const GlyphIcon(
-                                AppGlyphs.arrowDown,
-                                size: 16,
-                                color: Colors.white,
-                              ),
-                      ),
-                      const WidgetSpan(
-                        alignment: PlaceholderAlignment.middle,
-                        child: SizedBox(width: 6),
-                      ),
-                      const TextSpan(text: '下载并导入'),
-                    ],
-                  ),
-                  textAlign: TextAlign.center,
+                  ],
                 ),
               ),
             ),
