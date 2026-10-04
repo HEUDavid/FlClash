@@ -456,7 +456,7 @@ class _MvpHeaderBar extends StatelessWidget {
                         ),
                       )
                     : const GlyphIcon(
-                        AppGlyphs.logs,
+                        AppGlyphs.profiles,
                         size: 16,
                         color: MvpTheme.textMuted,
                       ),
@@ -1211,7 +1211,7 @@ class _MvpProfileCard extends StatelessWidget {
                                 ),
                               )
                             : const GlyphIcon(
-                                AppGlyphs.cloudDownload,
+                                AppGlyphs.importFile,
                                 size: 16,
                                 color: Colors.white,
                               ),
