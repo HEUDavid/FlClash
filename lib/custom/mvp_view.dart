@@ -625,7 +625,7 @@ class _MvpStatusHero extends StatelessWidget {
                 alignment: Alignment.center,
                 children: <Widget>[
                   ...previousChildren,
-                  if (currentChild != null) currentChild,
+                  ?currentChild,
                 ],
               );
             },
@@ -657,7 +657,7 @@ class _MvpStatusHero extends StatelessWidget {
                 alignment: Alignment.center,
                 children: <Widget>[
                   ...previousChildren,
-                  if (currentChild != null) currentChild,
+                  ?currentChild,
                 ],
               );
             },
