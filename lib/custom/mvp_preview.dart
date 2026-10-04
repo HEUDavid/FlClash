@@ -50,6 +50,7 @@ class MvpAlignPreviewView extends StatefulWidget {
 }
 
 enum _AlignPreset {
+  finalDesign('最终方案 (MvpIconLabel: 16px + 字号×6% 上提)', 0.0, 1.0, TextLeadingDistribution.even, 16.0),
   planA('方案 A (Icon 14px + 零位移)', 0.0, 1.0, TextLeadingDistribution.even, 14.0),
   planB('方案 B (Icon 15px + 零位移)', 0.0, 1.0, TextLeadingDistribution.even, 15.0),
   zeroOffset16('对照组 (Icon 16px + 零位移)', 0.0, 1.0, TextLeadingDistribution.even, 16.0),
@@ -73,9 +74,9 @@ enum _AlignPreset {
 }
 
 class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
-  _AlignPreset _preset = _AlignPreset.planA;
-  double _offsetY = 0.0;
-  double _iconSize = 14.0;
+  _AlignPreset _preset = _AlignPreset.finalDesign;
+  double _offsetY = MvpIconLabel.opticalOffsetFor('同步', 14);
+  double _iconSize = 16.0;
   double _zoomScale = 8.0;
 
   bool _showCenterLine = true;
@@ -94,7 +95,9 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
   void _applyPreset(_AlignPreset preset) {
     setState(() {
       _preset = preset;
-      _offsetY = preset.defaultOffset;
+      _offsetY = preset == _AlignPreset.finalDesign
+          ? MvpIconLabel.opticalOffsetFor(_buttonText, 14)
+          : preset.defaultOffset;
       _iconSize = preset.defaultIconSize;
     });
   }
