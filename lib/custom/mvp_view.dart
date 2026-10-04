@@ -882,15 +882,26 @@ class _MvpProfileCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Text(
-                  '配置文件',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    color: MvpTheme.textPrimary,
-                    height: 1.1,
-                    leadingDistribution: TextLeadingDistribution.even,
-                  ),
+                const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    GlyphIcon(
+                      AppGlyphs.sliders,
+                      size: 18,
+                      color: MvpTheme.textPrimary,
+                    ),
+                    SizedBox(width: 6),
+                    Text(
+                      '配置文件',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        color: MvpTheme.textPrimary,
+                        height: 1.1,
+                        leadingDistribution: TextLeadingDistribution.even,
+                      ),
+                    ),
+                  ],
                 ),
                 if (isLoadedMode)
                   _buildHeaderButton(
