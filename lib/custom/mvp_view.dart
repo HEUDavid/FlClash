@@ -1101,9 +1101,9 @@ class _MvpProfileCard extends StatelessWidget {
                             color: Colors.white,
                           ),
                     const SizedBox(width: 6),
-                    const Transform.translate(
-                      offset: Offset(0, 0.8),
-                      child: Text(
+                    Transform.translate(
+                      offset: const Offset(0, 0.8),
+                      child: const Text(
                         '同步',
                         style: TextStyle(
                           fontSize: 14,
@@ -1231,9 +1231,9 @@ class _MvpProfileCard extends StatelessWidget {
                             color: Colors.white,
                           ),
                     const SizedBox(width: 6),
-                    const Transform.translate(
-                      offset: Offset(0, 0.8),
-                      child: Text(
+                    Transform.translate(
+                      offset: const Offset(0, 0.8),
+                      child: const Text(
                         '下载并导入',
                         style: TextStyle(
                           fontSize: 14,
