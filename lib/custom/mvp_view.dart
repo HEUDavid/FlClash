@@ -456,7 +456,7 @@ class _MvpHeaderBar extends StatelessWidget {
                         ),
                       )
                     : const GlyphIcon(
-                        AppGlyphs.cardLarge,
+                        AppGlyphs.wrap,
                         size: 16,
                         color: MvpTheme.textMuted,
                       ),
