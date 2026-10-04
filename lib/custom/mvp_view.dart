@@ -703,7 +703,7 @@ class _MvpQuickInfoCards extends StatelessWidget {
       children: [
         Expanded(
           child: _buildInfoItem(
-            icon: AppGlyphs.key,
+            icon: AppGlyphs.checkCircle,
             title: '防护状态',
             value: isStart ? '已开启' : '未开启',
             isActive: isStart,
