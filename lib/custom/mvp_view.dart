@@ -1136,6 +1136,7 @@ class _MvpProfileCard extends StatelessWidget {
               behavior: HitTestBehavior.opaque,
               child: Container(
                 width: double.infinity,
+                alignment: Alignment.center,
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 decoration: ShapeDecoration(
                   color: MvpTheme.activeColor,
@@ -1197,6 +1198,8 @@ class MvpIconLabel extends StatelessWidget {
     final scaledFontSize = MediaQuery.textScalerOf(context).scale(fontSize);
     return Row(
       mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         SizedBox.square(
           dimension: iconSize,
