@@ -50,29 +50,32 @@ class MvpAlignPreviewView extends StatefulWidget {
 }
 
 enum _AlignPreset {
-  negative08('向上补偿 -0.8px (推荐)', -0.8, 1.0, TextLeadingDistribution.even),
-  negative10('向上补偿 -1.0px', -1.0, 1.0, TextLeadingDistribution.even),
-  negative05('向上补偿 -0.5px', -0.5, 1.0, TextLeadingDistribution.even),
-  zeroOffset('零偏移 (height: 1.0 偏下)', 0.0, 1.0, TextLeadingDistribution.even),
-  oldBug('历史误用 (+0.8px 向下加剧)', 0.8, 1.15, TextLeadingDistribution.even),
-  custom('自由微调', -0.8, 1.0, TextLeadingDistribution.even);
+  planA('方案 A (Icon 14px + 零位移)', 0.0, 1.0, TextLeadingDistribution.even, 14.0),
+  planB('方案 B (Icon 15px + 零位移)', 0.0, 1.0, TextLeadingDistribution.even, 15.0),
+  zeroOffset16('对照组 (Icon 16px + 零位移)', 0.0, 1.0, TextLeadingDistribution.even, 16.0),
+  negative08('方案一 (Icon 16px -0.8px 补偿)', -0.8, 1.0, TextLeadingDistribution.even, 16.0),
+  oldBug('历史误用 (+0.8px 向下加剧)', 0.8, 1.15, TextLeadingDistribution.even, 16.0),
+  custom('自由微调', 0.0, 1.0, TextLeadingDistribution.even, 15.0);
 
   final String label;
   final double defaultOffset;
   final double? lineHeight;
   final TextLeadingDistribution leadingDist;
+  final double defaultIconSize;
 
   const _AlignPreset(
     this.label,
     this.defaultOffset,
     this.lineHeight,
     this.leadingDist,
+    this.defaultIconSize,
   );
 }
 
 class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
-  _AlignPreset _preset = _AlignPreset.negative08;
-  double _offsetY = -0.8;
+  _AlignPreset _preset = _AlignPreset.planA;
+  double _offsetY = 0.0;
+  double _iconSize = 14.0;
   double _zoomScale = 8.0;
 
   bool _showCenterLine = true;
@@ -92,6 +95,7 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
     setState(() {
       _preset = preset;
       _offsetY = preset.defaultOffset;
+      _iconSize = preset.defaultIconSize;
     });
   }
 
@@ -187,7 +191,7 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
                   ),
                 ),
                 Text(
-                  '缩放: ${_zoomScale.toInt()}x  |  Y位移: ${_offsetY >= 0 ? '+' : ''}${_offsetY.toStringAsFixed(1)}px',
+                  '缩放: ${_zoomScale.toInt()}x  |  Icon: ${_iconSize.toInt()}px  |  Y位移: ${_offsetY >= 0 ? '+' : ''}${_offsetY.toStringAsFixed(1)}px',
                   style: const TextStyle(
                     fontSize: 12,
                     fontFamily: 'monospace',
@@ -322,7 +326,7 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
                 : null,
             child: GlyphIcon(
               _selectedGlyph,
-              size: 16,
+              size: _iconSize,
               color: Colors.white,
             ),
           ),
@@ -398,7 +402,53 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
-                '2. Y轴微调偏移量 (Offset Y)',
+                '2. Icon 尺寸调节',
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: MvpTheme.textPrimary,
+                ),
+              ),
+              Row(
+                children: [14.0, 15.0, 16.0].map((size) {
+                  final isSelected = _iconSize == size;
+                  return Padding(
+                    padding: const EdgeInsets.only(left: 6),
+                    child: InkWell(
+                      onTap: () {
+                        setState(() {
+                          _iconSize = size;
+                          _preset = _AlignPreset.custom;
+                        });
+                      },
+                      customBorder: AppShape.xs,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        decoration: ShapeDecoration(
+                          color: isSelected ? MvpTheme.activeColor : const Color(0xFFF1F5F9),
+                          shape: AppShape.xs,
+                        ),
+                        child: Text(
+                          '${size.toInt()}px',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: isSelected ? Colors.white : MvpTheme.textSecondary,
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                '3. Y轴微调偏移量 (Offset Y)',
                 style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
