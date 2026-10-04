@@ -1,6 +1,8 @@
-import 'package:material_ui/material_ui.dart';
+import 'package:fl_clash/common/shape.dart';
+import 'package:fl_clash/icons/icons.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:material_ui/material_ui.dart';
 
 import 'mvp_bridge.dart';
 import 'mvp_models.dart';
@@ -52,7 +54,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
             constraints: const BoxConstraints(maxWidth: 400),
             child: Material(
               color: MvpTheme.toastBg,
-              borderRadius: BorderRadius.circular(12),
+              shape: AppShape.all(12),
               elevation: 4,
               shadowColor: Colors.black.withValues(alpha: 0.15),
               child: Padding(
@@ -71,14 +73,13 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                               alignment: PlaceholderAlignment.middle,
                               child: Transform.translate(
                                 offset: const Offset(0, -0.5),
-                                child: Icon(
+                                child: GlyphIcon(
                                   switch (type) {
-                                    MvpToastType.info => Icons.info_rounded,
+                                    MvpToastType.info => AppGlyphs.info,
                                     MvpToastType.success =>
-                                      Icons.check_circle_rounded,
-                                    MvpToastType.error => Icons.error_rounded,
-                                    MvpToastType.warning =>
-                                      Icons.warning_amber_rounded,
+                                      AppGlyphs.checkCircle,
+                                    MvpToastType.error => AppGlyphs.error,
+                                    MvpToastType.warning => AppGlyphs.warning,
                                   },
                                   color: Colors.white,
                                   size: 16,
@@ -106,7 +107,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                             Clipboard.setData(ClipboardData(text: copyData));
                             ScaffoldMessenger.of(context).hideCurrentSnackBar();
                           },
-                          borderRadius: BorderRadius.circular(4),
+                          customBorder: AppShape.xs,
                           child: const Padding(
                             padding: EdgeInsets.symmetric(
                               horizontal: 6,
@@ -454,8 +455,8 @@ class _MvpHeaderBar extends StatelessWidget {
                           color: MvpTheme.textSecondary,
                         ),
                       )
-                    : const Icon(
-                        Icons.description_outlined,
+                    : const GlyphIcon(
+                        AppGlyphs.logs,
                         size: 16,
                         color: MvpTheme.textMuted,
                       ),
@@ -499,9 +500,9 @@ class _MvpToggleSwitch extends StatelessWidget {
                 curve: Curves.easeInOutCubic,
                 width: 130,
                 height: 56,
-                decoration: BoxDecoration(
+                decoration: ShapeDecoration(
                   color: isOn ? MvpTheme.activeColor : MvpTheme.inactiveGray,
-                  borderRadius: BorderRadius.circular(28),
+                  shape: AppShape.all(28),
                 ),
               ),
               AnimatedAlign(
@@ -537,8 +538,8 @@ class _MvpToggleSwitch extends StatelessWidget {
                           child: AnimatedScale(
                             duration: const Duration(milliseconds: 200),
                             scale: isOn ? 1.0 : 0.5,
-                            child: const Icon(
-                              Icons.check_rounded,
+                            child: const GlyphIcon(
+                              AppGlyphs.check,
                               size: 38,
                               color: MvpTheme.activeColor,
                             ),
@@ -702,7 +703,7 @@ class _MvpQuickInfoCards extends StatelessWidget {
       children: [
         Expanded(
           child: _buildInfoItem(
-            icon: Icons.shield_rounded,
+            icon: AppGlyphs.vpn,
             title: '防护状态',
             value: isStart ? '已开启' : '未开启',
             isActive: isStart,
@@ -711,7 +712,7 @@ class _MvpQuickInfoCards extends StatelessWidget {
         const SizedBox(width: 16),
         Expanded(
           child: _buildInfoItem(
-            icon: Icons.security_rounded,
+            icon: AppGlyphs.cpu,
             title: '内核状态',
             value: coreStatusText,
             isActive: isStart,
@@ -722,7 +723,7 @@ class _MvpQuickInfoCards extends StatelessWidget {
   }
 
   Widget _buildInfoItem({
-    required IconData icon,
+    required Glyph icon,
     required String title,
     required String value,
     required bool isActive,
@@ -734,14 +735,15 @@ class _MvpQuickInfoCards extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(
+      decoration: ShapeDecoration(
         color: MvpTheme.cardBg,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: Colors.black.withValues(alpha: 0.05),
-          width: 0.5,
+        shape: AppShape.md.copyWith(
+          side: BorderSide(
+            color: Colors.black.withValues(alpha: 0.05),
+            width: 0.5,
+          ),
         ),
-        boxShadow: [
+        shadows: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
             blurRadius: 12,
@@ -755,12 +757,12 @@ class _MvpQuickInfoCards extends StatelessWidget {
           Container(
             width: 32,
             height: 32,
-            decoration: BoxDecoration(
+            decoration: ShapeDecoration(
               color: bgFill,
-              borderRadius: BorderRadius.circular(10),
+              shape: AppShape.all(10),
             ),
             child: Center(
-              child: Icon(
+              child: GlyphIcon(
                 icon,
                 size: 18,
                 color: iconColor,
@@ -854,14 +856,15 @@ class _MvpProfileCard extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(
+      decoration: ShapeDecoration(
         color: MvpTheme.cardBg,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: Colors.black.withValues(alpha: 0.05),
-          width: 0.5,
+        shape: AppShape.md.copyWith(
+          side: BorderSide(
+            color: Colors.black.withValues(alpha: 0.05),
+            width: 0.5,
+          ),
         ),
-        boxShadow: [
+        shadows: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
             blurRadius: 12,
@@ -891,7 +894,7 @@ class _MvpProfileCard extends StatelessWidget {
                 ),
                 if (isLoadedMode)
                   _buildHeaderButton(
-                    icon: Icons.swap_horiz_rounded,
+                    icon: AppGlyphs.reset,
                     label: '重置',
                     color: MvpTheme.dangerText,
                     backgroundColor:
@@ -900,7 +903,7 @@ class _MvpProfileCard extends StatelessWidget {
                   )
                 else if (hasProfile)
                   _buildHeaderButton(
-                    icon: Icons.keyboard_arrow_up_rounded,
+                    icon: AppGlyphs.chevronUp,
                     label: '收起',
                     color: MvpTheme.textSecondary,
                     backgroundColor:
@@ -945,7 +948,7 @@ class _MvpProfileCard extends StatelessWidget {
   }
 
   Widget _buildHeaderButton({
-    required IconData icon,
+    required Glyph icon,
     required String label,
     required Color color,
     required Color backgroundColor,
@@ -958,16 +961,16 @@ class _MvpProfileCard extends StatelessWidget {
         height: 30,
         padding: const EdgeInsets.only(left: 8, right: 10),
         alignment: Alignment.center,
-        decoration: BoxDecoration(
+        decoration: ShapeDecoration(
           color: backgroundColor,
-          borderRadius: BorderRadius.circular(10),
+          shape: AppShape.all(10),
         ),
         child: Text.rich(
           TextSpan(
             children: [
               WidgetSpan(
                 alignment: PlaceholderAlignment.middle,
-                child: Icon(
+                child: GlyphIcon(
                   icon,
                   size: 14,
                   color: color,
@@ -1049,10 +1052,10 @@ class _MvpProfileCard extends StatelessWidget {
                   horizontal: 16,
                   vertical: 10,
                 ),
-                decoration: BoxDecoration(
+                decoration: ShapeDecoration(
                   color: MvpTheme.activeColor,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
+                  shape: AppShape.all(12),
+                  shadows: [
                     BoxShadow(
                       color: MvpTheme.activeColor.withValues(alpha: 0.2),
                       blurRadius: 12,
@@ -1074,8 +1077,8 @@ class _MvpProfileCard extends StatelessWidget {
                                   color: Colors.white,
                                 ),
                               )
-                            : const Icon(
-                                Icons.refresh_rounded,
+                            : const GlyphIcon(
+                                AppGlyphs.refresh,
                                 size: 16,
                                 color: Colors.white,
                               ),
@@ -1116,14 +1119,15 @@ class _MvpProfileCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              decoration: BoxDecoration(
+              decoration: ShapeDecoration(
                 color: MvpTheme.inputBg,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: Colors.black.withValues(alpha: 0.08),
-                  width: 0.5,
+                shape: AppShape.all(12).copyWith(
+                  side: BorderSide(
+                    color: Colors.black.withValues(alpha: 0.08),
+                    width: 0.5,
+                  ),
                 ),
-                boxShadow: [
+                shadows: [
                   BoxShadow(
                     color: Colors.black.withValues(alpha: 0.02),
                     blurRadius: 12,
@@ -1163,8 +1167,8 @@ class _MvpProfileCard extends StatelessWidget {
                       minHeight: 40,
                     ),
                     padding: EdgeInsets.zero,
-                    icon: const Icon(
-                      Icons.content_paste_rounded,
+                    icon: const GlyphIcon(
+                      AppGlyphs.paste,
                       size: 16,
                       color: MvpTheme.textSecondary,
                     ),
@@ -1181,10 +1185,10 @@ class _MvpProfileCard extends StatelessWidget {
               child: Container(
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(vertical: 12),
-                decoration: BoxDecoration(
+                decoration: ShapeDecoration(
                   color: MvpTheme.activeColor,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
+                  shape: AppShape.all(12),
+                  shadows: [
                     BoxShadow(
                       color: MvpTheme.activeColor.withValues(alpha: 0.2),
                       blurRadius: 12,
@@ -1206,8 +1210,8 @@ class _MvpProfileCard extends StatelessWidget {
                                   color: Colors.white,
                                 ),
                               )
-                            : const Icon(
-                                Icons.file_download_outlined,
+                            : const GlyphIcon(
+                                AppGlyphs.cloudDownload,
                                 size: 16,
                                 color: Colors.white,
                               ),
