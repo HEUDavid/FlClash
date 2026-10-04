@@ -50,11 +50,12 @@ class MvpAlignPreviewView extends StatefulWidget {
 }
 
 enum _AlignPreset {
-  schemeOne('方案一: 紧致行高 (height: 1.0)', 0.0, 1.0, TextLeadingDistribution.even),
-  defaultRow('默认 Row Center (无补偿)', 0.0, null, TextLeadingDistribution.proportional),
-  currentCode('当前代码 (Offset +0.8px)', 0.8, 1.15, TextLeadingDistribution.even),
-  strictBox('严格行高对齐 (16/14 ≈ 1.14)', 0.0, 16.0 / 14.0, TextLeadingDistribution.even),
-  custom('自由微调', 0.0, 1.0, TextLeadingDistribution.even);
+  negative08('向上补偿 -0.8px (推荐)', -0.8, 1.0, TextLeadingDistribution.even),
+  negative10('向上补偿 -1.0px', -1.0, 1.0, TextLeadingDistribution.even),
+  negative05('向上补偿 -0.5px', -0.5, 1.0, TextLeadingDistribution.even),
+  zeroOffset('零偏移 (height: 1.0 偏下)', 0.0, 1.0, TextLeadingDistribution.even),
+  oldBug('历史误用 (+0.8px 向下加剧)', 0.8, 1.15, TextLeadingDistribution.even),
+  custom('自由微调', -0.8, 1.0, TextLeadingDistribution.even);
 
   final String label;
   final double defaultOffset;
@@ -70,8 +71,8 @@ enum _AlignPreset {
 }
 
 class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
-  _AlignPreset _preset = _AlignPreset.schemeOne;
-  double _offsetY = 0.0;
+  _AlignPreset _preset = _AlignPreset.negative08;
+  double _offsetY = -0.8;
   double _zoomScale = 8.0;
 
   bool _showCenterLine = true;
@@ -632,13 +633,12 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
           ),
           SizedBox(height: 8),
           Text(
-            '1. 为什么默认 Row Center 视觉上中文字偏高？\n'
-            '中文字符（汉字）在绝大多数 CJK 字体中，由于顶部自带预留空隙与字重分布，其光学重心（Optical Center）天然高于几何中心约 0.6px ~ 0.8px。\n\n'
-            '2. 为什么开启【渲染外框盒】后发现盒子其实是对齐的？\n'
-            '开启橙/蓝框后可以清晰看到：Flutter 的 Row 把 16px 图标盒和文本渲染盒对齐得严丝合缝。不齐的是【字形墨水】本身，而非【布局盒子】。\n\n'
-            '3. 最佳实践建议：\n'
-            '• 严格度量对齐：height: 16/14, leadingDistribution: TextLeadingDistribution.even\n'
-            '• 光学补偿：在 4x / 8x 放大下观察，Offset(0, 0.7~0.8) 确实能让汉字重心精确落到红线上。',
+            '1. 为什么 height: 1.0 时汉字依然明显偏下？\n'
+            '字体的排版盒子高度由 ascent（上延）和 descent（下延）决定。中文字符直接坐在 Baseline 基线上，底边距（Descent）极小；而顶端（Ascent）留有大片西文变音符空间，因此字形天生沉在盒子底部。\n\n'
+            '2. 为什么历史代码写 +0.8px 会雪上加霜？\n'
+            '之前代码写了 Offset(0, 0.8)，相当于把原本就偏下的汉字又向下推了 0.8px，导致底部空隙更小、顶部空隙更大。\n\n'
+            '3. 解决方案：\n'
+            '通过向上负补偿（例如 Offset(0, -0.8px) 到 -1.0px），把汉字墨水视觉中心向上提，精准落在贯穿 16px 图标正中的红线上。',
             style: TextStyle(
               fontSize: 12,
               height: 1.5,
