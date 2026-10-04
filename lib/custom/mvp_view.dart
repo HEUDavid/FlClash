@@ -887,30 +887,13 @@ class _MvpProfileCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const GlyphIcon(
-                      AppGlyphs.sliders,
-                      size: 18,
-                      color: MvpTheme.textPrimary,
-                    ),
-                    const SizedBox(width: 6),
-                    Transform.translate(
-                      offset: const Offset(0, 0.6),
-                      child: const Text(
-                        '配置文件',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                          color: MvpTheme.textPrimary,
-                          height: 1.1,
-                          leadingDistribution: TextLeadingDistribution.even,
-                        ),
-                      ),
-                    ),
-                  ],
+                MvpIconLabel(
+                  glyph: AppGlyphs.sliders,
+                  label: '配置文件',
+                  iconSize: 18,
+                  fontSize: 15,
+                  gap: 6,
+                  color: MvpTheme.textPrimary,
                 ),
                 if (isLoadedMode)
                   _buildHeaderButton(
@@ -985,30 +968,13 @@ class _MvpProfileCard extends StatelessWidget {
           color: backgroundColor,
           shape: AppShape.all(10),
         ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            GlyphIcon(
-              icon,
-              size: 14,
-              color: color,
-            ),
-            const SizedBox(width: 4),
-            Transform.translate(
-              offset: const Offset(0, 0.6),
-              child: Text(
-                label,
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: color,
-                  height: 1.15,
-                  leadingDistribution: TextLeadingDistribution.even,
-                ),
-              ),
-            ),
-          ],
+        child: MvpIconLabel(
+          glyph: icon,
+          label: label,
+          iconSize: 14,
+          fontSize: 12,
+          gap: 4,
+          color: color,
         ),
       ),
     );
