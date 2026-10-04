@@ -1,7 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'mvp_view.dart';
+import 'mvp_preview.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,7 +34,7 @@ class _MvpPreviewApp extends StatelessWidget {
           brightness: Brightness.dark,
         ),
       ),
-      home: const CustomMvpView(),
+      home: const MvpAlignPreviewView(),
     );
   }
 }
