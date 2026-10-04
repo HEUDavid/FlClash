@@ -1088,8 +1088,8 @@ class _MvpProfileCard extends StatelessWidget {
                   children: [
                     isUpdating
                         ? const SizedBox(
-                            width: 16,
-                            height: 16,
+                            width: 14,
+                            height: 14,
                             child: CircularProgressIndicator(
                               strokeWidth: 2,
                               color: Colors.white,
@@ -1097,21 +1097,18 @@ class _MvpProfileCard extends StatelessWidget {
                           )
                         : const GlyphIcon(
                             AppGlyphs.sync,
-                            size: 16,
+                            size: 14,
                             color: Colors.white,
                           ),
                     const SizedBox(width: 6),
-                    Transform.translate(
-                      offset: const Offset(0, 0.8),
-                      child: const Text(
-                        '同步',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                          height: 1.15,
-                          leadingDistribution: TextLeadingDistribution.even,
-                        ),
+                    const Text(
+                      '同步',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                        height: 1.0,
+                        leadingDistribution: TextLeadingDistribution.even,
                       ),
                     ),
                   ],
@@ -1218,8 +1215,8 @@ class _MvpProfileCard extends StatelessWidget {
                   children: [
                     isImporting
                         ? const SizedBox(
-                            width: 16,
-                            height: 16,
+                            width: 15,
+                            height: 15,
                             child: CircularProgressIndicator(
                               strokeWidth: 2,
                               color: Colors.white,
@@ -1227,21 +1224,18 @@ class _MvpProfileCard extends StatelessWidget {
                           )
                         : const GlyphIcon(
                             AppGlyphs.arrowDown,
-                            size: 16,
+                            size: 15,
                             color: Colors.white,
                           ),
                     const SizedBox(width: 6),
-                    Transform.translate(
-                      offset: const Offset(0, 0.8),
-                      child: const Text(
-                        '下载并导入',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                          height: 1.15,
-                          leadingDistribution: TextLeadingDistribution.even,
-                        ),
+                    const Text(
+                      '下载并导入',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                        height: 1.0,
+                        leadingDistribution: TextLeadingDistribution.even,
                       ),
                     ),
                   ],
