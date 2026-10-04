@@ -1211,7 +1211,7 @@ class _MvpProfileCard extends StatelessWidget {
                                 ),
                               )
                             : const GlyphIcon(
-                                AppGlyphs.importFile,
+                                AppGlyphs.arrowDown,
                                 size: 16,
                                 color: Colors.white,
                               ),
