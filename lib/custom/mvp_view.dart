@@ -357,7 +357,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                               isExportingLogs: _isExportingLogs,
                             ),
                             const Spacer(flex: 1),
-                            const SizedBox(height: 20),
+                            const SizedBox(height: 8),
                             _MvpStatusHero(
                               isStart: isStart,
                               coreStatus: coreStatus,
@@ -366,7 +366,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                                 hasProfile,
                               ),
                             ),
-                            const SizedBox(height: 24),
+                            const SizedBox(height: 36),
                             const Spacer(flex: 1),
                             _MvpQuickInfoCards(
                               isStart: isStart,
@@ -489,7 +489,7 @@ class _MvpToggleSwitch extends StatelessWidget {
         },
         behavior: HitTestBehavior.opaque,
         child: SizedBox(
-          width: 154,
+          width: 160,
           height: 86,
           child: Stack(
             alignment: Alignment.center,
