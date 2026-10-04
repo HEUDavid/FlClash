@@ -68,32 +68,34 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                     Flexible(
                       child: Text.rich(
                         TextSpan(
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white,
+                            height: 1.25,
+                            leadingDistribution: TextLeadingDistribution.even,
+                          ),
                           children: [
                             WidgetSpan(
                               alignment: PlaceholderAlignment.middle,
-                              child: Transform.translate(
-                                offset: const Offset(0, -0.5),
-                                child: GlyphIcon(
-                                  switch (type) {
-                                    MvpToastType.info => AppGlyphs.info,
-                                    MvpToastType.success =>
-                                      AppGlyphs.checkCircle,
-                                    MvpToastType.error => AppGlyphs.error,
-                                    MvpToastType.warning => AppGlyphs.warning,
-                                  },
-                                  color: Colors.white,
-                                  size: 16,
-                                ),
+                              child: GlyphIcon(
+                                switch (type) {
+                                  MvpToastType.info => AppGlyphs.info,
+                                  MvpToastType.success =>
+                                    AppGlyphs.checkCircle,
+                                  MvpToastType.error => AppGlyphs.error,
+                                  MvpToastType.warning => AppGlyphs.warning,
+                                },
+                                color: Colors.white,
+                                size: 16,
                               ),
                             ),
-                            const WidgetSpan(child: SizedBox(width: 6)),
+                            const WidgetSpan(
+                              alignment: PlaceholderAlignment.middle,
+                              child: SizedBox(width: 6),
+                            ),
                             TextSpan(
                               text: message.trim(),
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.white,
-                              ),
                             ),
                           ],
                         ),
@@ -119,6 +121,9 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white,
+                                height: 1.15,
+                                leadingDistribution:
+                                    TextLeadingDistribution.even,
                               ),
                             ),
                           ),
@@ -891,8 +896,8 @@ class _MvpProfileCard extends StatelessWidget {
                       size: 18,
                       color: MvpTheme.textPrimary,
                     ),
-                    SizedBox(width: 6),
-                    Text(
+                    const SizedBox(width: 6),
+                    const Text(
                       '配置文件',
                       style: TextStyle(
                         fontSize: 15,
@@ -979,6 +984,13 @@ class _MvpProfileCard extends StatelessWidget {
         ),
         child: Text.rich(
           TextSpan(
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: color,
+              height: 1.15,
+              leadingDistribution: TextLeadingDistribution.even,
+            ),
             children: [
               WidgetSpan(
                 alignment: PlaceholderAlignment.middle,
@@ -988,17 +1000,11 @@ class _MvpProfileCard extends StatelessWidget {
                   color: color,
                 ),
               ),
-              const WidgetSpan(child: SizedBox(width: 4)),
-              TextSpan(
-                text: label,
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: color,
-                  height: 1.15,
-                  leadingDistribution: TextLeadingDistribution.even,
-                ),
+              const WidgetSpan(
+                alignment: PlaceholderAlignment.middle,
+                child: SizedBox(width: 4),
               ),
+              TextSpan(text: label),
             ],
           ),
           textAlign: TextAlign.center,
@@ -1077,6 +1083,13 @@ class _MvpProfileCard extends StatelessWidget {
                 ),
                 child: Text.rich(
                   TextSpan(
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                      height: 1.15,
+                      leadingDistribution: TextLeadingDistribution.even,
+                    ),
                     children: [
                       WidgetSpan(
                         alignment: PlaceholderAlignment.middle,
@@ -1099,16 +1112,7 @@ class _MvpProfileCard extends StatelessWidget {
                         alignment: PlaceholderAlignment.middle,
                         child: SizedBox(width: 6),
                       ),
-                      const TextSpan(
-                        text: '同步',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                          height: 1.15,
-                          leadingDistribution: TextLeadingDistribution.even,
-                        ),
-                      ),
+                      const TextSpan(text: '同步'),
                     ],
                   ),
                   textAlign: TextAlign.center,
@@ -1210,6 +1214,13 @@ class _MvpProfileCard extends StatelessWidget {
                 ),
                 child: Text.rich(
                   TextSpan(
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                      height: 1.15,
+                      leadingDistribution: TextLeadingDistribution.even,
+                    ),
                     children: [
                       WidgetSpan(
                         alignment: PlaceholderAlignment.middle,
@@ -1232,16 +1243,7 @@ class _MvpProfileCard extends StatelessWidget {
                         alignment: PlaceholderAlignment.middle,
                         child: SizedBox(width: 6),
                       ),
-                      const TextSpan(
-                        text: '下载并导入',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                          height: 1.16,
-                          leadingDistribution: TextLeadingDistribution.even,
-                        ),
-                      ),
+                      const TextSpan(text: '下载并导入'),
                     ],
                   ),
                   textAlign: TextAlign.center,
