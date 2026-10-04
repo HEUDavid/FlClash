@@ -1082,36 +1082,10 @@ class _MvpProfileCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    isUpdating
-                        ? const SizedBox(
-                            width: 14,
-                            height: 14,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: Colors.white,
-                            ),
-                          )
-                        : const GlyphIcon(
-                            AppGlyphs.sync,
-                            size: 14,
-                            color: Colors.white,
-                          ),
-                    const SizedBox(width: 6),
-                    const Text(
-                      '同步',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                        height: 1.0,
-                        leadingDistribution: TextLeadingDistribution.even,
-                      ),
-                    ),
-                  ],
+                child: MvpIconLabel(
+                  glyph: AppGlyphs.sync,
+                  label: '同步',
+                  isLoading: isUpdating,
                 ),
               ),
             ),
@@ -1208,43 +1182,77 @@ class _MvpProfileCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    isImporting
-                        ? const SizedBox(
-                            width: 15,
-                            height: 15,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: Colors.white,
-                            ),
-                          )
-                        : const GlyphIcon(
-                            AppGlyphs.arrowDown,
-                            size: 15,
-                            color: Colors.white,
-                          ),
-                    const SizedBox(width: 6),
-                    const Text(
-                      '下载并导入',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                        height: 1.0,
-                        leadingDistribution: TextLeadingDistribution.even,
-                      ),
-                    ),
-                  ],
+                child: MvpIconLabel(
+                  glyph: AppGlyphs.arrowDown,
+                  label: '下载并导入',
+                  isLoading: isImporting,
                 ),
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class MvpIconLabel extends StatelessWidget {
+  const MvpIconLabel({
+    super.key,
+    required this.glyph,
+    required this.label,
+    this.isLoading = false,
+    this.iconSize = 16,
+    this.fontSize = 14,
+    this.gap = 6,
+    this.color = Colors.white,
+  });
+
+  final Glyph glyph;
+  final String label;
+  final bool isLoading;
+  final double iconSize;
+  final double fontSize;
+  final double gap;
+  final Color color;
+
+  // CJK glyphs sit on the alphabetic baseline and leave the ascent's accent
+  // room empty above them, so their ink reads low next to a centered icon.
+  static const double cjkOpticalLiftRatio = 0.06;
+  static final RegExp _cjk = RegExp(r'[\u3400-\u9FFF\uF900-\uFAFF]');
+
+  static double opticalOffsetFor(String text, double scaledFontSize) {
+    if (!_cjk.hasMatch(text)) return 0;
+    return -scaledFontSize * cjkOpticalLiftRatio;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final scaledFontSize = MediaQuery.textScalerOf(context).scale(fontSize);
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SizedBox.square(
+          dimension: iconSize,
+          child: isLoading
+              ? CircularProgressIndicator(strokeWidth: 2, color: color)
+              : GlyphIcon(glyph, size: iconSize, color: color),
+        ),
+        SizedBox(width: gap),
+        Transform.translate(
+          offset: Offset(0, opticalOffsetFor(label, scaledFontSize)),
+          child: Text(
+            label,
+            style: TextStyle(
+              fontSize: fontSize,
+              fontWeight: FontWeight.w600,
+              color: color,
+              height: 1.0,
+              leadingDistribution: TextLeadingDistribution.even,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
