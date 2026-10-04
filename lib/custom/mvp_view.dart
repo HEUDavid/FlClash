@@ -540,7 +540,8 @@ class _MvpToggleSwitch extends StatelessWidget {
                             scale: isOn ? 1.0 : 0.5,
                             child: const GlyphIcon(
                               AppGlyphs.check,
-                              size: 38,
+                              size: 48,
+                              fill: 1,
                               color: MvpTheme.activeColor,
                             ),
                           ),
@@ -552,13 +553,13 @@ class _MvpToggleSwitch extends StatelessWidget {
                             duration: const Duration(milliseconds: 200),
                             scale: isOn ? 0.5 : 1.0,
                             child: Container(
-                              width: 24,
-                              height: 24,
+                              width: 28,
+                              height: 28,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 border: Border.all(
                                   color: MvpTheme.inactiveGray,
-                                  width: 4,
+                                  width: 4.5,
                                 ),
                               ),
                             ),
