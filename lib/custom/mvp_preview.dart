@@ -50,10 +50,11 @@ class MvpAlignPreviewView extends StatefulWidget {
 }
 
 enum _AlignPreset {
+  schemeOne('方案一: 紧致行高 (height: 1.0)', 0.0, 1.0, TextLeadingDistribution.even),
   defaultRow('默认 Row Center (无补偿)', 0.0, null, TextLeadingDistribution.proportional),
   currentCode('当前代码 (Offset +0.8px)', 0.8, 1.15, TextLeadingDistribution.even),
   strictBox('严格行高对齐 (16/14 ≈ 1.14)', 0.0, 16.0 / 14.0, TextLeadingDistribution.even),
-  custom('自由微调', 0.8, 1.15, TextLeadingDistribution.even);
+  custom('自由微调', 0.0, 1.0, TextLeadingDistribution.even);
 
   final String label;
   final double defaultOffset;
@@ -69,12 +70,12 @@ enum _AlignPreset {
 }
 
 class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
-  _AlignPreset _preset = _AlignPreset.currentCode;
-  double _offsetY = 0.8;
-  double _zoomScale = 1.0;
+  _AlignPreset _preset = _AlignPreset.schemeOne;
+  double _offsetY = 0.0;
+  double _zoomScale = 8.0;
 
   bool _showCenterLine = true;
-  bool _showBoundingBox = false;
+  bool _showBoundingBox = true;
 
   Glyph _selectedGlyph = AppGlyphs.sync;
   String _buttonText = '同步';
@@ -198,7 +199,8 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
           ),
           const Divider(height: 1, color: Color(0xFFF1F5F9)),
           Container(
-            height: 180,
+            height: 340,
+            clipBehavior: Clip.hardEdge,
             alignment: Alignment.center,
             decoration: const BoxDecoration(
               color: Color(0xFFF8FAFC),
