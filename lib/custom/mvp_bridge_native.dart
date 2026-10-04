@@ -87,53 +87,53 @@ class MvpBridge {
     queryParams['hwid'] = hwid;
     final downloadUrl = uri.replace(queryParameters: queryParams).toString();
 
-    final backupPath = await appPath.backupFilePath;
-    final tempEncryptedPath = '$backupPath.download';
-    final dio = Dio(
-      BaseOptions(
-        connectTimeout: const Duration(seconds: 15),
-        receiveTimeout: const Duration(seconds: 30),
-        followRedirects: true,
-        headers: {
-          'X-HWID': hwid,
-        },
-      ),
-    );
-
-    final response = await dio.download(downloadUrl, tempEncryptedPath);
-
-    if (response.statusCode != 200) {
-      throw MvpException('文件下载失败，服务器响应: ${response.statusCode}，请检查链接是否有效');
-    }
-
-    final tempFile = File(tempEncryptedPath);
-    try {
-      final contentDisposition =
-          response.headers.value('content-disposition') ?? '';
-      if (!contentDisposition.contains('fk-config.zip')) {
-        throw MvpException('配置文件链接无效');
-      }
-
-      final zipDecoder = ZipDecoder();
-      final bytes = await tempFile.readAsBytes();
-      late final Archive archive;
-      try {
-        archive = zipDecoder.decodeBytes(bytes, password: 'BlockAd2026');
-      } catch (_) {
-        throw MvpException('配置文件格式错误');
-      }
-
-      final unencryptedBytes = ZipEncoder().encode(archive);
-      await File(backupPath).writeAsBytes(unencryptedBytes);
-    } finally {
-      if (await tempFile.exists()) {
-        await tempFile.delete();
-      }
-    }
-
     await globalState.container
         .read(backupActionProvider.notifier)
-        .restore(RestoreOption.all);
+        .restore(RestoreOption.all, (downloadPath) async {
+      final tempEncryptedPath = '$downloadPath.download';
+      final dio = Dio(
+        BaseOptions(
+          connectTimeout: const Duration(seconds: 15),
+          receiveTimeout: const Duration(seconds: 30),
+          followRedirects: true,
+          headers: {
+            'X-HWID': hwid,
+          },
+        ),
+      );
+
+      final response = await dio.download(downloadUrl, tempEncryptedPath);
+
+      if (response.statusCode != 200) {
+        throw MvpException('文件下载失败，服务器响应: ${response.statusCode}，请检查链接是否有效');
+      }
+
+      final tempFile = File(tempEncryptedPath);
+      try {
+        final contentDisposition =
+            response.headers.value('content-disposition') ?? '';
+        if (!contentDisposition.contains('fk-config.zip')) {
+          throw MvpException('配置文件链接无效');
+        }
+
+        final zipDecoder = ZipDecoder();
+        final bytes = await tempFile.readAsBytes();
+        late final Archive archive;
+        try {
+          archive = zipDecoder.decodeBytes(bytes, password: 'BlockAd2026');
+        } catch (_) {
+          throw MvpException('配置文件格式错误');
+        }
+
+        final unencryptedBytes = ZipEncoder().encode(archive);
+        await File(downloadPath).writeAsBytes(unencryptedBytes);
+        return downloadPath;
+      } finally {
+        if (await tempFile.exists()) {
+          await tempFile.delete();
+        }
+      }
+    });
     await _syncAndRefreshProviders(globalState.container);
   }
 
