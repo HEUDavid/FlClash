@@ -66,38 +66,15 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Flexible(
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          GlyphIcon(
-                            switch (type) {
-                              MvpToastType.info => AppGlyphs.info,
-                              MvpToastType.success => AppGlyphs.checkCircle,
-                              MvpToastType.error => AppGlyphs.error,
-                              MvpToastType.warning => AppGlyphs.warning,
-                            },
-                            color: Colors.white,
-                            size: 16,
-                          ),
-                          const SizedBox(width: 6),
-                          Flexible(
-                            child: Transform.translate(
-                              offset: const Offset(0, 0.5),
-                              child: Text(
-                                message.trim(),
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.white,
-                                  height: 1.25,
-                                  leadingDistribution:
-                                      TextLeadingDistribution.even,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                      child: Text(
+                        message.trim(),
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
+                          height: 1.25,
+                          leadingDistribution: TextLeadingDistribution.even,
+                        ),
                       ),
                     ),
                     if (copyData != null)
