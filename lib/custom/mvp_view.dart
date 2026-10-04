@@ -559,7 +559,7 @@ class _MvpToggleSwitch extends StatelessWidget {
                                 shape: BoxShape.circle,
                                 border: Border.all(
                                   color: MvpTheme.inactiveGray,
-                                  width: 4.5,
+                                  width: 4,
                                 ),
                               ),
                             ),
