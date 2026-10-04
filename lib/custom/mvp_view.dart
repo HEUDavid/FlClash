@@ -1078,7 +1078,7 @@ class _MvpProfileCard extends StatelessWidget {
                                 ),
                               )
                             : const GlyphIcon(
-                                AppGlyphs.refresh,
+                                AppGlyphs.sync,
                                 size: 16,
                                 color: Colors.white,
                               ),
