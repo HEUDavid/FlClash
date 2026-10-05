@@ -59,9 +59,11 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
               elevation: 4,
               shadowColor: Colors.black.withValues(alpha: 0.15),
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 14,
-                  vertical: 10,
+                padding: EdgeInsets.only(
+                  left: 14,
+                  right: copyData != null ? 8 : 14,
+                  top: 10,
+                  bottom: 10,
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -421,7 +423,7 @@ class _MvpHeaderBar extends StatelessWidget {
               },
               behavior: HitTestBehavior.opaque,
               child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                padding: EdgeInsets.only(top: 8, bottom: 8, right: 12),
                 child: GlyphIcon(
                   AppGlyphs.sliders,
                   size: 16,
@@ -450,7 +452,7 @@ class _MvpHeaderBar extends StatelessWidget {
               onTap: isExportingLogs ? null : onExportLogs,
               behavior: HitTestBehavior.opaque,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                padding: const EdgeInsets.only(top: 8, bottom: 8, left: 12),
                 child: isExportingLogs
                     ? const SizedBox(
                         width: 16,
@@ -748,7 +750,7 @@ class _MvpQuickInfoCards extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: ShapeDecoration(
         color: MvpTheme.cardBg,
-        shape: AppShape.md.copyWith(
+        shape: AppShape.lg.copyWith(
           side: const BorderSide(
             color: MvpTheme.cardBorder,
             width: 0.5,
@@ -770,7 +772,7 @@ class _MvpQuickInfoCards extends StatelessWidget {
             height: 32,
             decoration: ShapeDecoration(
               color: bgFill,
-              shape: AppShape.all(10),
+              shape: AppShape.sm,
             ),
             child: Center(
               child: GlyphIcon(
@@ -873,7 +875,7 @@ class _MvpProfileCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: ShapeDecoration(
         color: MvpTheme.cardBg,
-        shape: AppShape.md.copyWith(
+        shape: AppShape.xl.copyWith(
           side: const BorderSide(
             color: MvpTheme.cardBorder,
             width: 0.5,
@@ -976,7 +978,7 @@ class _MvpProfileCard extends StatelessWidget {
         alignment: Alignment.center,
         decoration: ShapeDecoration(
           color: backgroundColor,
-          shape: AppShape.all(10),
+          shape: AppShape.all(12),
         ),
         child: MvpIconLabel(
           glyph: icon,
