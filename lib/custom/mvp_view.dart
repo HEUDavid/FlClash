@@ -437,9 +437,9 @@ class _MvpHeaderBar extends StatelessWidget {
                         height: 16,
                         child: Center(
                           child: SizedBox.square(
-                            dimension: 10.5,
+                            dimension: 12,
                             child: CircularProgressIndicator(
-                              strokeWidth: 1.2,
+                              strokeWidth: 1.3,
                               color: MvpTheme.textMuted,
                             ),
                           ),
