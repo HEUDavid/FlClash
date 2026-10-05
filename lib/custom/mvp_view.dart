@@ -728,17 +728,17 @@ class _MvpQuickInfoCards extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: ShapeDecoration(
         color: MvpTheme.cardBg,
-        shape: AppShape.md.copyWith(
-          side: const BorderSide(
-            color: MvpTheme.cardBorder,
-            width: 0.5,
-          ),
-        ),
+        shape: AppShape.md,
         shadows: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.02),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 12,
             offset: const Offset(0, 3),
+          ),
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.02),
+            blurRadius: 4,
+            offset: const Offset(0, 1),
           ),
         ],
       ),
@@ -853,17 +853,17 @@ class _MvpProfileCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: ShapeDecoration(
         color: MvpTheme.cardBg,
-        shape: AppShape.md.copyWith(
-          side: const BorderSide(
-            color: MvpTheme.cardBorder,
-            width: 0.5,
-          ),
-        ),
+        shape: AppShape.md,
         shadows: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.02),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 12,
             offset: const Offset(0, 3),
+          ),
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.02),
+            blurRadius: 4,
+            offset: const Offset(0, 1),
           ),
         ],
       ),
@@ -1069,21 +1069,9 @@ class _MvpProfileCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              decoration: ShapeDecoration(
+              decoration: const ShapeDecoration(
                 color: MvpTheme.inputBg,
-                shape: AppShape.sm.copyWith(
-                  side: BorderSide(
-                    color: Colors.black.withValues(alpha: 0.08),
-                    width: 0.5,
-                  ),
-                ),
-                shadows: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.02),
-                    blurRadius: 12,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
+                shape: AppShape.sm,
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
