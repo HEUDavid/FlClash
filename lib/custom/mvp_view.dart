@@ -97,9 +97,9 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                               '复制',
                               style: TextStyle(
                                 fontSize: 14,
-                                fontWeight: FontWeight.w600,
+                                fontWeight: FontWeight.w500,
                                 color: Colors.white,
-                                height: MvpTheme.lineHeightTight,
+                                height: MvpTheme.lineHeightBody,
                                 leadingDistribution:
                                     TextLeadingDistribution.even,
                               ),
