@@ -882,7 +882,7 @@ class _MvpProfileCard extends StatelessWidget {
                   label: '配置文件',
                   iconSize: 16,
                   fontSize: 14,
-                  gap: 8,
+                  gap: 7,
                   color: MvpTheme.textPrimary,
                 ),
                 if (isLoadedMode)
