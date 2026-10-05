@@ -50,13 +50,8 @@ class MvpAlignPreviewView extends StatefulWidget {
 }
 
 enum _AlignPreset {
-  topAlign('💡 顶部对齐 (CrossAxisAlignment.start + 0位移)', 0.0, 1.0, TextLeadingDistribution.even, 16.0, CrossAxisAlignment.start),
-  finalDesign('比例微提 (居中 + 字号×6% 上提)', 0.0, 1.0, TextLeadingDistribution.even, 16.0, CrossAxisAlignment.center),
-  planA('方案 A (Icon 14px + 零位移 居中)', 0.0, 1.0, TextLeadingDistribution.even, 14.0, CrossAxisAlignment.center),
-  planB('方案 B (Icon 15px + 零位移 居中)', 0.0, 1.0, TextLeadingDistribution.even, 15.0, CrossAxisAlignment.center),
-  zeroOffset16('对照组 (Icon 16px + 零位移 居中)', 0.0, 1.0, TextLeadingDistribution.even, 16.0, CrossAxisAlignment.center),
-  negative08('方案一 (Icon 16px -0.8px 补偿)', -0.8, 1.0, TextLeadingDistribution.even, 16.0, CrossAxisAlignment.center),
-  oldBug('历史误用 (+0.8px 向下加剧)', 0.8, 1.15, TextLeadingDistribution.even, 16.0, CrossAxisAlignment.center),
+  topAlign('💡 敲定方案: 顶部对齐 (start + 0位移)', 0.0, 1.0, TextLeadingDistribution.even, 16.0, CrossAxisAlignment.start),
+  zeroOffset16('对照组: 居中未位移 (center)', 0.0, 1.0, TextLeadingDistribution.even, 16.0, CrossAxisAlignment.center),
   custom('自由微调', 0.0, 1.0, TextLeadingDistribution.even, 16.0, CrossAxisAlignment.start);
 
   final String label;
@@ -92,10 +87,10 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
 
   final List<(Glyph, String, double, double, String)> _mvpButtons = [
     (AppGlyphs.sync, '同步', 16.0, 14.0, '主操作按钮 (实装: 16/14)'),
+    (AppGlyphs.arrowDown, '下载并导入', 16.0, 14.0, '长主按钮 (实装: 16/14)'),
     (AppGlyphs.chevronUp, '收起', 14.0, 12.0, '顶部胶囊 (实装: 14/12)'),
     (AppGlyphs.reset, '重置', 14.0, 12.0, '危险胶囊 (实装: 14/12)'),
-    (AppGlyphs.arrowDown, '下载并导入', 16.0, 14.0, '长主按钮 (实装: 16/14)'),
-    (AppGlyphs.sliders, '配置文件', 18.0, 15.0, '卡片标题 (实装: 18/15)'),
+    (AppGlyphs.sliders, '配置文件', 16.0, 14.0, '卡片标题 (实装: 16/14)'),
     (AppGlyphs.check, '确认完成', 16.0, 14.0, '常规按钮 (16/14)'),
   ];
 
@@ -111,9 +106,7 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
   void _applyPreset(_AlignPreset preset) {
     setState(() {
       _preset = preset;
-      _offsetY = preset == _AlignPreset.finalDesign
-          ? MvpIconLabel.opticalOffsetFor(_buttonText, _fontSize)
-          : preset.defaultOffset;
+      _offsetY = preset.defaultOffset;
       _iconSize = preset.defaultIconSize;
       _crossAxisAlignment = preset.crossAxisAlignment;
     });
@@ -907,17 +900,16 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
             ],
           ),
           SizedBox(height: 8),
-          Text(
-            '1. 为什么 height: 1.0 时汉字依然明显偏下？\n'
-            '字体的排版盒子高度由 ascent（上延）和 descent（下延）决定。中文字符直接坐在 Baseline 基线上，底边距（Descent）极小；而顶端（Ascent）留有大片西文变音符空间，因此字形天生沉在盒子底部。\n\n'
-            '2. 为什么历史代码写 +0.8px 会雪上加霜？\n'
-            '之前代码写了 Offset(0, 0.8)，相当于把原本就偏下的汉字又向下推了 0.8px，导致底部空隙更小、顶部空隙更大。\n\n'
-            '3. 顶部对齐（CrossAxisAlignment.start）实测原理：\n'
-            'Icon 是 16px，汉字是 14px。当顶部对齐时，14px 文本框顶边紧贴 16px 图标顶边，文本在物理盒模型上自动向上提了恰好 (16-14)/2 = 1.0px！这正好抵消了汉字顶部多出的约 1px Ascent 留白，使得图标顶边墨水与汉字顶笔画自然拉平，且 Y 位移保持绝对的 0。\n\n'
-            '4. “同步 / 下载并导入”主按钮字号观察（14px vs 15px / 16px）：\n'
-            '在 42px 主按钮中，当前实装字号为 14px。若感觉字号偏小，可在上方点击 15px 或 16px 查看：15px 墨水更饱满；16px 则与 16px 图标完全等高，顶底双向齐平。\n\n'
-            '5. “收起 / 重置”胶囊按钮字号观察（12px vs 13px / 14px）：\n'
-            '在 30px 高度小胶囊中，当前实装为 12px 字体搭配 14px 图标。若感觉 12px 略单薄，可在上方切换 13px（微调增重）或 14px（与 14px 图标完全 1:1 等高对齐）。',
+          const Text(
+            '【最终敲定方案】\n'
+            '• 对齐基准：顶部对齐 (CrossAxisAlignment.start) + 0位移 (Offset.zero)\n'
+            '• 排版参数：height: 1.0, leadingDistribution: TextLeadingDistribution.even\n\n'
+            '【实装按钮规格规范】\n'
+            '1. 同步 / 下载并导入：字体 14px，Icon 16px\n'
+            '2. 收起 / 重置：字体 12px，Icon 14px\n'
+            '3. 配置文件：字体 14px，Icon 16px\n\n'
+            '【设计原理】\n'
+            '中文字符由于天然缺少西方变音符，在排版盒中沉在底部。在顶部对齐模式下，文本框顶边紧贴图标顶边，使得图标顶边缘墨水与汉字顶端笔画自然拉平，在无需任何 Magic Number 负位移的情况下，实现跨平台最稳健、最纯粹的像素级对齐。',
             style: TextStyle(
               fontSize: 12,
               height: 1.5,

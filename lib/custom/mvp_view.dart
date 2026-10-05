@@ -889,8 +889,8 @@ class _MvpProfileCard extends StatelessWidget {
                 MvpIconLabel(
                   glyph: AppGlyphs.sliders,
                   label: '配置文件',
-                  iconSize: 18,
-                  fontSize: 15,
+                  iconSize: 16,
+                  fontSize: 14,
                   gap: 6,
                   color: MvpTheme.textPrimary,
                 ),
@@ -1172,7 +1172,6 @@ class MvpIconLabel extends StatelessWidget {
     this.fontSize = 14,
     this.gap = 6,
     this.color = Colors.white,
-    this.crossAxisAlignment = CrossAxisAlignment.start,
   });
 
   final Glyph glyph;
@@ -1182,41 +1181,13 @@ class MvpIconLabel extends StatelessWidget {
   final double fontSize;
   final double gap;
   final Color color;
-  final CrossAxisAlignment crossAxisAlignment;
-
-  // CJK glyphs sit on the alphabetic baseline and leave the ascent's accent
-  // room empty above them, so their ink reads low next to a centered icon.
-  static const double cjkOpticalLiftRatio = 0.06;
-  static final RegExp _cjk = RegExp(r'[\u3400-\u9FFF\uF900-\uFAFF]');
-
-  static double opticalOffsetFor(String text, double scaledFontSize) {
-    if (!_cjk.hasMatch(text)) return 0;
-    return -scaledFontSize * cjkOpticalLiftRatio;
-  }
 
   @override
   Widget build(BuildContext context) {
-    final isTopAlign = crossAxisAlignment == CrossAxisAlignment.start;
-    final scaledFontSize = MediaQuery.textScalerOf(context).scale(fontSize);
-    final offset = isTopAlign
-        ? Offset.zero
-        : Offset(0, opticalOffsetFor(label, scaledFontSize));
-
-    final textWidget = Text(
-      label,
-      style: TextStyle(
-        fontSize: fontSize,
-        fontWeight: FontWeight.w600,
-        color: color,
-        height: 1.0,
-        leadingDistribution: TextLeadingDistribution.even,
-      ),
-    );
-
     return Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: crossAxisAlignment,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox.square(
           dimension: iconSize,
@@ -1225,9 +1196,16 @@ class MvpIconLabel extends StatelessWidget {
               : GlyphIcon(glyph, size: iconSize, color: color),
         ),
         SizedBox(width: gap),
-        offset == Offset.zero
-            ? textWidget
-            : Transform.translate(offset: offset, child: textWidget),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: fontSize,
+            fontWeight: FontWeight.w600,
+            color: color,
+            height: 1.0,
+            leadingDistribution: TextLeadingDistribution.even,
+          ),
+        ),
       ],
     );
   }
