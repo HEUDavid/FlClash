@@ -37,7 +37,6 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     String message, {
     MvpToastType type = MvpToastType.info,
     Duration duration = const Duration(seconds: 2),
-    String? copyData,
   }) {
     if (!mounted) return;
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -58,56 +57,20 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
               elevation: 4,
               shadowColor: Colors.black.withValues(alpha: 0.15),
               child: Padding(
-                padding: EdgeInsets.only(
-                  left: 14,
-                  right: copyData != null ? 8 : 14,
-                  top: 10,
-                  bottom: 10,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 10,
                 ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Flexible(
-                      child: Text(
-                        message.trim(),
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white,
-                          height: MvpTheme.lineHeightBody,
-                          leadingDistribution: TextLeadingDistribution.even,
-                        ),
-                      ),
-                    ),
-                    if (copyData != null)
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8),
-                        child: InkWell(
-                          onTap: () {
-                            Clipboard.setData(ClipboardData(text: copyData));
-                            ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                          },
-                          customBorder: AppShape.xs,
-                          child: const Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 6,
-                              vertical: 2,
-                            ),
-                            child: Text(
-                              '复制',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.white,
-                                height: MvpTheme.lineHeightBody,
-                                leadingDistribution:
-                                    TextLeadingDistribution.even,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                  ],
+                child: Text(
+                  message.trim(),
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white,
+                    height: MvpTheme.lineHeightBody,
+                    leadingDistribution: TextLeadingDistribution.even,
+                  ),
                 ),
               ),
             ),
@@ -241,7 +204,6 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
       _showMvpToast(
         '更新失败: $e',
         type: MvpToastType.error,
-        copyData: '更新失败: $e',
         duration: const Duration(seconds: 5),
       );
     } finally {
@@ -290,7 +252,6 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
       _showMvpToast(
         '导入失败: $e',
         type: MvpToastType.error,
-        copyData: '导入失败: $e',
         duration: const Duration(seconds: 5),
       );
     } finally {
