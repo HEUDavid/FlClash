@@ -73,7 +73,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
                           color: Colors.white,
-                          height: 1.25,
+                          height: MvpTheme.lineHeightBody,
                           leadingDistribution: TextLeadingDistribution.even,
                         ),
                       ),
@@ -98,7 +98,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white,
-                                height: 1.15,
+                                height: MvpTheme.lineHeightTight,
                                 leadingDistribution:
                                     TextLeadingDistribution.even,
                               ),
@@ -439,6 +439,8 @@ class _MvpHeaderBar extends StatelessWidget {
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
                 color: MvpTheme.textPrimary,
+                height: MvpTheme.lineHeightBody,
+                leadingDistribution: TextLeadingDistribution.even,
               ),
             ),
           ),
@@ -453,9 +455,14 @@ class _MvpHeaderBar extends StatelessWidget {
                     ? const SizedBox(
                         width: 16,
                         height: 16,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: MvpTheme.textSecondary,
+                        child: Center(
+                          child: SizedBox.square(
+                            dimension: 13,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 1.5,
+                              color: MvpTheme.textMuted,
+                            ),
+                          ),
                         ),
                       )
                     : const GlyphIcon(
@@ -642,7 +649,7 @@ class _MvpStatusHero extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
-                height: 1.2,
+                height: MvpTheme.lineHeightTitle,
                 leadingDistribution: TextLeadingDistribution.even,
                 color: MvpTheme.textPrimary,
               ),
@@ -674,7 +681,7 @@ class _MvpStatusHero extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
-                height: 1.25,
+                height: MvpTheme.lineHeightBody,
                 leadingDistribution: TextLeadingDistribution.even,
                 color: MvpTheme.textSecondary,
               ),
@@ -742,8 +749,8 @@ class _MvpQuickInfoCards extends StatelessWidget {
       decoration: ShapeDecoration(
         color: MvpTheme.cardBg,
         shape: AppShape.md.copyWith(
-          side: BorderSide(
-            color: Colors.black.withValues(alpha: 0.05),
+          side: const BorderSide(
+            color: MvpTheme.cardBorder,
             width: 0.5,
           ),
         ),
@@ -785,6 +792,8 @@ class _MvpQuickInfoCards extends StatelessWidget {
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
                     color: MvpTheme.textSecondary,
+                    height: MvpTheme.lineHeightBody,
+                    leadingDistribution: TextLeadingDistribution.even,
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -796,6 +805,8 @@ class _MvpQuickInfoCards extends StatelessWidget {
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     color: MvpTheme.textPrimary,
+                    height: MvpTheme.lineHeightBody,
+                    leadingDistribution: TextLeadingDistribution.even,
                   ),
                 ),
               ],
@@ -863,8 +874,8 @@ class _MvpProfileCard extends StatelessWidget {
       decoration: ShapeDecoration(
         color: MvpTheme.cardBg,
         shape: AppShape.md.copyWith(
-          side: BorderSide(
-            color: Colors.black.withValues(alpha: 0.05),
+          side: const BorderSide(
+            color: MvpTheme.cardBorder,
             width: 0.5,
           ),
         ),
@@ -1004,6 +1015,8 @@ class _MvpProfileCard extends StatelessWidget {
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: MvpTheme.textPrimary,
+                      height: MvpTheme.lineHeightTitle,
+                      leadingDistribution: TextLeadingDistribution.even,
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -1011,7 +1024,10 @@ class _MvpProfileCard extends StatelessWidget {
                     '更新于：$updateDateStr',
                     style: const TextStyle(
                       fontSize: 12,
+                      fontWeight: FontWeight.w400,
                       color: MvpTheme.textSecondary,
+                      height: MvpTheme.lineHeightBody,
+                      leadingDistribution: TextLeadingDistribution.even,
                     ),
                   ),
                   const SizedBox(height: 6),
@@ -1021,7 +1037,10 @@ class _MvpProfileCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
                       fontSize: 12,
+                      fontWeight: FontWeight.w400,
                       color: MvpTheme.textSecondary,
+                      height: MvpTheme.lineHeightBody,
+                      leadingDistribution: TextLeadingDistribution.even,
                     ),
                   ),
                 ],
@@ -1192,7 +1211,15 @@ class MvpIconLabel extends StatelessWidget {
         SizedBox.square(
           dimension: iconSize,
           child: isLoading
-              ? CircularProgressIndicator(strokeWidth: 2, color: color)
+              ? Center(
+                  child: SizedBox.square(
+                    dimension: (iconSize * 0.82).roundToDouble(),
+                    child: CircularProgressIndicator(
+                      strokeWidth: 1.5,
+                      color: color,
+                    ),
+                  ),
+                )
               : GlyphIcon(glyph, size: iconSize, color: color),
         ),
         SizedBox(width: gap),
@@ -1202,7 +1229,7 @@ class MvpIconLabel extends StatelessWidget {
             fontSize: fontSize,
             fontWeight: FontWeight.w600,
             color: color,
-            height: 1.0,
+            height: MvpTheme.lineHeightTight,
             leadingDistribution: TextLeadingDistribution.even,
           ),
         ),
