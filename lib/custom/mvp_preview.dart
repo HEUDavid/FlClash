@@ -80,6 +80,7 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
   _AlignPreset _preset = _AlignPreset.topAlign;
   double _offsetY = 0.0;
   double _iconSize = 16.0;
+  double _fontSize = 14.0;
   double _zoomScale = 8.0;
   CrossAxisAlignment _crossAxisAlignment = CrossAxisAlignment.start;
 
@@ -89,18 +90,29 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
   Glyph _selectedGlyph = AppGlyphs.sync;
   String _buttonText = '同步';
 
-  final List<(Glyph, String, String)> _glyphOptions = [
-    (AppGlyphs.sync, '同步', 'AppGlyphs.sync'),
-    (AppGlyphs.arrowDown, '下载并导入', 'AppGlyphs.arrowDown'),
-    (AppGlyphs.check, '确认完成', 'AppGlyphs.check'),
-    (AppGlyphs.sliders, '配置文件', 'AppGlyphs.sliders'),
+  final List<(Glyph, String, double, double, String)> _mvpButtons = [
+    (AppGlyphs.sync, '同步', 16.0, 14.0, '主操作按钮 (实装: 16/14)'),
+    (AppGlyphs.chevronUp, '收起', 14.0, 12.0, '顶部胶囊 (实装: 14/12)'),
+    (AppGlyphs.reset, '重置', 14.0, 12.0, '危险胶囊 (实装: 14/12)'),
+    (AppGlyphs.arrowDown, '下载并导入', 16.0, 14.0, '长主按钮 (实装: 16/14)'),
+    (AppGlyphs.sliders, '配置文件', 18.0, 15.0, '卡片标题 (实装: 18/15)'),
+    (AppGlyphs.check, '确认完成', 16.0, 14.0, '常规按钮 (16/14)'),
   ];
+
+  void _selectMvpButton((Glyph, String, double, double, String) item) {
+    setState(() {
+      _selectedGlyph = item.$1;
+      _buttonText = item.$2;
+      _iconSize = item.$3;
+      _fontSize = item.$4;
+    });
+  }
 
   void _applyPreset(_AlignPreset preset) {
     setState(() {
       _preset = preset;
       _offsetY = preset == _AlignPreset.finalDesign
-          ? MvpIconLabel.opticalOffsetFor(_buttonText, 14)
+          ? MvpIconLabel.opticalOffsetFor(_buttonText, _fontSize)
           : preset.defaultOffset;
       _iconSize = preset.defaultIconSize;
       _crossAxisAlignment = preset.crossAxisAlignment;
@@ -199,7 +211,7 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
                   ),
                 ),
                 Text(
-                  '缩放: ${_zoomScale.toInt()}x  |  基准: ${_crossAxisAlignment == CrossAxisAlignment.start ? "顶部(start)" : "居中(center)"}  |  Y位移: ${_offsetY >= 0 ? '+' : ''}${_offsetY.toStringAsFixed(1)}px',
+                  '缩放: ${_zoomScale.toInt()}x  |  基准: ${_crossAxisAlignment == CrossAxisAlignment.start ? "顶部(start)" : "居中(center)"}  |  Icon: ${_iconSize.toInt()}px  |  字号: ${_fontSize.toStringAsFixed(0)}px  |  Y位移: ${_offsetY >= 0 ? '+' : ''}${_offsetY.toStringAsFixed(1)}px',
                   style: const TextStyle(
                     fontSize: 12,
                     fontFamily: 'monospace',
@@ -268,9 +280,9 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
                     ),
                   ),
                   const SizedBox(width: 4),
-                  const Text(
-                    'Icon盒 (高16px)',
-                    style: TextStyle(
+                  Text(
+                    'Icon盒 (${_iconSize.toInt()}px)',
+                    style: const TextStyle(
                       fontSize: 11,
                       color: Colors.black87,
                       fontWeight: FontWeight.w600,
@@ -285,9 +297,9 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
                     ),
                   ),
                   const SizedBox(width: 4),
-                  const Text(
-                    'Text盒 (高14px)',
-                    style: TextStyle(
+                  Text(
+                    'Text盒 (${_fontSize.toInt()}px)',
+                    style: const TextStyle(
                       fontSize: 11,
                       color: Colors.black87,
                       fontWeight: FontWeight.w600,
@@ -306,35 +318,39 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
                   top: BorderSide(color: Color(0xFFF1F5F9), width: 1),
                 ),
               ),
-              child: Row(
-                children: [
-                  const Text(
-                    'Icon盒 Y坐标: 顶 0.00 / 中 8.00 / 底 16.00 px',
-                    style: TextStyle(
-                      fontSize: 10.5,
-                      fontFamily: 'monospace',
-                      color: MvpTheme.textSecondary,
-                    ),
-                  ),
-                  const Spacer(),
-                  Builder(
-                    builder: (context) {
-                      final double textBaseTop = _crossAxisAlignment == CrossAxisAlignment.start ? 0.0 : 1.0;
-                      final double textTop = textBaseTop + _offsetY;
-                      final double textCenter = textBaseTop + 7.0 + _offsetY;
-                      final double textBottom = textBaseTop + 14.0 + _offsetY;
-                      return Text(
-                        'Text盒 Y坐标: 顶 ${textTop >= 0 ? '+' : ''}${textTop.toStringAsFixed(2)} / 中 ${textCenter >= 0 ? '+' : ''}${textCenter.toStringAsFixed(2)} / 底 ${textBottom >= 0 ? '+' : ''}${textBottom.toStringAsFixed(2)} px',
+              child: Builder(
+                builder: (context) {
+                  final double iconCenter = _iconSize / 2;
+                  final double iconBottom = _iconSize;
+                  final double textBaseTop = _crossAxisAlignment == CrossAxisAlignment.start
+                      ? 0.0
+                      : (_iconSize - _fontSize) / 2;
+                  final double textTop = textBaseTop + _offsetY;
+                  final double textCenter = textBaseTop + (_fontSize / 2) + _offsetY;
+                  final double textBottom = textBaseTop + _fontSize + _offsetY;
+                  return Row(
+                    children: [
+                      Text(
+                        'Icon盒 Y: 顶 0.00 / 中 ${iconCenter.toStringAsFixed(2)} / 底 ${iconBottom.toStringAsFixed(2)} px',
+                        style: const TextStyle(
+                          fontSize: 10.5,
+                          fontFamily: 'monospace',
+                          color: MvpTheme.textSecondary,
+                        ),
+                      ),
+                      const Spacer(),
+                      Text(
+                        'Text盒 Y: 顶 ${textTop >= 0 ? '+' : ''}${textTop.toStringAsFixed(2)} / 中 ${textCenter >= 0 ? '+' : ''}${textCenter.toStringAsFixed(2)} / 底 ${textBottom >= 0 ? '+' : ''}${textBottom.toStringAsFixed(2)} px',
                         style: const TextStyle(
                           fontSize: 10.5,
                           fontFamily: 'monospace',
                           fontWeight: FontWeight.w600,
                           color: Colors.black87,
                         ),
-                      );
-                    },
-                  ),
-                ],
+                      ),
+                    ],
+                  );
+                },
               ),
             ),
         ],
@@ -344,7 +360,7 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
 
   Widget _buildInspectedButton() {
     final TextStyle textStyle = TextStyle(
-      fontSize: 14,
+      fontSize: _fontSize,
       fontWeight: FontWeight.w600,
       color: Colors.white,
       height: _preset.lineHeight,
@@ -425,7 +441,48 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            '1. 对齐预设模式对比',
+            '1. MVP 实装按钮场景 (一键切换图标与推荐尺寸)',
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              color: MvpTheme.textPrimary,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: _mvpButtons.map((item) {
+              final isSelected = _selectedGlyph == item.$1 && _buttonText == item.$2;
+              return ChoiceChip(
+                label: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    GlyphIcon(
+                      item.$1,
+                      size: 14,
+                      color: isSelected ? Colors.white : MvpTheme.textPrimary,
+                    ),
+                    const SizedBox(width: 4),
+                    Text('${item.$2} (${item.$4.toInt()}px)'),
+                  ],
+                ),
+                selected: isSelected,
+                labelStyle: TextStyle(
+                  fontSize: 12,
+                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                  color: isSelected ? Colors.white : MvpTheme.textPrimary,
+                ),
+                selectedColor: MvpTheme.activeColor,
+                backgroundColor: const Color(0xFFF1F5F9),
+                shape: AppShape.all(8),
+                onSelected: (_) => _selectMvpButton(item),
+              );
+            }).toList(),
+          ),
+          const SizedBox(height: 16),
+          const Text(
+            '2. 对齐预设模式对比',
             style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w600,
@@ -457,8 +514,82 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    '3. 字号尺寸调节 (Font Size)',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: MvpTheme.textPrimary,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    '当前: ${_fontSize.toStringAsFixed(0)}px  (重点对比 12/13/14/15/16px)',
+                    style: const TextStyle(
+                      fontSize: 11,
+                      color: MvpTheme.textSecondary,
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  _buildStepButton(
+                    icon: Icons.remove,
+                    onTap: () {
+                      setState(() {
+                        _fontSize = (_fontSize - 1.0).clamp(10.0, 24.0);
+                      });
+                    },
+                  ),
+                  const SizedBox(width: 4),
+                  ...[12.0, 13.0, 14.0, 15.0, 16.0].map((size) {
+                    final isSelected = _fontSize == size;
+                    return Padding(
+                      padding: const EdgeInsets.only(left: 4),
+                      child: InkWell(
+                        onTap: () => setState(() => _fontSize = size),
+                        customBorder: AppShape.xs,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          decoration: ShapeDecoration(
+                            color: isSelected ? MvpTheme.activeColor : const Color(0xFFF1F5F9),
+                            shape: AppShape.xs,
+                          ),
+                          child: Text(
+                            '${size.toInt()}',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: isSelected ? Colors.white : MvpTheme.textSecondary,
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  }),
+                  const SizedBox(width: 4),
+                  _buildStepButton(
+                    icon: Icons.add,
+                    onTap: () {
+                      setState(() {
+                        _fontSize = (_fontSize + 1.0).clamp(10.0, 24.0);
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
               const Text(
-                '2. Icon 尺寸调节',
+                '4. Icon 尺寸调节',
                 style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
@@ -466,7 +597,7 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
                 ),
               ),
               Row(
-                children: [14.0, 15.0, 16.0].map((size) {
+                children: [14.0, 15.0, 16.0, 18.0].map((size) {
                   final isSelected = _iconSize == size;
                   return Padding(
                     padding: const EdgeInsets.only(left: 6),
@@ -504,7 +635,7 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
-                '3. 对齐基准 (CrossAxisAlignment)',
+                '5. 对齐基准 (CrossAxisAlignment)',
                 style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
@@ -553,7 +684,7 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
-                '4. Y轴微调偏移量 (Offset Y)',
+                '6. Y轴微调偏移量 (Offset Y)',
                 style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
@@ -615,7 +746,7 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
           ),
           const SizedBox(height: 8),
           const Text(
-            '3. 辅助观察工具',
+            '7. 辅助观察工具',
             style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w600,
@@ -682,52 +813,6 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
               }),
             ],
           ),
-          const SizedBox(height: 16),
-          const Text(
-            '4. 切换测试文案与图标',
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w600,
-              color: MvpTheme.textPrimary,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: _glyphOptions.map((item) {
-              final isSelected = _selectedGlyph == item.$1 && _buttonText == item.$2;
-              return ChoiceChip(
-                label: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    GlyphIcon(
-                      item.$1,
-                      size: 14,
-                      color: isSelected ? Colors.white : MvpTheme.textPrimary,
-                    ),
-                    const SizedBox(width: 4),
-                    Text(item.$2),
-                  ],
-                ),
-                selected: isSelected,
-                labelStyle: TextStyle(
-                  fontSize: 12,
-                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-                  color: isSelected ? Colors.white : MvpTheme.textPrimary,
-                ),
-                selectedColor: MvpTheme.activeColor,
-                backgroundColor: const Color(0xFFF1F5F9),
-                shape: AppShape.all(8),
-                onSelected: (_) {
-                  setState(() {
-                    _selectedGlyph = item.$1;
-                    _buttonText = item.$2;
-                  });
-                },
-              );
-            }).toList(),
-          ),
         ],
       ),
     );
@@ -792,10 +877,12 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
             '字体的排版盒子高度由 ascent（上延）和 descent（下延）决定。中文字符直接坐在 Baseline 基线上，底边距（Descent）极小；而顶端（Ascent）留有大片西文变音符空间，因此字形天生沉在盒子底部。\n\n'
             '2. 为什么历史代码写 +0.8px 会雪上加霜？\n'
             '之前代码写了 Offset(0, 0.8)，相当于把原本就偏下的汉字又向下推了 0.8px，导致底部空隙更小、顶部空隙更大。\n\n'
-            '3. 解决方案：\n'
-            '通过向上负补偿（例如 Offset(0, -0.8px) 到 -1.0px），把汉字墨水视觉中心向上提，精准落在贯穿 16px 图标正中的红线上。\n\n'
-            '4. 顶部对齐（CrossAxisAlignment.start）实测原理：\n'
-            'Icon 是 16px，汉字是 14px。当顶部对齐时，14px 文本框顶边紧贴 16px 图标顶边，文本在物理盒模型上自动向上提了恰好 (16-14)/2 = 1.0px！这正好抵消了汉字顶部多出的约 1px Ascent 留白，使得图标顶边墨水与汉字顶笔画自然拉平，且 Y 位移保持绝对的 0。',
+            '3. 顶部对齐（CrossAxisAlignment.start）实测原理：\n'
+            'Icon 是 16px，汉字是 14px。当顶部对齐时，14px 文本框顶边紧贴 16px 图标顶边，文本在物理盒模型上自动向上提了恰好 (16-14)/2 = 1.0px！这正好抵消了汉字顶部多出的约 1px Ascent 留白，使得图标顶边墨水与汉字顶笔画自然拉平，且 Y 位移保持绝对的 0。\n\n'
+            '4. “同步 / 下载并导入”主按钮字号观察（14px vs 15px / 16px）：\n'
+            '在 42px 主按钮中，当前实装字号为 14px。若感觉字号偏小，可在上方点击 15px 或 16px 查看：15px 墨水更饱满；16px 则与 16px 图标完全等高，顶底双向齐平。\n\n'
+            '5. “收起 / 重置”胶囊按钮字号观察（12px vs 13px / 14px）：\n'
+            '在 30px 高度小胶囊中，当前实装为 12px 字体搭配 14px 图标。若感觉 12px 略单薄，可在上方切换 13px（微调增重）或 14px（与 14px 图标完全 1:1 等高对齐）。',
             style: TextStyle(
               fontSize: 12,
               height: 1.5,
