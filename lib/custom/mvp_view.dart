@@ -63,7 +63,6 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                 ),
                 child: Text(
                   message.trim(),
-                  textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
