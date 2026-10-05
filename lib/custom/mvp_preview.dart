@@ -264,31 +264,79 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
                     width: 8,
                     height: 8,
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.cyan, width: 1.5),
+                      border: Border.all(color: Colors.black, width: 1.5),
                     ),
                   ),
                   const SizedBox(width: 4),
                   const Text(
-                    'Icon盒',
-                    style: TextStyle(fontSize: 11, color: Colors.cyan),
+                    'Icon盒 (高16px)',
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: Colors.black87,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   const SizedBox(width: 8),
                   Container(
                     width: 8,
                     height: 8,
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.amber, width: 1.5),
+                      border: Border.all(color: Colors.black, width: 1.5),
                     ),
                   ),
                   const SizedBox(width: 4),
                   const Text(
-                    'Text盒',
-                    style: TextStyle(fontSize: 11, color: Colors.amber),
+                    'Text盒 (高14px)',
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: Colors.black87,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ],
               ],
             ),
           ),
+          if (_showBoundingBox)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: const BoxDecoration(
+                color: Color(0xFFF8FAFC),
+                border: Border(
+                  top: BorderSide(color: Color(0xFFF1F5F9), width: 1),
+                ),
+              ),
+              child: Row(
+                children: [
+                  const Text(
+                    'Icon盒 Y坐标: 顶 0.00 / 中 8.00 / 底 16.00 px',
+                    style: TextStyle(
+                      fontSize: 10.5,
+                      fontFamily: 'monospace',
+                      color: MvpTheme.textSecondary,
+                    ),
+                  ),
+                  const Spacer(),
+                  Builder(
+                    builder: (context) {
+                      final double textBaseTop = _crossAxisAlignment == CrossAxisAlignment.start ? 0.0 : 1.0;
+                      final double textTop = textBaseTop + _offsetY;
+                      final double textCenter = textBaseTop + 7.0 + _offsetY;
+                      final double textBottom = textBaseTop + 14.0 + _offsetY;
+                      return Text(
+                        'Text盒 Y坐标: 顶 ${textTop >= 0 ? '+' : ''}${textTop.toStringAsFixed(2)} / 中 ${textCenter >= 0 ? '+' : ''}${textCenter.toStringAsFixed(2)} / 底 ${textBottom >= 0 ? '+' : ''}${textBottom.toStringAsFixed(2)} px',
+                        style: const TextStyle(
+                          fontSize: 10.5,
+                          fontFamily: 'monospace',
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black87,
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
         ],
       ),
     );
@@ -327,8 +375,8 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
             decoration: _showBoundingBox
                 ? BoxDecoration(
                     border: Border.all(
-                      color: Colors.cyan,
-                      width: 0.75,
+                      color: Colors.black,
+                      width: 1.0,
                     ),
                   )
                 : null,
@@ -345,8 +393,8 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
               decoration: _showBoundingBox
                   ? BoxDecoration(
                       border: Border.all(
-                        color: Colors.amber,
-                        width: 0.75,
+                        color: Colors.black,
+                        width: 1.0,
                       ),
                     )
                   : null,
@@ -591,13 +639,13 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
               ),
               const SizedBox(width: 8),
               FilterChip(
-                label: const Text('渲染外框盒'),
+                label: const Text('黑色渲染外框盒'),
                 selected: _showBoundingBox,
-                selectedColor: Colors.amber.withValues(alpha: 0.15),
-                checkmarkColor: Colors.amber[800],
+                selectedColor: Colors.black.withValues(alpha: 0.1),
+                checkmarkColor: Colors.black87,
                 labelStyle: TextStyle(
                   fontSize: 12,
-                  color: _showBoundingBox ? Colors.amber[800] : MvpTheme.textSecondary,
+                  color: _showBoundingBox ? Colors.black87 : MvpTheme.textSecondary,
                 ),
                 shape: AppShape.all(8),
                 onSelected: (val) => setState(() => _showBoundingBox = val),
