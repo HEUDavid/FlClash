@@ -1169,7 +1169,7 @@ class MvpIconLabel extends StatelessWidget {
     this.isLoading = false,
     this.iconSize = 16,
     this.fontSize = 14,
-    this.gap = 8,
+    this.gap = 6,
     this.color = Colors.white,
   });
 
