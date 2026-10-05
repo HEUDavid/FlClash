@@ -6,6 +6,7 @@ import 'package:material_ui/material_ui.dart';
 
 import 'mvp_bridge.dart';
 import 'mvp_models.dart';
+import 'mvp_preview.dart';
 import 'mvp_provider.dart';
 import 'mvp_theme.dart';
 
@@ -408,6 +409,27 @@ class _MvpHeaderBar extends StatelessWidget {
       child: Stack(
         alignment: Alignment.center,
         children: [
+          Align(
+            alignment: Alignment.centerLeft,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const MvpAlignPreviewView(),
+                  ),
+                );
+              },
+              behavior: HitTestBehavior.opaque,
+              child: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                child: GlyphIcon(
+                  AppGlyphs.sliders,
+                  size: 16,
+                  color: MvpTheme.textMuted,
+                ),
+              ),
+            ),
+          ),
           GestureDetector(
             onTap: onMinimalTap,
             behavior: HitTestBehavior.opaque,
@@ -1150,6 +1172,7 @@ class MvpIconLabel extends StatelessWidget {
     this.fontSize = 14,
     this.gap = 6,
     this.color = Colors.white,
+    this.crossAxisAlignment = CrossAxisAlignment.start,
   });
 
   final Glyph glyph;
@@ -1159,6 +1182,7 @@ class MvpIconLabel extends StatelessWidget {
   final double fontSize;
   final double gap;
   final Color color;
+  final CrossAxisAlignment crossAxisAlignment;
 
   // CJK glyphs sit on the alphabetic baseline and leave the ascent's accent
   // room empty above them, so their ink reads low next to a centered icon.
@@ -1172,11 +1196,16 @@ class MvpIconLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isTopAlign = crossAxisAlignment == CrossAxisAlignment.start;
     final scaledFontSize = MediaQuery.textScalerOf(context).scale(fontSize);
+    final offset = isTopAlign
+        ? Offset.zero
+        : Offset(0, opticalOffsetFor(label, scaledFontSize));
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: crossAxisAlignment,
       children: [
         SizedBox.square(
           dimension: iconSize,
@@ -1186,7 +1215,7 @@ class MvpIconLabel extends StatelessWidget {
         ),
         SizedBox(width: gap),
         Transform.translate(
-          offset: Offset(0, opticalOffsetFor(label, scaledFontSize)),
+          offset: offset,
           child: Text(
             label,
             style: TextStyle(

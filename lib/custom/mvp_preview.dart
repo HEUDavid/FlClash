@@ -50,19 +50,21 @@ class MvpAlignPreviewView extends StatefulWidget {
 }
 
 enum _AlignPreset {
-  finalDesign('最终方案 (MvpIconLabel: 16px + 字号×6% 上提)', 0.0, 1.0, TextLeadingDistribution.even, 16.0),
-  planA('方案 A (Icon 14px + 零位移)', 0.0, 1.0, TextLeadingDistribution.even, 14.0),
-  planB('方案 B (Icon 15px + 零位移)', 0.0, 1.0, TextLeadingDistribution.even, 15.0),
-  zeroOffset16('对照组 (Icon 16px + 零位移)', 0.0, 1.0, TextLeadingDistribution.even, 16.0),
-  negative08('方案一 (Icon 16px -0.8px 补偿)', -0.8, 1.0, TextLeadingDistribution.even, 16.0),
-  oldBug('历史误用 (+0.8px 向下加剧)', 0.8, 1.15, TextLeadingDistribution.even, 16.0),
-  custom('自由微调', 0.0, 1.0, TextLeadingDistribution.even, 15.0);
+  topAlign('💡 顶部对齐 (CrossAxisAlignment.start + 0位移)', 0.0, 1.0, TextLeadingDistribution.even, 16.0, CrossAxisAlignment.start),
+  finalDesign('比例微提 (居中 + 字号×6% 上提)', 0.0, 1.0, TextLeadingDistribution.even, 16.0, CrossAxisAlignment.center),
+  planA('方案 A (Icon 14px + 零位移 居中)', 0.0, 1.0, TextLeadingDistribution.even, 14.0, CrossAxisAlignment.center),
+  planB('方案 B (Icon 15px + 零位移 居中)', 0.0, 1.0, TextLeadingDistribution.even, 15.0, CrossAxisAlignment.center),
+  zeroOffset16('对照组 (Icon 16px + 零位移 居中)', 0.0, 1.0, TextLeadingDistribution.even, 16.0, CrossAxisAlignment.center),
+  negative08('方案一 (Icon 16px -0.8px 补偿)', -0.8, 1.0, TextLeadingDistribution.even, 16.0, CrossAxisAlignment.center),
+  oldBug('历史误用 (+0.8px 向下加剧)', 0.8, 1.15, TextLeadingDistribution.even, 16.0, CrossAxisAlignment.center),
+  custom('自由微调', 0.0, 1.0, TextLeadingDistribution.even, 16.0, CrossAxisAlignment.start);
 
   final String label;
   final double defaultOffset;
   final double? lineHeight;
   final TextLeadingDistribution leadingDist;
   final double defaultIconSize;
+  final CrossAxisAlignment crossAxisAlignment;
 
   const _AlignPreset(
     this.label,
@@ -70,14 +72,16 @@ enum _AlignPreset {
     this.lineHeight,
     this.leadingDist,
     this.defaultIconSize,
+    this.crossAxisAlignment,
   );
 }
 
 class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
-  _AlignPreset _preset = _AlignPreset.finalDesign;
-  double _offsetY = MvpIconLabel.opticalOffsetFor('同步', 14);
+  _AlignPreset _preset = _AlignPreset.topAlign;
+  double _offsetY = 0.0;
   double _iconSize = 16.0;
   double _zoomScale = 8.0;
+  CrossAxisAlignment _crossAxisAlignment = CrossAxisAlignment.start;
 
   bool _showCenterLine = true;
   bool _showBoundingBox = true;
@@ -99,6 +103,7 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
           ? MvpIconLabel.opticalOffsetFor(_buttonText, 14)
           : preset.defaultOffset;
       _iconSize = preset.defaultIconSize;
+      _crossAxisAlignment = preset.crossAxisAlignment;
     });
   }
 
@@ -194,7 +199,7 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
                   ),
                 ),
                 Text(
-                  '缩放: ${_zoomScale.toInt()}x  |  Icon: ${_iconSize.toInt()}px  |  Y位移: ${_offsetY >= 0 ? '+' : ''}${_offsetY.toStringAsFixed(1)}px',
+                  '缩放: ${_zoomScale.toInt()}x  |  基准: ${_crossAxisAlignment == CrossAxisAlignment.start ? "顶部(start)" : "居中(center)"}  |  Y位移: ${_offsetY >= 0 ? '+' : ''}${_offsetY.toStringAsFixed(1)}px',
                   style: const TextStyle(
                     fontSize: 12,
                     fontFamily: 'monospace',
@@ -316,7 +321,7 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: _crossAxisAlignment,
         children: [
           Container(
             decoration: _showBoundingBox
@@ -451,7 +456,56 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
-                '3. Y轴微调偏移量 (Offset Y)',
+                '3. 对齐基准 (CrossAxisAlignment)',
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: MvpTheme.textPrimary,
+                ),
+              ),
+              Row(
+                children: [
+                  (CrossAxisAlignment.start, '顶部对齐 (start)'),
+                  (CrossAxisAlignment.center, '居中对齐 (center)'),
+                ].map((item) {
+                  final isSelected = _crossAxisAlignment == item.$1;
+                  return Padding(
+                    padding: const EdgeInsets.only(left: 6),
+                    child: InkWell(
+                      onTap: () {
+                        setState(() {
+                          _crossAxisAlignment = item.$1;
+                          _preset = _AlignPreset.custom;
+                        });
+                      },
+                      customBorder: AppShape.xs,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        decoration: ShapeDecoration(
+                          color: isSelected ? MvpTheme.activeColor : const Color(0xFFF1F5F9),
+                          shape: AppShape.xs,
+                        ),
+                        child: Text(
+                          item.$2,
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: isSelected ? Colors.white : MvpTheme.textSecondary,
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                '4. Y轴微调偏移量 (Offset Y)',
                 style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
@@ -691,7 +745,9 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
             '2. 为什么历史代码写 +0.8px 会雪上加霜？\n'
             '之前代码写了 Offset(0, 0.8)，相当于把原本就偏下的汉字又向下推了 0.8px，导致底部空隙更小、顶部空隙更大。\n\n'
             '3. 解决方案：\n'
-            '通过向上负补偿（例如 Offset(0, -0.8px) 到 -1.0px），把汉字墨水视觉中心向上提，精准落在贯穿 16px 图标正中的红线上。',
+            '通过向上负补偿（例如 Offset(0, -0.8px) 到 -1.0px），把汉字墨水视觉中心向上提，精准落在贯穿 16px 图标正中的红线上。\n\n'
+            '4. 顶部对齐（CrossAxisAlignment.start）实测原理：\n'
+            'Icon 是 16px，汉字是 14px。当顶部对齐时，14px 文本框顶边紧贴 16px 图标顶边，文本在物理盒模型上自动向上提了恰好 (16-14)/2 = 1.0px！这正好抵消了汉字顶部多出的约 1px Ascent 留白，使得图标顶边墨水与汉字顶笔画自然拉平，且 Y 位移保持绝对的 0。',
             style: TextStyle(
               fontSize: 12,
               height: 1.5,
