@@ -437,9 +437,9 @@ class _MvpHeaderBar extends StatelessWidget {
                         height: 16,
                         child: Center(
                           child: SizedBox.square(
-                            dimension: 13,
+                            dimension: 10.5,
                             child: CircularProgressIndicator(
-                              strokeWidth: 1.5,
+                              strokeWidth: 1.2,
                               color: MvpTheme.textMuted,
                             ),
                           ),
@@ -1193,9 +1193,9 @@ class MvpIconLabel extends StatelessWidget {
           child: isLoading
               ? Center(
                   child: SizedBox.square(
-                    dimension: (iconSize * 0.82).roundToDouble(),
+                    dimension: iconSize * (10.5 / 16),
                     child: CircularProgressIndicator(
-                      strokeWidth: 1.5,
+                      strokeWidth: 1.2,
                       color: color,
                     ),
                   ),
