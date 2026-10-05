@@ -13,7 +13,7 @@ abstract final class MvpTheme {
 
   static const dangerColor = Color(0xFFEF4444);
   static const dangerText = Color(0xFFF87171);
-  static final inputBg = inactiveBadgeBg.withValues(alpha: 0.02);
+  static final inputBg = inactiveBadgeBg.withValues(alpha: 0.01);
 
   static const textPrimary = Color(0xFF0F172A);
   static const textSecondary = Color(0xFF64748B);
