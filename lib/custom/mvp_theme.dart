@@ -4,7 +4,7 @@ abstract final class MvpTheme {
   static const bgPrimary = Color(0xFFF8FAFC);
   static const cardBg = Color(0xFFFFFFFF);
   static const cardBorder = Color(0x0D000000);
-  static const borderColor = Color(0x0D000000);
+  static const borderColor = Color(0x14000000);
 
   static const activeColor = Color(0xFF10B981);
 
