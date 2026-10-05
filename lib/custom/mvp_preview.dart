@@ -588,45 +588,80 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                '4. Icon 尺寸调节',
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                  color: MvpTheme.textPrimary,
-                ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    '4. Icon 尺寸调节',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: MvpTheme.textPrimary,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    '当前: ${_iconSize.toStringAsFixed(0)}px  (支持 10/12/14/15/16/18px)',
+                    style: const TextStyle(
+                      fontSize: 11,
+                      color: MvpTheme.textSecondary,
+                    ),
+                  ),
+                ],
               ),
               Row(
-                children: [14.0, 15.0, 16.0, 18.0].map((size) {
-                  final isSelected = _iconSize == size;
-                  return Padding(
-                    padding: const EdgeInsets.only(left: 6),
-                    child: InkWell(
-                      onTap: () {
-                        setState(() {
-                          _iconSize = size;
-                          _preset = _AlignPreset.custom;
-                        });
-                      },
-                      customBorder: AppShape.xs,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                        decoration: ShapeDecoration(
-                          color: isSelected ? MvpTheme.activeColor : const Color(0xFFF1F5F9),
-                          shape: AppShape.xs,
-                        ),
-                        child: Text(
-                          '${size.toInt()}px',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            color: isSelected ? Colors.white : MvpTheme.textSecondary,
+                children: [
+                  _buildStepButton(
+                    icon: Icons.remove,
+                    onTap: () {
+                      setState(() {
+                        _iconSize = (_iconSize - 1.0).clamp(8.0, 24.0);
+                        _preset = _AlignPreset.custom;
+                      });
+                    },
+                  ),
+                  const SizedBox(width: 4),
+                  ...[10.0, 12.0, 14.0, 15.0, 16.0, 18.0].map((size) {
+                    final isSelected = _iconSize == size;
+                    return Padding(
+                      padding: const EdgeInsets.only(left: 4),
+                      child: InkWell(
+                        onTap: () {
+                          setState(() {
+                            _iconSize = size;
+                            _preset = _AlignPreset.custom;
+                          });
+                        },
+                        customBorder: AppShape.xs,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 4),
+                          decoration: ShapeDecoration(
+                            color: isSelected ? MvpTheme.activeColor : const Color(0xFFF1F5F9),
+                            shape: AppShape.xs,
+                          ),
+                          child: Text(
+                            '${size.toInt()}',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: isSelected ? Colors.white : MvpTheme.textSecondary,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  );
-                }).toList(),
+                    );
+                  }),
+                  const SizedBox(width: 4),
+                  _buildStepButton(
+                    icon: Icons.add,
+                    onTap: () {
+                      setState(() {
+                        _iconSize = (_iconSize + 1.0).clamp(8.0, 24.0);
+                        _preset = _AlignPreset.custom;
+                      });
+                    },
+                  ),
+                ],
               ),
             ],
           ),
