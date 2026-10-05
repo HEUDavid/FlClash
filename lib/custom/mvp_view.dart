@@ -6,7 +6,6 @@ import 'package:material_ui/material_ui.dart';
 
 import 'mvp_bridge.dart';
 import 'mvp_models.dart';
-import 'mvp_preview.dart';
 import 'mvp_provider.dart';
 import 'mvp_theme.dart';
 
@@ -411,27 +410,6 @@ class _MvpHeaderBar extends StatelessWidget {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: GestureDetector(
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const MvpAlignPreviewView(),
-                  ),
-                );
-              },
-              behavior: HitTestBehavior.opaque,
-              child: const Padding(
-                padding: EdgeInsets.only(top: 8, bottom: 8, right: 12),
-                child: GlyphIcon(
-                  AppGlyphs.sliders,
-                  size: 16,
-                  color: MvpTheme.textMuted,
-                ),
-              ),
-            ),
-          ),
           GestureDetector(
             onTap: onMinimalTap,
             behavior: HitTestBehavior.opaque,
@@ -750,7 +728,7 @@ class _MvpQuickInfoCards extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: ShapeDecoration(
         color: MvpTheme.cardBg,
-        shape: AppShape.lg.copyWith(
+        shape: AppShape.md.copyWith(
           side: const BorderSide(
             color: MvpTheme.cardBorder,
             width: 0.5,
@@ -875,7 +853,7 @@ class _MvpProfileCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: ShapeDecoration(
         color: MvpTheme.cardBg,
-        shape: AppShape.xl.copyWith(
+        shape: AppShape.md.copyWith(
           side: const BorderSide(
             color: MvpTheme.cardBorder,
             width: 0.5,
@@ -978,7 +956,7 @@ class _MvpProfileCard extends StatelessWidget {
         alignment: Alignment.center,
         decoration: ShapeDecoration(
           color: backgroundColor,
-          shape: AppShape.all(12),
+          shape: AppShape.sm,
         ),
         child: MvpIconLabel(
           glyph: icon,
@@ -1059,7 +1037,7 @@ class _MvpProfileCard extends StatelessWidget {
                 ),
                 decoration: ShapeDecoration(
                   color: MvpTheme.activeColor,
-                  shape: AppShape.all(12),
+                  shape: AppShape.sm,
                   shadows: [
                     BoxShadow(
                       color: MvpTheme.activeColor.withValues(alpha: 0.2),
@@ -1093,7 +1071,7 @@ class _MvpProfileCard extends StatelessWidget {
             Container(
               decoration: ShapeDecoration(
                 color: MvpTheme.inputBg,
-                shape: AppShape.all(12).copyWith(
+                shape: AppShape.sm.copyWith(
                   side: BorderSide(
                     color: Colors.black.withValues(alpha: 0.08),
                     width: 0.5,
@@ -1160,7 +1138,7 @@ class _MvpProfileCard extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 decoration: ShapeDecoration(
                   color: MvpTheme.activeColor,
-                  shape: AppShape.all(12),
+                  shape: AppShape.sm,
                   shadows: [
                     BoxShadow(
                       color: MvpTheme.activeColor.withValues(alpha: 0.2),
