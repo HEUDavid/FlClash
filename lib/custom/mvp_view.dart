@@ -1202,6 +1202,17 @@ class MvpIconLabel extends StatelessWidget {
         ? Offset.zero
         : Offset(0, opticalOffsetFor(label, scaledFontSize));
 
+    final textWidget = Text(
+      label,
+      style: TextStyle(
+        fontSize: fontSize,
+        fontWeight: FontWeight.w600,
+        color: color,
+        height: 1.0,
+        leadingDistribution: TextLeadingDistribution.even,
+      ),
+    );
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -1214,19 +1225,9 @@ class MvpIconLabel extends StatelessWidget {
               : GlyphIcon(glyph, size: iconSize, color: color),
         ),
         SizedBox(width: gap),
-        Transform.translate(
-          offset: offset,
-          child: Text(
-            label,
-            style: TextStyle(
-              fontSize: fontSize,
-              fontWeight: FontWeight.w600,
-              color: color,
-              height: 1.0,
-              leadingDistribution: TextLeadingDistribution.even,
-            ),
-          ),
-        ),
+        offset == Offset.zero
+            ? textWidget
+            : Transform.translate(offset: offset, child: textWidget),
       ],
     );
   }
