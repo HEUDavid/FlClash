@@ -1195,7 +1195,7 @@ class MvpIconLabel extends StatelessWidget {
                   child: SizedBox.square(
                     dimension: iconSize * (11 / 16),
                     child: CircularProgressIndicator(
-                      strokeWidth: 1.3,
+                      strokeWidth: 1.4,
                       color: color,
                     ),
                   ),
