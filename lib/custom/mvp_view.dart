@@ -921,7 +921,7 @@ class _MvpProfileCard extends StatelessWidget {
         child: MvpIconLabel(
           glyph: icon,
           label: label,
-          iconSize: 14,
+          iconSize: 13,
           fontSize: 12,
           gap: 5,
           color: color,
