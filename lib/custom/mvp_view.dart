@@ -916,7 +916,7 @@ class _MvpProfileCard extends StatelessWidget {
         alignment: Alignment.center,
         decoration: ShapeDecoration(
           color: backgroundColor,
-          shape: AppShape.all(6),
+          shape: AppShape.sm,
         ),
         child: MvpIconLabel(
           glyph: icon,
