@@ -1063,27 +1063,27 @@ class _MvpProfileCard extends StatelessWidget {
                         ),
                         border: InputBorder.none,
                         isDense: true,
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: 14,
-                          vertical: 10,
-                        ),
+                        contentPadding: EdgeInsets.fromLTRB(14, 10, 0, 10),
                       ),
                     ),
                   ),
-                  IconButton(
-                    tooltip: '粘贴',
-                    constraints: const BoxConstraints(
-                      minWidth: 40,
-                      minHeight: 40,
+                  Padding(
+                    padding: const EdgeInsets.only(right: 2),
+                    child: IconButton(
+                      tooltip: '粘贴',
+                      constraints: const BoxConstraints(
+                        minWidth: 40,
+                        minHeight: 40,
+                      ),
+                      padding: EdgeInsets.zero,
+                      icon: const GlyphIcon(
+                        AppGlyphs.paste,
+                        size: 16,
+                        color: MvpTheme.textSecondary,
+                      ),
+                      onPressed: onPaste,
+                      splashRadius: 18,
                     ),
-                    padding: EdgeInsets.zero,
-                    icon: const GlyphIcon(
-                      AppGlyphs.paste,
-                      size: 16,
-                      color: MvpTheme.textSecondary,
-                    ),
-                    onPressed: onPaste,
-                    splashRadius: 18,
                   ),
                 ],
               ),
