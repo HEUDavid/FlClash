@@ -90,7 +90,7 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
     (AppGlyphs.arrowDown, '下载并导入', 16.0, 14.0, '长主按钮 (实装: 16/14)'),
     (AppGlyphs.chevronUp, '收起', 13.0, 12.0, '顶部胶囊 (实装: 13/12)'),
     (AppGlyphs.reset, '重置', 13.0, 12.0, '危险胶囊 (实装: 13/12)'),
-    (AppGlyphs.sliders, '配置文件', 16.0, 14.0, '卡片标题 (实装: 16/14)'),
+    (AppGlyphs.sliders, '配置文件', 15.0, 13.0, '卡片标题 (实装: 15/13)'),
     (AppGlyphs.check, '确认完成', 16.0, 14.0, '常规按钮 (16/14)'),
   ];
 
@@ -907,7 +907,7 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
             '【实装按钮规格规范】\n'
             '1. 同步 / 下载并导入：字体 14px，Icon 16px\n'
             '2. 收起 / 重置：字体 12px，Icon 13px\n'
-            '3. 配置文件：字体 14px，Icon 16px\n\n'
+            '3. 配置文件：字体 13px，Icon 15px\n\n'
             '【设计原理】\n'
             '中文字符由于天然缺少西方变音符，在排版盒中沉在底部。在顶部对齐模式下，文本框顶边紧贴图标顶边，使得图标顶边缘墨水与汉字顶端笔画自然拉平，在无需任何 Magic Number 负位移的情况下，实现跨平台最稳健、最纯粹的像素级对齐。',
             style: TextStyle(
