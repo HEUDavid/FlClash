@@ -88,7 +88,7 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
 
   final List<(Glyph, String, double, double, String)> _mvpButtons = [
     (AppGlyphs.sync, '同步', 13.0, 12.0, '主操作按钮 (实装: 13/12)'),
-    (AppGlyphs.arrowDown, '下载并导入', 13.0, 12.0, '长主按钮 (实装: 13/12)'),
+    (AppGlyphs.arrowDown, '下载导入', 13.0, 12.0, '长主按钮 (实装: 13/12)'), // 下载并导入
     (AppGlyphs.chevronUp, '收起', 13.0, 12.0, '顶部胶囊 (实装: 13/12)'),
     (AppGlyphs.reset, '重置', 13.0, 12.0, '危险胶囊 (实装: 13/12)'),
     (AppGlyphs.sliders, '配置文件', 13.0, 12.0, '卡片标题 (实装: 13/12)'),
