@@ -991,10 +991,7 @@ class _MvpProfileCard extends StatelessWidget {
               onTap: isUpdating ? null : onUpdate,
               behavior: HitTestBehavior.opaque,
               child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 10,
-                ),
+                padding: const EdgeInsets.fromLTRB(16, 11, 16, 10),
                 decoration: ShapeDecoration(
                   color: MvpTheme.activeColor,
                   shape: AppShape.sm,
