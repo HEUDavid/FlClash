@@ -1127,8 +1127,8 @@ class MvpIconLabel extends StatelessWidget {
     required this.glyph,
     required this.label,
     this.isLoading = false,
-    this.iconSize = 16,
-    this.fontSize = 14,
+    this.iconSize = 15,
+    this.fontSize = 13,
     this.gap = 6,
     this.color = Colors.white,
   });
@@ -1153,7 +1153,7 @@ class MvpIconLabel extends StatelessWidget {
           child: isLoading
               ? Center(
                   child: SizedBox.square(
-                    dimension: iconSize * (10.5 / 16),
+                    dimension: iconSize * (10.0 / 15),
                     child: CircularProgressIndicator(
                       strokeWidth: 1.3,
                       color: color,
