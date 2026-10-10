@@ -1052,13 +1052,13 @@ class _MvpProfileCard extends StatelessWidget {
                     child: TextField(
                       controller: urlController,
                       style: const TextStyle(
-                        fontSize: 14,
+                        fontSize: 13,
                         color: MvpTheme.textPrimary,
                       ),
                       decoration: const InputDecoration(
                         hintText: '粘贴配置文件链接',
                         hintStyle: TextStyle(
-                          fontSize: 14,
+                          fontSize: 13,
                           color: MvpTheme.textSecondary,
                         ),
                         border: InputBorder.none,
@@ -1078,7 +1078,7 @@ class _MvpProfileCard extends StatelessWidget {
                       padding: EdgeInsets.zero,
                       icon: const GlyphIcon(
                         AppGlyphs.paste,
-                        size: 16,
+                        size: 15,
                         color: MvpTheme.textSecondary,
                       ),
                       onPressed: onPaste,
