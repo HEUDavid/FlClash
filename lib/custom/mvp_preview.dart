@@ -814,7 +814,7 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
                 '倍率: ',
                 style: TextStyle(fontSize: 12, color: MvpTheme.textSecondary),
               ),
-              ...[1.0, 2.0, 4.0, 8.0].map((scale) {
+              ...[1.0, 2.0, 4.0, 6.0, 8.0].map((scale) {
                 final isSelected = _zoomScale == scale;
                 return Padding(
                   padding: const EdgeInsets.only(left: 4),
