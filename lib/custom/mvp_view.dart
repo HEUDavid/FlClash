@@ -1063,7 +1063,7 @@ class _MvpProfileCard extends StatelessWidget {
                         ),
                         border: InputBorder.none,
                         isDense: true,
-                        contentPadding: EdgeInsets.fromLTRB(15, 10, 0, 10),
+                        contentPadding: EdgeInsets.fromLTRB(15, 9, 0, 9),
                       ),
                     ),
                   ),
@@ -1073,7 +1073,7 @@ class _MvpProfileCard extends StatelessWidget {
                       tooltip: '粘贴',
                       constraints: const BoxConstraints(
                         minWidth: 32,
-                        minHeight: 40,
+                        minHeight: 38,
                       ),
                       padding: EdgeInsets.zero,
                       icon: const GlyphIcon(
@@ -1095,7 +1095,7 @@ class _MvpProfileCard extends StatelessWidget {
               child: Container(
                 width: double.infinity,
                 alignment: Alignment.center,
-                padding: const EdgeInsets.symmetric(vertical: 12),
+                padding: const EdgeInsets.only(top: 13, bottom: 12),
                 decoration: ShapeDecoration(
                   color: MvpTheme.activeColor,
                   shape: AppShape.sm,
