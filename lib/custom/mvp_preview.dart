@@ -397,7 +397,7 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
                 ? SizedBox.square(
                     dimension: _iconSize * (10.5 / 15),
                     child: const CircularProgressIndicator(
-                      strokeWidth: 1.3,
+                      strokeWidth: 1.2,
                       color: Colors.white,
                     ),
                   )
