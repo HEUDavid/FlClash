@@ -50,9 +50,9 @@ class MvpAlignPreviewView extends StatefulWidget {
 }
 
 enum _AlignPreset {
-  topAlign('💡 敲定方案: 顶部对齐 (start + 0位移)', 0.0, 1.0, TextLeadingDistribution.even, 15.0, CrossAxisAlignment.start),
-  zeroOffset16('对照组: 居中未位移 (center)', 0.0, 1.0, TextLeadingDistribution.even, 15.0, CrossAxisAlignment.center),
-  custom('自由微调', 0.0, 1.0, TextLeadingDistribution.even, 15.0, CrossAxisAlignment.start);
+  topAlign('💡 敲定方案: 顶部对齐 (start + 0位移)', 0.0, 1.0, TextLeadingDistribution.even, 13.0, CrossAxisAlignment.start),
+  zeroOffset16('对照组: 居中未位移 (center)', 0.0, 1.0, TextLeadingDistribution.even, 13.0, CrossAxisAlignment.center),
+  custom('自由微调', 0.0, 1.0, TextLeadingDistribution.even, 13.0, CrossAxisAlignment.start);
 
   final String label;
   final double defaultOffset;
@@ -74,8 +74,8 @@ enum _AlignPreset {
 class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
   _AlignPreset _preset = _AlignPreset.topAlign;
   double _offsetY = 0.0;
-  double _iconSize = 15.0;
-  double _fontSize = 13.0;
+  double _iconSize = 13.0;
+  double _fontSize = 12.0;
   double _zoomScale = 8.0;
   CrossAxisAlignment _crossAxisAlignment = CrossAxisAlignment.start;
 
@@ -87,12 +87,11 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
   String _buttonText = '同步';
 
   final List<(Glyph, String, double, double, String)> _mvpButtons = [
-    (AppGlyphs.sync, '同步', 15.0, 13.0, '主操作按钮 (实装: 15/13)'),
-    (AppGlyphs.arrowDown, '下载并导入', 15.0, 13.0, '长主按钮 (实装: 15/13)'),
+    (AppGlyphs.sync, '同步', 13.0, 12.0, '主操作按钮 (实装: 13/12)'),
+    (AppGlyphs.arrowDown, '下载并导入', 13.0, 12.0, '长主按钮 (实装: 13/12)'),
     (AppGlyphs.chevronUp, '收起', 13.0, 12.0, '顶部胶囊 (实装: 13/12)'),
     (AppGlyphs.reset, '重置', 13.0, 12.0, '危险胶囊 (实装: 13/12)'),
     (AppGlyphs.sliders, '配置文件', 13.0, 12.0, '卡片标题 (实装: 13/12)'),
-    (AppGlyphs.check, '确认完成', 15.0, 13.0, '常规按钮 (15/13)'),
   ];
 
   void _selectMvpButton((Glyph, String, double, double, String) item) {
@@ -930,7 +929,7 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
             '• 对齐基准：顶部对齐 (CrossAxisAlignment.start) + 0位移 (Offset.zero)\n'
             '• 排版参数：height: 1.0, leadingDistribution: TextLeadingDistribution.even\n\n'
             '【实装按钮规格规范】\n'
-            '1. 同步 / 下载并导入：字体 13px，Icon 15px (含菊花 Loading)\n'
+            '1. 同步 / 下载并导入：字体 12px，Icon 13px (含菊花 Loading)\n'
             '2. 收起 / 重置：字体 12px，Icon 13px\n'
             '3. 配置文件：字体 12px，Icon 13px\n\n'
             '【设计原理】\n'
