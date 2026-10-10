@@ -840,8 +840,8 @@ class _MvpProfileCard extends StatelessWidget {
                 MvpIconLabel(
                   glyph: AppGlyphs.sliders,
                   label: '配置文件',
-                  iconSize: 16,
-                  fontSize: 14,
+                  iconSize: 15,
+                  fontSize: 13,
                   gap: 7,
                   color: MvpTheme.textPrimary,
                 ),
