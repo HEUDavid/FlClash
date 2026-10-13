@@ -715,7 +715,7 @@ class _MvpQuickInfoCards extends StatelessWidget {
             child: Center(
               child: GlyphIcon(
                 icon,
-                size: 22,
+                size: 20,
                 color: iconColor,
               ),
             ),
