@@ -696,7 +696,7 @@ class _MvpQuickInfoCards extends StatelessWidget {
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 8,
-            offset: const Offset(2.0, 2.5),
+            offset: const Offset(2.0, 3.0),
           ),
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
@@ -821,7 +821,7 @@ class _MvpProfileCard extends StatelessWidget {
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.94),
             blurRadius: 8,
-            offset: const Offset(2.0, 12.5),
+            offset: const Offset(2.0, 3.0),
           ),
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
