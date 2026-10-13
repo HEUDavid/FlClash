@@ -50,9 +50,56 @@ class MvpAlignPreviewView extends StatefulWidget {
 }
 
 enum _AlignPreset {
-  topAlign('💡 敲定方案: 顶部对齐 (start + 0位移)', 0.0, 1.0, TextLeadingDistribution.even, 13.0, CrossAxisAlignment.start),
-  zeroOffset16('对照组: 居中未位移 (center)', 0.0, 1.0, TextLeadingDistribution.even, 13.0, CrossAxisAlignment.center),
-  custom('自由微调', 0.0, 1.0, TextLeadingDistribution.even, 13.0, CrossAxisAlignment.start);
+  scheme3Middle(
+    '🔥 方案3: 文本引擎 (WidgetSpan.middle)',
+    0.0,
+    1.0,
+    TextLeadingDistribution.even,
+    13.0,
+    CrossAxisAlignment.center,
+    true,
+    PlaceholderAlignment.middle,
+  ),
+  scheme3Baseline(
+    '方案3变体: 基线对齐 (WidgetSpan.baseline)',
+    0.0,
+    1.0,
+    TextLeadingDistribution.even,
+    13.0,
+    CrossAxisAlignment.center,
+    true,
+    PlaceholderAlignment.baseline,
+  ),
+  topAlign(
+    '原敲定方案: 顶部对齐 (Row.start + 0位移)',
+    0.0,
+    1.0,
+    TextLeadingDistribution.even,
+    13.0,
+    CrossAxisAlignment.start,
+    false,
+    PlaceholderAlignment.middle,
+  ),
+  zeroOffset16(
+    '对照组: 几何居中 (Row.center)',
+    0.0,
+    1.0,
+    TextLeadingDistribution.even,
+    13.0,
+    CrossAxisAlignment.center,
+    false,
+    PlaceholderAlignment.middle,
+  ),
+  custom(
+    '自由微调',
+    0.0,
+    1.0,
+    TextLeadingDistribution.even,
+    13.0,
+    CrossAxisAlignment.start,
+    false,
+    PlaceholderAlignment.middle,
+  );
 
   final String label;
   final double defaultOffset;
@@ -60,6 +107,8 @@ enum _AlignPreset {
   final TextLeadingDistribution leadingDist;
   final double defaultIconSize;
   final CrossAxisAlignment crossAxisAlignment;
+  final bool isWidgetSpan;
+  final PlaceholderAlignment placeholderAlignment;
 
   const _AlignPreset(
     this.label,
@@ -68,27 +117,32 @@ enum _AlignPreset {
     this.leadingDist,
     this.defaultIconSize,
     this.crossAxisAlignment,
+    this.isWidgetSpan,
+    this.placeholderAlignment,
   );
 }
 
 class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
-  _AlignPreset _preset = _AlignPreset.topAlign;
+  _AlignPreset _preset = _AlignPreset.scheme3Middle;
   double _offsetY = 0.0;
   double _iconSize = 13.0;
   double _fontSize = 12.0;
-  double _zoomScale = 8.0;
-  CrossAxisAlignment _crossAxisAlignment = CrossAxisAlignment.start;
+  double _zoomScale = 6.0;
+  CrossAxisAlignment _crossAxisAlignment = CrossAxisAlignment.center;
+  bool _useWidgetSpan = true;
+  PlaceholderAlignment _placeholderAlignment = PlaceholderAlignment.middle;
 
   bool _showCenterLine = true;
   bool _showBoundingBox = true;
   bool _isLoading = false;
+  bool _compareMode = false;
 
   Glyph _selectedGlyph = AppGlyphs.sync;
   String _buttonText = '同步';
 
   final List<(Glyph, String, double, double, String)> _mvpButtons = [
     (AppGlyphs.sync, '同步', 13.0, 12.0, '主操作按钮 (实装: 13/12)'),
-    (AppGlyphs.arrowDown, '下载导入', 13.0, 12.0, '长主按钮 (实装: 13/12)'), // 下载并导入
+    (AppGlyphs.arrowDown, '下载导入', 13.0, 12.0, '长主按钮 (实装: 13/12)'),
     (AppGlyphs.chevronUp, '收起', 13.0, 12.0, '顶部胶囊 (实装: 13/12)'),
     (AppGlyphs.reset, '重置', 13.0, 12.0, '危险胶囊 (实装: 13/12)'),
     (AppGlyphs.sliders, '配置文件', 13.0, 12.0, '卡片标题 (实装: 13/12)'),
@@ -109,6 +163,8 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
       _offsetY = preset.defaultOffset;
       _iconSize = preset.defaultIconSize;
       _crossAxisAlignment = preset.crossAxisAlignment;
+      _useWidgetSpan = preset.isWidgetSpan;
+      _placeholderAlignment = preset.placeholderAlignment;
     });
   }
 
@@ -151,7 +207,7 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
           child: Center(
             child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 540),
+              constraints: const BoxConstraints(maxWidth: 580),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -170,6 +226,10 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
   }
 
   Widget _buildStageCard() {
+    final String modeDesc = _useWidgetSpan
+        ? '方案3 (WidgetSpan.${_placeholderAlignment.name})'
+        : 'Row (${_crossAxisAlignment == CrossAxisAlignment.start ? "start" : "center"})';
+
     return Container(
       decoration: ShapeDecoration(
         color: Colors.white,
@@ -195,16 +255,43 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  '画布观察区',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: MvpTheme.textPrimary,
-                  ),
+                Row(
+                  children: [
+                    const Text(
+                      '画布观察区',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: MvpTheme.textPrimary,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 2,
+                      ),
+                      decoration: ShapeDecoration(
+                        color: _useWidgetSpan
+                            ? MvpTheme.activeColor.withValues(alpha: 0.12)
+                            : const Color(0xFFF1F5F9),
+                        shape: AppShape.xs,
+                      ),
+                      child: Text(
+                        _compareMode ? '三方案同屏对比' : modeDesc,
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                          color: _useWidgetSpan
+                              ? MvpTheme.activeColor
+                              : MvpTheme.textSecondary,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 Text(
-                  '缩放: ${_zoomScale.toInt()}x  |  基准: ${_crossAxisAlignment == CrossAxisAlignment.start ? "顶部(start)" : "居中(center)"}  |  Icon: ${_iconSize.toInt()}px  |  字号: ${_fontSize.toStringAsFixed(0)}px  |  Y位移: ${_offsetY >= 0 ? '+' : ''}${_offsetY.toStringAsFixed(1)}px',
+                  '缩放: ${_zoomScale.toInt()}x | 字号: ${_fontSize.toInt()}px | 图标: ${_iconSize.toInt()}px',
                   style: const TextStyle(
                     fontSize: 12,
                     fontFamily: 'monospace',
@@ -226,10 +313,21 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
             child: Stack(
               alignment: Alignment.center,
               children: [
-                Transform.scale(
-                  scale: _zoomScale,
-                  child: _buildInspectedButton(),
-                ),
+                if (_compareMode)
+                  Transform.scale(
+                    scale: _zoomScale.clamp(1.0, 5.0),
+                    child: _buildComparisonRow(),
+                  )
+                else
+                  Transform.scale(
+                    scale: _zoomScale,
+                    child: _buildInspectedButton(
+                      useWidgetSpan: _useWidgetSpan,
+                      placeholderAlignment: _placeholderAlignment,
+                      crossAxisAlignment: _crossAxisAlignment,
+                      offsetY: _offsetY,
+                    ),
+                  ),
                 if (_showCenterLine)
                   Positioned(
                     left: 0,
@@ -302,56 +400,151 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
               ],
             ),
           ),
-          if (_showBoundingBox)
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              decoration: const BoxDecoration(
-                color: Color(0xFFF8FAFC),
-                border: Border(
-                  top: BorderSide(color: Color(0xFFF1F5F9), width: 1),
-                ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            decoration: const BoxDecoration(
+              color: Color(0xFFF8FAFC),
+              border: Border(
+                top: BorderSide(color: Color(0xFFF1F5F9), width: 1),
               ),
-              child: Builder(
-                builder: (context) {
-                  final double iconCenter = _iconSize / 2;
-                  final double iconBottom = _iconSize;
-                  final double textBaseTop = _crossAxisAlignment == CrossAxisAlignment.start
-                      ? 0.0
-                      : (_iconSize - _fontSize) / 2;
-                  final double textTop = textBaseTop + _offsetY;
-                  final double textCenter = textBaseTop + (_fontSize / 2) + _offsetY;
-                  final double textBottom = textBaseTop + _fontSize + _offsetY;
-                  return Row(
+            ),
+            child: Builder(
+              builder: (context) {
+                if (_useWidgetSpan) {
+                  return const Row(
                     children: [
-                      Text(
-                        'Icon盒 Y: 顶 0.00 / 中 ${iconCenter.toStringAsFixed(2)} / 底 ${iconBottom.toStringAsFixed(2)} px',
-                        style: const TextStyle(
-                          fontSize: 10.5,
-                          fontFamily: 'monospace',
-                          color: MvpTheme.textSecondary,
-                        ),
+                      Icon(
+                        Icons.check_circle_outline,
+                        size: 13,
+                        color: MvpTheme.activeColor,
                       ),
-                      const Spacer(),
+                      SizedBox(width: 6),
                       Text(
-                        'Text盒 Y: 顶 ${textTop >= 0 ? '+' : ''}${textTop.toStringAsFixed(2)} / 中 ${textCenter >= 0 ? '+' : ''}${textCenter.toStringAsFixed(2)} / 底 ${textBottom >= 0 ? '+' : ''}${textBottom.toStringAsFixed(2)} px',
-                        style: const TextStyle(
-                          fontSize: 10.5,
-                          fontFamily: 'monospace',
+                        '方案3模式：底层 HarfBuzz 引擎根据当前字体度量 (FontMetrics) 动态自适应中线对齐',
+                        style: TextStyle(
+                          fontSize: 11,
                           fontWeight: FontWeight.w600,
-                          color: Colors.black87,
+                          color: MvpTheme.activeColor,
                         ),
                       ),
                     ],
                   );
-                },
-              ),
+                }
+
+                final double iconCenter = _iconSize / 2;
+                final double iconBottom = _iconSize;
+                final double textBaseTop =
+                    _crossAxisAlignment == CrossAxisAlignment.start
+                        ? 0.0
+                        : (_iconSize - _fontSize) / 2;
+                final double textTop = textBaseTop + _offsetY;
+                final double textCenter =
+                    textBaseTop + (_fontSize / 2) + _offsetY;
+                final double textBottom = textBaseTop + _fontSize + _offsetY;
+                return Row(
+                  children: [
+                    Text(
+                      'Icon盒 Y: 顶 0.00 / 中 ${iconCenter.toStringAsFixed(2)} / 底 ${iconBottom.toStringAsFixed(2)} px',
+                      style: const TextStyle(
+                        fontSize: 10.5,
+                        fontFamily: 'monospace',
+                        color: MvpTheme.textSecondary,
+                      ),
+                    ),
+                    const Spacer(),
+                    Text(
+                      'Text盒 Y: 顶 ${textTop >= 0 ? '+' : ''}${textTop.toStringAsFixed(2)} / 中 ${textCenter >= 0 ? '+' : ''}${textCenter.toStringAsFixed(2)} / 底 ${textBottom >= 0 ? '+' : ''}${textBottom.toStringAsFixed(2)} px',
+                      style: const TextStyle(
+                        fontSize: 10.5,
+                        fontFamily: 'monospace',
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black87,
+                      ),
+                    ),
+                  ],
+                );
+              },
             ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildInspectedButton() {
+  Widget _buildComparisonRow() {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text(
+              '🔥 方案3 (WidgetSpan)',
+              style: TextStyle(
+                fontSize: 9,
+                fontWeight: FontWeight.bold,
+                color: MvpTheme.activeColor,
+              ),
+            ),
+            const SizedBox(height: 4),
+            _buildInspectedButton(
+              useWidgetSpan: true,
+              placeholderAlignment: PlaceholderAlignment.middle,
+              offsetY: 0.0,
+            ),
+          ],
+        ),
+        const SizedBox(width: 14),
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text(
+              '原敲定 (Row.start)',
+              style: TextStyle(
+                fontSize: 9,
+                fontWeight: FontWeight.w600,
+                color: MvpTheme.textSecondary,
+              ),
+            ),
+            const SizedBox(height: 4),
+            _buildInspectedButton(
+              useWidgetSpan: false,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              offsetY: 0.0,
+            ),
+          ],
+        ),
+        const SizedBox(width: 14),
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text(
+              '对照组 (Row.center)',
+              style: TextStyle(
+                fontSize: 9,
+                fontWeight: FontWeight.w600,
+                color: MvpTheme.textSecondary,
+              ),
+            ),
+            const SizedBox(height: 4),
+            _buildInspectedButton(
+              useWidgetSpan: false,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              offsetY: 0.0,
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildInspectedButton({
+    required bool useWidgetSpan,
+    PlaceholderAlignment placeholderAlignment = PlaceholderAlignment.middle,
+    CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.start,
+    double offsetY = 0.0,
+  }) {
     final TextStyle textStyle = TextStyle(
       fontSize: _fontSize,
       fontWeight: FontWeight.w600,
@@ -359,6 +552,91 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
       height: _preset.lineHeight,
       leadingDistribution: _preset.leadingDist,
     );
+
+    final Widget iconContent = _isLoading
+        ? SizedBox.square(
+            dimension: (_iconSize - 4.0).clamp(8.0, 24.0),
+            child: const CircularProgressIndicator(
+              strokeWidth: 1.1,
+              color: Colors.white,
+            ),
+          )
+        : GlyphIcon(
+            _selectedGlyph,
+            size: _iconSize,
+            color: Colors.white,
+          );
+
+    final Widget iconBox = Container(
+      width: _iconSize,
+      height: _iconSize,
+      alignment: Alignment.center,
+      decoration: _showBoundingBox
+          ? BoxDecoration(
+              border: Border.all(
+                color: Colors.black,
+                width: 1.0,
+              ),
+            )
+          : null,
+      child: iconContent,
+    );
+
+    final Widget innerContent;
+
+    if (useWidgetSpan) {
+      innerContent = Text.rich(
+        TextSpan(
+          children: [
+            WidgetSpan(
+              alignment: placeholderAlignment,
+              baseline: TextBaseline.alphabetic,
+              child: offsetY != 0.0
+                  ? Transform.translate(
+                      offset: Offset(0, -offsetY),
+                      child: iconBox,
+                    )
+                  : iconBox,
+            ),
+            WidgetSpan(
+              alignment: placeholderAlignment,
+              baseline: TextBaseline.alphabetic,
+              child: const SizedBox(width: 6),
+            ),
+            TextSpan(
+              text: _buttonText,
+              style: textStyle,
+            ),
+          ],
+        ),
+      );
+    } else {
+      innerContent = Row(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: crossAxisAlignment,
+        children: [
+          iconBox,
+          const SizedBox(width: 6),
+          Transform.translate(
+            offset: Offset(0, offsetY),
+            child: Container(
+              decoration: _showBoundingBox
+                  ? BoxDecoration(
+                      border: Border.all(
+                        color: Colors.black,
+                        width: 1.0,
+                      ),
+                    )
+                  : null,
+              child: Text(
+                _buttonText,
+                style: textStyle,
+              ),
+            ),
+          ),
+        ],
+      );
+    }
 
     return Container(
       padding: const EdgeInsets.symmetric(
@@ -376,56 +654,7 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
           ),
         ],
       ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: _crossAxisAlignment,
-        children: [
-          Container(
-            width: _iconSize,
-            height: _iconSize,
-            alignment: Alignment.center,
-            decoration: _showBoundingBox
-                ? BoxDecoration(
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 1.0,
-                    ),
-                  )
-                : null,
-            child: _isLoading
-                ? SizedBox.square(
-                    dimension: (_iconSize - 4.0).clamp(8.0, 24.0),
-                    child: const CircularProgressIndicator(
-                      strokeWidth: 1.1,
-                      color: Colors.white,
-                    ),
-                  )
-                : GlyphIcon(
-                    _selectedGlyph,
-                    size: _iconSize,
-                    color: Colors.white,
-                  ),
-          ),
-          const SizedBox(width: 6),
-          Transform.translate(
-            offset: Offset(0, _offsetY),
-            child: Container(
-              decoration: _showBoundingBox
-                  ? BoxDecoration(
-                      border: Border.all(
-                        color: Colors.black,
-                        width: 1.0,
-                      ),
-                    )
-                  : null,
-              child: Text(
-                _buttonText,
-                style: textStyle,
-              ),
-            ),
-          ),
-        ],
-      ),
+      child: innerContent,
     );
   }
 
@@ -457,7 +686,8 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
             spacing: 8,
             runSpacing: 8,
             children: _mvpButtons.map((item) {
-              final isSelected = _selectedGlyph == item.$1 && _buttonText == item.$2;
+              final isSelected =
+                  _selectedGlyph == item.$1 && _buttonText == item.$2;
               return ChoiceChip(
                 label: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -558,9 +788,14 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
                         onTap: () => setState(() => _fontSize = size),
                         customBorder: AppShape.xs,
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 4,
+                          ),
                           decoration: ShapeDecoration(
-                            color: isSelected ? MvpTheme.activeColor : const Color(0xFFF1F5F9),
+                            color: isSelected
+                                ? MvpTheme.activeColor
+                                : const Color(0xFFF1F5F9),
                             shape: AppShape.xs,
                           ),
                           child: Text(
@@ -568,7 +803,9 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
-                              color: isSelected ? Colors.white : MvpTheme.textSecondary,
+                              color: isSelected
+                                  ? Colors.white
+                                  : MvpTheme.textSecondary,
                             ),
                           ),
                         ),
@@ -638,9 +875,14 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
                         },
                         customBorder: AppShape.xs,
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 7,
+                            vertical: 4,
+                          ),
                           decoration: ShapeDecoration(
-                            color: isSelected ? MvpTheme.activeColor : const Color(0xFFF1F5F9),
+                            color: isSelected
+                                ? MvpTheme.activeColor
+                                : const Color(0xFFF1F5F9),
                             shape: AppShape.xs,
                           ),
                           child: Text(
@@ -648,7 +890,9 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
-                              color: isSelected ? Colors.white : MvpTheme.textSecondary,
+                              color: isSelected
+                                  ? Colors.white
+                                  : MvpTheme.textSecondary,
                             ),
                           ),
                         ),
@@ -674,7 +918,7 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
-                '5. 对齐基准 (CrossAxisAlignment)',
+                '5. 排版引擎 / 对齐基准',
                 style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
@@ -683,32 +927,59 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
               ),
               Row(
                 children: [
-                  (CrossAxisAlignment.start, '顶部对齐 (start)'),
-                  (CrossAxisAlignment.center, '居中对齐 (center)'),
+                  (
+                    true,
+                    PlaceholderAlignment.middle,
+                    CrossAxisAlignment.center,
+                    '🔥 方案3 (middle)'
+                  ),
+                  (
+                    false,
+                    PlaceholderAlignment.middle,
+                    CrossAxisAlignment.start,
+                    'Row (start)'
+                  ),
+                  (
+                    false,
+                    PlaceholderAlignment.middle,
+                    CrossAxisAlignment.center,
+                    'Row (center)'
+                  ),
                 ].map((item) {
-                  final isSelected = _crossAxisAlignment == item.$1;
+                  final isSelected = _useWidgetSpan == item.$1 &&
+                      (!item.$1 || _placeholderAlignment == item.$2) &&
+                      (item.$1 || _crossAxisAlignment == item.$3);
                   return Padding(
                     padding: const EdgeInsets.only(left: 6),
                     child: InkWell(
                       onTap: () {
                         setState(() {
-                          _crossAxisAlignment = item.$1;
+                          _useWidgetSpan = item.$1;
+                          _placeholderAlignment = item.$2;
+                          _crossAxisAlignment = item.$3;
                           _preset = _AlignPreset.custom;
                         });
                       },
                       customBorder: AppShape.xs,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
                         decoration: ShapeDecoration(
-                          color: isSelected ? MvpTheme.activeColor : const Color(0xFFF1F5F9),
+                          color: isSelected
+                              ? MvpTheme.activeColor
+                              : const Color(0xFFF1F5F9),
                           shape: AppShape.xs,
                         ),
                         child: Text(
-                          item.$2,
+                          item.$4,
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 11.5,
                             fontWeight: FontWeight.w600,
-                            color: isSelected ? Colors.white : MvpTheme.textSecondary,
+                            color: isSelected
+                                ? Colors.white
+                                : MvpTheme.textSecondary,
                           ),
                         ),
                       ),
@@ -793,8 +1064,26 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
             ),
           ),
           const SizedBox(height: 8),
-          Row(
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            crossAxisAlignment: WrapCrossAlignment.center,
             children: [
+              FilterChip(
+                label: const Text('三方案同屏对比'),
+                selected: _compareMode,
+                selectedColor: MvpTheme.activeColor.withValues(alpha: 0.18),
+                checkmarkColor: MvpTheme.activeColor,
+                labelStyle: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: _compareMode
+                      ? MvpTheme.activeColor
+                      : MvpTheme.textSecondary,
+                ),
+                shape: AppShape.all(8),
+                onSelected: (val) => setState(() => _compareMode = val),
+              ),
               FilterChip(
                 label: const Text('中轴红线'),
                 selected: _showCenterLine,
@@ -802,25 +1091,27 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
                 checkmarkColor: Colors.redAccent,
                 labelStyle: TextStyle(
                   fontSize: 12,
-                  color: _showCenterLine ? Colors.redAccent : MvpTheme.textSecondary,
+                  color: _showCenterLine
+                      ? Colors.redAccent
+                      : MvpTheme.textSecondary,
                 ),
                 shape: AppShape.all(8),
                 onSelected: (val) => setState(() => _showCenterLine = val),
               ),
-              const SizedBox(width: 8),
               FilterChip(
-                label: const Text('黑色渲染外框盒'),
+                label: const Text('黑色外框盒'),
                 selected: _showBoundingBox,
                 selectedColor: Colors.black.withValues(alpha: 0.1),
                 checkmarkColor: Colors.black87,
                 labelStyle: TextStyle(
                   fontSize: 12,
-                  color: _showBoundingBox ? Colors.black87 : MvpTheme.textSecondary,
+                  color: _showBoundingBox
+                      ? Colors.black87
+                      : MvpTheme.textSecondary,
                 ),
                 shape: AppShape.all(8),
                 onSelected: (val) => setState(() => _showBoundingBox = val),
               ),
-              const SizedBox(width: 8),
               FilterChip(
                 label: const Text('菊花 Loading'),
                 selected: _isLoading,
@@ -828,41 +1119,56 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
                 checkmarkColor: MvpTheme.activeColor,
                 labelStyle: TextStyle(
                   fontSize: 12,
-                  color: _isLoading ? MvpTheme.activeColor : MvpTheme.textSecondary,
+                  color:
+                      _isLoading ? MvpTheme.activeColor : MvpTheme.textSecondary,
                 ),
                 shape: AppShape.all(8),
                 onSelected: (val) => setState(() => _isLoading = val),
               ),
-              const Spacer(),
-              const Text(
-                '倍率: ',
-                style: TextStyle(fontSize: 12, color: MvpTheme.textSecondary),
-              ),
-              ...[1.0, 2.0, 4.0, 6.0, 8.0].map((scale) {
-                final isSelected = _zoomScale == scale;
-                return Padding(
-                  padding: const EdgeInsets.only(left: 4),
-                  child: InkWell(
-                    onTap: () => setState(() => _zoomScale = scale),
-                    customBorder: AppShape.xs,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-                      decoration: ShapeDecoration(
-                        color: isSelected ? MvpTheme.activeColor : const Color(0xFFF1F5F9),
-                        shape: AppShape.xs,
-                      ),
-                      child: Text(
-                        '${scale.toInt()}x',
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
-                          color: isSelected ? Colors.white : MvpTheme.textSecondary,
-                        ),
-                      ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    '倍率: ',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: MvpTheme.textSecondary,
                     ),
                   ),
-                );
-              }),
+                  ...[1.0, 2.0, 4.0, 6.0, 8.0].map((scale) {
+                    final isSelected = _zoomScale == scale;
+                    return Padding(
+                      padding: const EdgeInsets.only(left: 4),
+                      child: InkWell(
+                        onTap: () => setState(() => _zoomScale = scale),
+                        customBorder: AppShape.xs,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 4,
+                          ),
+                          decoration: ShapeDecoration(
+                            color: isSelected
+                                ? MvpTheme.activeColor
+                                : const Color(0xFFF1F5F9),
+                            shape: AppShape.xs,
+                          ),
+                          child: Text(
+                            '${scale.toInt()}x',
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w600,
+                              color: isSelected
+                                  ? Colors.white
+                                  : MvpTheme.textSecondary,
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  }),
+                ],
+              ),
             ],
           ),
         ],
@@ -911,10 +1217,10 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
         children: [
           Row(
             children: [
-              Icon(Icons.info_outline, size: 16, color: MvpTheme.activeColor),
+              Icon(Icons.insights, size: 16, color: MvpTheme.activeColor),
               SizedBox(width: 6),
               Text(
-                '强迫症实测分析结论',
+                '方案对比与跨厂商验证分析',
                 style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
@@ -924,16 +1230,17 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
             ],
           ),
           SizedBox(height: 8),
-          const Text(
-            '【最终敲定方案】\n'
-            '• 对齐基准：顶部对齐 (CrossAxisAlignment.start) + 0位移 (Offset.zero)\n'
-            '• 排版参数：height: 1.0, leadingDistribution: TextLeadingDistribution.even\n\n'
-            '【实装按钮规格规范】\n'
-            '1. 同步 / 下载并导入：字体 12px，Icon 13px (含菊花 Loading)\n'
-            '2. 收起 / 重置：字体 12px，Icon 13px\n'
-            '3. 配置文件：字体 12px，Icon 13px\n\n'
-            '【设计原理】\n'
-            '中文字符由于天然缺少西方变音符，在排版盒中沉在底部。在顶部对齐模式下，文本框顶边紧贴图标顶边，使得图标顶边缘墨水与汉字顶端笔画自然拉平，在无需任何 Magic Number 负位移的情况下，实现跨平台最稳健、最纯粹的像素级对齐。',
+          Text(
+            '【方案3：Text.rich + WidgetSpan(middle) 验证重点】\n'
+            '• 技术本质：将图文混排的垂直对齐决策权，从外部纯几何盒模型 (Row) 移交给底层 HarfBuzz / SkParagraph 文本排版引擎。\n'
+            '• 为什么能抵抗跨厂商差异：Android 各 ROM（MIUI/HyperOS MiSans、HarmonyOS Sans、OPPO/vivo Sans）的字体度量表 (ascent/descent/xHeight) 各不相同。WidgetSpan 会在运行时动态读取当前加载字体的真实中线位置，自动居中锚定，不依赖任何写死的固定像素补偿。\n\n'
+            '【实测操作建议】\n'
+            '1. 点击上方「三方案同屏对比」FilterChip，可在同一画布中同步观察：\n'
+            '   - 方案3: WidgetSpan.middle\n'
+            '   - 对照A: Row.start (顶部贴齐)\n'
+            '   - 对照B: Row.center (几何居中)\n'
+            '2. 切换上方「1. MVP 实装按钮场景」，在 5 个真实按钮文案与图标下验证光学稳定性。\n'
+            '3. 如果方案3验证满意，只需将 `mvp_view.dart` 中的 `MvpIconLabel` 改为 `Text.rich(WidgetSpan)` 即可全局无感生效。',
             style: TextStyle(
               fontSize: 12,
               height: 1.5,
