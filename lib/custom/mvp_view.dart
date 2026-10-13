@@ -1038,12 +1038,12 @@ class _MvpProfileCard extends StatelessWidget {
                 shadows: [
                   BoxShadow(
                     color: Colors.black.withValues(alpha: 0.04),
-                    blurRadius: 4,
+                    blurRadius: 2,
                     offset: const Offset(0, 1),
                   ),
                   BoxShadow(
                     color: Colors.black.withValues(alpha: 0.02),
-                    blurRadius: 2,
+                    blurRadius: 1,
                     offset: const Offset(0, 0.5),
                   ),
                 ],
