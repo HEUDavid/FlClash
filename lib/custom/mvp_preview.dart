@@ -55,7 +55,7 @@ enum _AlignPreset {
     0.0,
     1.0,
     TextLeadingDistribution.even,
-    13.0,
+    16.0,
     CrossAxisAlignment.center,
     true,
     PlaceholderAlignment.middle,
@@ -65,7 +65,7 @@ enum _AlignPreset {
     0.0,
     1.0,
     TextLeadingDistribution.even,
-    13.0,
+    16.0,
     CrossAxisAlignment.center,
     true,
     PlaceholderAlignment.baseline,
@@ -75,7 +75,7 @@ enum _AlignPreset {
     0.0,
     1.0,
     TextLeadingDistribution.even,
-    13.0,
+    16.0,
     CrossAxisAlignment.start,
     false,
     PlaceholderAlignment.middle,
@@ -85,7 +85,7 @@ enum _AlignPreset {
     0.0,
     1.0,
     TextLeadingDistribution.even,
-    13.0,
+    16.0,
     CrossAxisAlignment.center,
     false,
     PlaceholderAlignment.middle,
@@ -95,7 +95,7 @@ enum _AlignPreset {
     0.0,
     1.0,
     TextLeadingDistribution.even,
-    13.0,
+    16.0,
     CrossAxisAlignment.start,
     false,
     PlaceholderAlignment.middle,
@@ -125,7 +125,7 @@ enum _AlignPreset {
 class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
   _AlignPreset _preset = _AlignPreset.scheme3Middle;
   double _offsetY = 0.0;
-  double _iconSize = 13.0;
+  double _iconSize = 16.0;
   double _fontSize = 12.0;
   double _zoomScale = 6.0;
   CrossAxisAlignment _crossAxisAlignment = CrossAxisAlignment.center;
@@ -133,6 +133,8 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
   PlaceholderAlignment _placeholderAlignment = PlaceholderAlignment.middle;
 
   bool _showCenterLine = true;
+  bool _showIconCenterLine = true;
+  bool _showTextCenterLine = true;
   bool _showBoundingBox = true;
   bool _isLoading = false;
   bool _compareMode = false;
@@ -141,11 +143,11 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
   String _buttonText = '同步';
 
   final List<(Glyph, String, double, double, String)> _mvpButtons = [
-    (AppGlyphs.sync, '同步', 13.0, 12.0, '主操作按钮 (实装: 13/12)'),
-    (AppGlyphs.arrowDown, '下载导入', 13.0, 12.0, '长主按钮 (实装: 13/12)'),
-    (AppGlyphs.chevronUp, '收起', 13.0, 12.0, '顶部胶囊 (实装: 13/12)'),
-    (AppGlyphs.reset, '重置', 13.0, 12.0, '危险胶囊 (实装: 13/12)'),
-    (AppGlyphs.sliders, '配置文件', 13.0, 12.0, '卡片标题 (实装: 13/12)'),
+    (AppGlyphs.sync, '同步', 16.0, 12.0, '主操作按钮 (实装: 16/12)'),
+    (AppGlyphs.arrowDown, '下载导入', 16.0, 12.0, '长主按钮 (实装: 16/12)'),
+    (AppGlyphs.chevronUp, '收起', 16.0, 12.0, '顶部胶囊 (实装: 16/12)'),
+    (AppGlyphs.reset, '重置', 16.0, 12.0, '危险胶囊 (实装: 16/12)'),
+    (AppGlyphs.sliders, '配置文件', 16.0, 12.0, '卡片标题 (实装: 16/12)'),
   ];
 
   void _selectMvpButton((Glyph, String, double, double, String) item) {
@@ -344,59 +346,90 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            child: Row(
+            child: Wrap(
+              spacing: 12,
+              runSpacing: 6,
+              crossAxisAlignment: WrapCrossAlignment.center,
               children: [
-                const Icon(
-                  Icons.lens,
-                  size: 8,
-                  color: Colors.redAccent,
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(
+                      Icons.lens,
+                      size: 8,
+                      color: Colors.redAccent,
+                    ),
+                    const SizedBox(width: 4),
+                    const Text(
+                      '全局中心红线',
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: MvpTheme.textSecondary,
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 6),
-                const Expanded(
-                  child: Text(
-                    '红线为按钮垂直中心几何中轴线 (Center Guideline)',
-                    style: TextStyle(
-                      fontSize: 11,
-                      color: MvpTheme.textSecondary,
-                    ),
+                if (_showIconCenterLine)
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: 12,
+                        height: 2,
+                        color: Colors.grey.shade400,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        'Icon中轴白线 (${_iconSize.toInt()}px)',
+                        style: const TextStyle(
+                          fontSize: 11,
+                          color: MvpTheme.textSecondary,
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-                if (_showBoundingBox) ...[
-                  const SizedBox(width: 12),
-                  Container(
-                    width: 8,
-                    height: 8,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black, width: 1.5),
-                    ),
+                if (_showTextCenterLine)
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: 12,
+                        height: 2,
+                        color: Colors.black,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        'Text中轴黑线 (${_fontSize.toInt()}px)',
+                        style: const TextStyle(
+                          fontSize: 11,
+                          color: Colors.black87,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 4),
-                  Text(
-                    'Icon盒 (${_iconSize.toInt()}px)',
-                    style: const TextStyle(
-                      fontSize: 11,
-                      color: Colors.black87,
-                      fontWeight: FontWeight.w600,
-                    ),
+                if (_showBoundingBox)
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: 8,
+                        height: 8,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black, width: 1.5),
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        '外框盒 (Icon ${_iconSize.toInt()}px / Text ${_fontSize.toInt()}px)',
+                        style: const TextStyle(
+                          fontSize: 11,
+                          color: Colors.black87,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 8),
-                  Container(
-                    width: 8,
-                    height: 8,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black, width: 1.5),
-                    ),
-                  ),
-                  const SizedBox(width: 4),
-                  Text(
-                    'Text盒 (${_fontSize.toInt()}px)',
-                    style: const TextStyle(
-                      fontSize: 11,
-                      color: Colors.black87,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
               ],
             ),
           ),
@@ -593,7 +626,24 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
               ),
             )
           : null,
-      child: iconContent,
+      child: Stack(
+        alignment: Alignment.center,
+        clipBehavior: Clip.none,
+        children: [
+          iconContent,
+          if (_showIconCenterLine)
+            Positioned(
+              left: -3,
+              right: -3,
+              child: IgnorePointer(
+                child: Container(
+                  height: 1,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+        ],
+      ),
     );
 
     final Widget textBox = Container(
@@ -605,9 +655,26 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
               ),
             )
           : null,
-      child: Text(
-        _buttonText,
-        style: textStyle,
+      child: Stack(
+        alignment: Alignment.center,
+        clipBehavior: Clip.none,
+        children: [
+          Text(
+            _buttonText,
+            style: textStyle,
+          ),
+          if (_showTextCenterLine)
+            Positioned(
+              left: -3,
+              right: -3,
+              child: IgnorePointer(
+                child: Container(
+                  height: 1,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+        ],
       ),
     );
 
@@ -1114,6 +1181,34 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
                 ),
                 shape: AppShape.all(8),
                 onSelected: (val) => setState(() => _showCenterLine = val),
+              ),
+              FilterChip(
+                label: const Text('Icon白线'),
+                selected: _showIconCenterLine,
+                selectedColor: Colors.grey.withValues(alpha: 0.2),
+                checkmarkColor: Colors.black87,
+                labelStyle: TextStyle(
+                  fontSize: 12,
+                  color: _showIconCenterLine
+                      ? Colors.black87
+                      : MvpTheme.textSecondary,
+                ),
+                shape: AppShape.all(8),
+                onSelected: (val) => setState(() => _showIconCenterLine = val),
+              ),
+              FilterChip(
+                label: const Text('Text黑线'),
+                selected: _showTextCenterLine,
+                selectedColor: Colors.black.withValues(alpha: 0.15),
+                checkmarkColor: Colors.black87,
+                labelStyle: TextStyle(
+                  fontSize: 12,
+                  color: _showTextCenterLine
+                      ? Colors.black87
+                      : MvpTheme.textSecondary,
+                ),
+                shape: AppShape.all(8),
+                onSelected: (val) => setState(() => _showTextCenterLine = val),
               ),
               FilterChip(
                 label: const Text('黑色外框盒'),
