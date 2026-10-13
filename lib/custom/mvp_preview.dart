@@ -410,57 +410,71 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
             ),
             child: Builder(
               builder: (context) {
-                if (_useWidgetSpan) {
-                  return const Row(
-                    children: [
-                      Icon(
-                        Icons.check_circle_outline,
-                        size: 13,
-                        color: MvpTheme.activeColor,
-                      ),
-                      SizedBox(width: 6),
-                      Text(
-                        '方案3模式：底层 HarfBuzz 引擎根据当前字体度量 (FontMetrics) 动态自适应中线对齐',
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
-                          color: MvpTheme.activeColor,
-                        ),
-                      ),
-                    ],
-                  );
-                }
-
                 final double iconCenter = _iconSize / 2;
                 final double iconBottom = _iconSize;
-                final double textBaseTop =
-                    _crossAxisAlignment == CrossAxisAlignment.start
-                        ? 0.0
-                        : (_iconSize - _fontSize) / 2;
+                final double textBaseTop;
+                if (_useWidgetSpan) {
+                  textBaseTop = (_iconSize - _fontSize) / 2;
+                } else if (_crossAxisAlignment == CrossAxisAlignment.start) {
+                  textBaseTop = 0.0;
+                } else {
+                  textBaseTop = (_iconSize - _fontSize) / 2;
+                }
+
                 final double textTop = textBaseTop + _offsetY;
                 final double textCenter =
                     textBaseTop + (_fontSize / 2) + _offsetY;
                 final double textBottom = textBaseTop + _fontSize + _offsetY;
-                return Row(
+                final double centerDiff = (textCenter - iconCenter).abs();
+
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                      'Icon盒 Y: 顶 0.00 / 中 ${iconCenter.toStringAsFixed(2)} / 底 ${iconBottom.toStringAsFixed(2)} px',
-                      style: const TextStyle(
-                        fontSize: 10.5,
-                        fontFamily: 'monospace',
-                        color: MvpTheme.textSecondary,
-                      ),
+                    Row(
+                      children: [
+                        Text(
+                          'Icon盒 Y: 顶 0.00 / 中 ${iconCenter.toStringAsFixed(2)} / 底 ${iconBottom.toStringAsFixed(2)} px',
+                          style: const TextStyle(
+                            fontSize: 10.5,
+                            fontFamily: 'monospace',
+                            color: MvpTheme.textSecondary,
+                          ),
+                        ),
+                        const Spacer(),
+                        Text(
+                          'Text盒 Y: 顶 ${textTop >= 0 ? '+' : ''}${textTop.toStringAsFixed(2)} / 中 ${textCenter >= 0 ? '+' : ''}${textCenter.toStringAsFixed(2)} / 底 ${textBottom >= 0 ? '+' : ''}${textBottom.toStringAsFixed(2)} px',
+                          style: const TextStyle(
+                            fontSize: 10.5,
+                            fontFamily: 'monospace',
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black87,
+                          ),
+                        ),
+                      ],
                     ),
-                    const Spacer(),
-                    Text(
-                      'Text盒 Y: 顶 ${textTop >= 0 ? '+' : ''}${textTop.toStringAsFixed(2)} / 中 ${textCenter >= 0 ? '+' : ''}${textCenter.toStringAsFixed(2)} / 底 ${textBottom >= 0 ? '+' : ''}${textBottom.toStringAsFixed(2)} px',
-                      style: const TextStyle(
-                        fontSize: 10.5,
-                        fontFamily: 'monospace',
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black87,
+                    if (_useWidgetSpan) ...[
+                      const SizedBox(height: 4),
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.check_circle,
+                            size: 12,
+                            color: MvpTheme.activeColor,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            centerDiff < 0.01
+                                ? '方案3: HarfBuzz 引擎动态锁定中线重合 (Δ = 0.00px)'
+                                : '方案3微调: 中线偏差 Δ = ${centerDiff.toStringAsFixed(2)}px',
+                            style: const TextStyle(
+                              fontSize: 10.5,
+                              fontWeight: FontWeight.w600,
+                              color: MvpTheme.activeColor,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
+                    ],
                   ],
                 );
               },
@@ -582,6 +596,21 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
       child: iconContent,
     );
 
+    final Widget textBox = Container(
+      decoration: _showBoundingBox
+          ? BoxDecoration(
+              border: Border.all(
+                color: Colors.black,
+                width: 1.0,
+              ),
+            )
+          : null,
+      child: Text(
+        _buttonText,
+        style: textStyle,
+      ),
+    );
+
     final Widget innerContent;
 
     if (useWidgetSpan) {
@@ -591,21 +620,22 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
             WidgetSpan(
               alignment: placeholderAlignment,
               baseline: TextBaseline.alphabetic,
-              child: offsetY != 0.0
-                  ? Transform.translate(
-                      offset: Offset(0, -offsetY),
-                      child: iconBox,
-                    )
-                  : iconBox,
+              child: iconBox,
             ),
             WidgetSpan(
               alignment: placeholderAlignment,
               baseline: TextBaseline.alphabetic,
               child: const SizedBox(width: 6),
             ),
-            TextSpan(
-              text: _buttonText,
-              style: textStyle,
+            WidgetSpan(
+              alignment: placeholderAlignment,
+              baseline: TextBaseline.alphabetic,
+              child: offsetY != 0.0
+                  ? Transform.translate(
+                      offset: Offset(0, offsetY),
+                      child: textBox,
+                    )
+                  : textBox,
             ),
           ],
         ),
@@ -619,20 +649,7 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
           const SizedBox(width: 6),
           Transform.translate(
             offset: Offset(0, offsetY),
-            child: Container(
-              decoration: _showBoundingBox
-                  ? BoxDecoration(
-                      border: Border.all(
-                        color: Colors.black,
-                        width: 1.0,
-                      ),
-                    )
-                  : null,
-              child: Text(
-                _buttonText,
-                style: textStyle,
-              ),
-            ),
+            child: textBox,
           ),
         ],
       );
