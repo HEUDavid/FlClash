@@ -489,7 +489,7 @@ class _MvpToggleSwitch extends StatelessWidget {
                             duration: const Duration(milliseconds: 200),
                             scale: isOn ? 1.0 : 0.5,
                             child: Transform.translate(
-                              offset: const Offset(1.5, 0.5), // 视觉中心补偿 右移1.5 下移0.5
+                              offset: const Offset(1.0, 0.5), // 视觉中心补偿 右移1.0 下移0.5
                               child: const GlyphIcon(
                                 AppGlyphs.check,
                                 size: 50,
