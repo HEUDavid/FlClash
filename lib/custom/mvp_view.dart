@@ -706,8 +706,8 @@ class _MvpQuickInfoCards extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            width: 38,
-            height: 38,
+            width: 36,
+            height: 36,
             decoration: ShapeDecoration(
               color: bgFill,
               shape: AppShape.sm,
