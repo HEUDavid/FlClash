@@ -840,7 +840,7 @@ class _MvpProfileCard extends StatelessWidget {
                 MvpIconLabel(
                   glyph: AppGlyphs.sliders,
                   label: '配置文件',
-                  iconSize: 13,
+                  iconSize: 16,
                   fontSize: 12,
                   gap: 6,
                   color: MvpTheme.textPrimary,
@@ -912,7 +912,7 @@ class _MvpProfileCard extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       child: Container(
         height: 30,
-        padding: const EdgeInsets.only(left: 8, right: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         alignment: Alignment.center,
         decoration: ShapeDecoration(
           color: backgroundColor,
@@ -921,7 +921,7 @@ class _MvpProfileCard extends StatelessWidget {
         child: MvpIconLabel(
           glyph: icon,
           label: label,
-          iconSize: 13,
+          iconSize: 16,
           fontSize: 12,
           gap: 5,
           color: color,
@@ -991,7 +991,10 @@ class _MvpProfileCard extends StatelessWidget {
               onTap: isUpdating ? null : onUpdate,
               behavior: HitTestBehavior.opaque,
               child: Container(
-                padding: const EdgeInsets.fromLTRB(16, 11, 16, 10),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 10,
+                ),
                 decoration: ShapeDecoration(
                   color: MvpTheme.activeColor,
                   shape: AppShape.sm,
@@ -1092,7 +1095,7 @@ class _MvpProfileCard extends StatelessWidget {
               child: Container(
                 width: double.infinity,
                 alignment: Alignment.center,
-                padding: const EdgeInsets.only(top: 13, bottom: 12),
+                padding: const EdgeInsets.symmetric(vertical: 12),
                 decoration: ShapeDecoration(
                   color: MvpTheme.activeColor,
                   shape: AppShape.sm,
@@ -1124,7 +1127,7 @@ class MvpIconLabel extends StatelessWidget {
     required this.glyph,
     required this.label,
     this.isLoading = false,
-    this.iconSize = 13,
+    this.iconSize = 16,
     this.fontSize = 12,
     this.gap = 6,
     this.color = Colors.white,
@@ -1140,37 +1143,64 @@ class MvpIconLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox.square(
-          dimension: iconSize,
-          child: isLoading
-              ? Center(
-                  child: SizedBox.square(
-                    dimension: (iconSize - 4.0).clamp(8.0, 24.0),
-                    child: CircularProgressIndicator(
-                      strokeWidth: 1.1,
-                      color: color,
-                    ),
-                  ),
-                )
-              : GlyphIcon(glyph, size: iconSize, color: color),
-        ),
-        SizedBox(width: gap),
-        Text(
-          label,
-          style: TextStyle(
+    final Widget iconWidget = SizedBox.square(
+      dimension: iconSize,
+      child: isLoading
+          ? Center(
+              child: SizedBox.square(
+                dimension: (iconSize - 4.0).clamp(8.0, 24.0),
+                child: CircularProgressIndicator(
+                  strokeWidth: 1.1,
+                  color: color,
+                ),
+              ),
+            )
+          : GlyphIcon(glyph, size: iconSize, color: color),
+    );
+
+    final textStyle = TextStyle(
+      fontSize: fontSize,
+      fontWeight: FontWeight.w600,
+      color: color,
+      height: MvpTheme.lineHeightTight,
+      leadingDistribution: TextLeadingDistribution.even,
+    );
+
+    final double contentHeight = iconSize > fontSize ? iconSize : fontSize;
+
+    return SizedBox(
+      height: contentHeight,
+      child: Center(
+        widthFactor: 1.0,
+        heightFactor: 1.0,
+        child: Text.rich(
+          TextSpan(
+            style: textStyle,
+            children: [
+              WidgetSpan(
+                alignment: PlaceholderAlignment.middle,
+                baseline: TextBaseline.alphabetic,
+                child: iconWidget,
+              ),
+              WidgetSpan(
+                alignment: PlaceholderAlignment.middle,
+                baseline: TextBaseline.alphabetic,
+                child: SizedBox(width: gap),
+              ),
+              TextSpan(
+                text: label,
+                style: textStyle,
+              ),
+            ],
+          ),
+          strutStyle: StrutStyle(
             fontSize: fontSize,
-            fontWeight: FontWeight.w600,
-            color: color,
             height: MvpTheme.lineHeightTight,
             leadingDistribution: TextLeadingDistribution.even,
+            forceStrutHeight: true,
           ),
         ),
-      ],
+      ),
     );
   }
 }
