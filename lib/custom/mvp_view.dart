@@ -993,7 +993,7 @@ class _MvpProfileCard extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16,
-                  vertical: 12,
+                  vertical: 10,
                 ),
                 decoration: ShapeDecoration(
                   color: MvpTheme.activeColor,

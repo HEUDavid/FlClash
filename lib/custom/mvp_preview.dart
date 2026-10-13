@@ -756,7 +756,7 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 16,
-        vertical: 12,
+        vertical: 10,
       ),
       decoration: ShapeDecoration(
         color: MvpTheme.activeColor,
