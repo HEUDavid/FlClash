@@ -959,7 +959,7 @@ class _MvpProfileCard extends StatelessWidget {
                       leadingDistribution: TextLeadingDistribution.even,
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 14),
                   Text(
                     '更新于：$updateDateStr',
                     style: const TextStyle(
@@ -970,7 +970,7 @@ class _MvpProfileCard extends StatelessWidget {
                       leadingDistribution: TextLeadingDistribution.even,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 6),
                   Text(
                     ruleCountStr,
                     maxLines: 1,
