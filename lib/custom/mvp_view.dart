@@ -488,9 +488,9 @@ class _MvpToggleSwitch extends StatelessWidget {
                           child: AnimatedScale(
                             duration: const Duration(milliseconds: 200),
                             scale: isOn ? 1.0 : 0.5,
-                            child: const Transform.translate(
-                              offset: Offset(1.5, 1.5),
-                              child: GlyphIcon(
+                            child: Transform.translate(
+                              offset: const Offset(1.5, 1.5),
+                              child: const GlyphIcon(
                                 AppGlyphs.check,
                                 size: 50,
                                 fill: 1,
