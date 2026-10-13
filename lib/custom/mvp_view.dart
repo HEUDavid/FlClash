@@ -952,8 +952,8 @@ class _MvpProfileCard extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
                       color: MvpTheme.textPrimary,
                       height: MvpTheme.lineHeightTitle,
                       leadingDistribution: TextLeadingDistribution.even,
