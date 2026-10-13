@@ -136,6 +136,7 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
   bool _showIconCenterLine = true;
   bool _showTextCenterLine = true;
   bool _showBoundingBox = true;
+  bool _lockVerticalCenter = true;
   bool _isLoading = false;
   bool _compareMode = false;
 
@@ -489,20 +490,26 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
                       const SizedBox(height: 4),
                       Row(
                         children: [
-                          const Icon(
-                            Icons.check_circle,
-                            size: 12,
+                          Icon(
+                            _lockVerticalCenter
+                                ? Icons.verified
+                                : Icons.check_circle_outline,
+                            size: 13,
                             color: MvpTheme.activeColor,
                           ),
                           const SizedBox(width: 4),
-                          Text(
-                            centerDiff < 0.01
-                                ? '方案3: HarfBuzz 引擎动态锁定中线重合 (Δ = 0.00px)'
-                                : '方案3微调: 中线偏差 Δ = ${centerDiff.toStringAsFixed(2)}px',
-                            style: const TextStyle(
-                              fontSize: 10.5,
-                              fontWeight: FontWeight.w600,
-                              color: MvpTheme.activeColor,
+                          Expanded(
+                            child: Text(
+                              _lockVerticalCenter
+                                  ? '🌟 垂直居中锁生效：红线(按钮中轴) = 白线(Icon中轴) = 黑线(Text中轴) 严格三线合璧'
+                                  : (centerDiff < 0.01
+                                      ? '方案3: 黑白中线重合，但未锁外框高度 (红线因Descent处于上方)'
+                                      : '方案3微调: 中线偏差 Δ = ${centerDiff.toStringAsFixed(2)}px'),
+                              style: const TextStyle(
+                                fontSize: 10.5,
+                                fontWeight: FontWeight.w600,
+                                color: MvpTheme.activeColor,
+                              ),
                             ),
                           ),
                         ],
@@ -683,6 +690,11 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
     if (useWidgetSpan) {
       innerContent = Text.rich(
         TextSpan(
+          style: TextStyle(
+            fontSize: _fontSize,
+            height: _preset.lineHeight,
+            leadingDistribution: _preset.leadingDist,
+          ),
           children: [
             WidgetSpan(
               alignment: placeholderAlignment,
@@ -706,6 +718,12 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
             ),
           ],
         ),
+        strutStyle: StrutStyle(
+          fontSize: _fontSize,
+          height: _preset.lineHeight,
+          leadingDistribution: _preset.leadingDist,
+          forceStrutHeight: true,
+        ),
       );
     } else {
       innerContent = Row(
@@ -721,6 +739,18 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
         ],
       );
     }
+
+    final double maxElementHeight =
+        _iconSize > _fontSize ? _iconSize : _fontSize;
+    final Widget finalContent = _lockVerticalCenter
+        ? SizedBox(
+            height: maxElementHeight,
+            child: Center(
+              heightFactor: 1.0,
+              child: innerContent,
+            ),
+          )
+        : innerContent;
 
     return Container(
       padding: const EdgeInsets.symmetric(
@@ -738,7 +768,7 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
           ),
         ],
       ),
-      child: innerContent,
+      child: finalContent,
     );
   }
 
@@ -1209,6 +1239,22 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
                 ),
                 shape: AppShape.all(8),
                 onSelected: (val) => setState(() => _showTextCenterLine = val),
+              ),
+              FilterChip(
+                label: const Text('垂直居中锁 (三线合一)'),
+                selected: _lockVerticalCenter,
+                selectedColor: MvpTheme.activeColor.withValues(alpha: 0.18),
+                checkmarkColor: MvpTheme.activeColor,
+                labelStyle: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: _lockVerticalCenter
+                      ? MvpTheme.activeColor
+                      : MvpTheme.textSecondary,
+                ),
+                shape: AppShape.all(8),
+                onSelected: (val) =>
+                    setState(() => _lockVerticalCenter = val),
               ),
               FilterChip(
                 label: const Text('黑色外框盒'),
