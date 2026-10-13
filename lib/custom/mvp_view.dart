@@ -695,13 +695,13 @@ class _MvpQuickInfoCards extends StatelessWidget {
         shadows: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 0.5,
-            offset: const Offset(0, 0.5),
+            blurRadius: 1,
+            offset: const Offset(0.5, 0.5),
           ),
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
             blurRadius: 0.5,
-            offset: const Offset(0, 0.5),
+            offset: Offset.zero,
           ),
         ],
       ),
@@ -820,13 +820,13 @@ class _MvpProfileCard extends StatelessWidget {
         shadows: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 0.5,
-            offset: const Offset(0, 0.5),
+            blurRadius: 1,
+            offset: const Offset(0.5, 0.5),
           ),
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
             blurRadius: 0.5,
-            offset: const Offset(0, 0.5),
+            offset: Offset.zero,
           ),
         ],
       ),
@@ -1038,13 +1038,13 @@ class _MvpProfileCard extends StatelessWidget {
                 shadows: [
                   BoxShadow(
                     color: Colors.black.withValues(alpha: 0.04),
-                    blurRadius: 1,
-                    offset: const Offset(0, 0.5),
+                    blurRadius: 0.5,
+                    offset: Offset.zero,
                   ),
                   BoxShadow(
                     color: Colors.black.withValues(alpha: 0.02),
                     blurRadius: 0.5,
-                    offset: const Offset(0, 0.5),
+                    offset: Offset.zero,
                   ),
                 ],
               ),
