@@ -732,7 +732,7 @@ class _MvpQuickInfoCards extends StatelessWidget {
                 Text(
                   title,
                   style: const TextStyle(
-                    fontSize: 12,
+                    fontSize: 11,
                     fontWeight: FontWeight.w500,
                     color: MvpTheme.textSecondary,
                     height: MvpTheme.lineHeightBody,
@@ -745,7 +745,7 @@ class _MvpQuickInfoCards extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
-                    fontSize: 13,
+                    fontSize: 12,
                     fontWeight: FontWeight.w600,
                     color: MvpTheme.textPrimary,
                     height: MvpTheme.lineHeightBody,
