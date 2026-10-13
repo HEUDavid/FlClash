@@ -746,6 +746,7 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
         ? SizedBox(
             height: maxElementHeight,
             child: Center(
+              widthFactor: 1.0,
               heightFactor: 1.0,
               child: innerContent,
             ),
