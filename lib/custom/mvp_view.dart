@@ -850,6 +850,8 @@ class _MvpProfileCard extends StatelessWidget {
                     icon: AppGlyphs.reset,
                     label: '重置',
                     color: MvpTheme.dangerText,
+                    backgroundColor:
+                        MvpTheme.dangerColor.withValues(alpha: 0.05),
                     onTap: () => onToggleInputArea(true),
                   )
                 else if (hasProfile)
@@ -857,6 +859,8 @@ class _MvpProfileCard extends StatelessWidget {
                     icon: AppGlyphs.chevronUp,
                     label: '收起',
                     color: MvpTheme.textSecondary,
+                    backgroundColor:
+                        MvpTheme.inactiveBadgeBg.withValues(alpha: 0.30),
                     onTap: () => onToggleInputArea(false),
                   ),
               ],
@@ -900,6 +904,7 @@ class _MvpProfileCard extends StatelessWidget {
     required Glyph icon,
     required String label,
     required Color color,
+    required Color backgroundColor,
     required VoidCallback onTap,
   }) {
     return GestureDetector(
@@ -907,8 +912,12 @@ class _MvpProfileCard extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       child: Container(
         height: 30,
-        padding: const EdgeInsets.only(left: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         alignment: Alignment.center,
+        decoration: ShapeDecoration(
+          color: backgroundColor,
+          shape: AppShape.sm,
+        ),
         child: MvpIconLabel(
           glyph: icon,
           label: label,
