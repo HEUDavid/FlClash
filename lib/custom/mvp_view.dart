@@ -841,7 +841,7 @@ class _MvpProfileCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const MvpIconLabel(
-                  glyph: AppGlyphs.layoutTabs,
+                  glyph: AppGlyphs.dns,
                   label: '配置文件',
                   iconSize: 16,
                   fontSize: 12,
@@ -1111,7 +1111,7 @@ class _MvpProfileCard extends StatelessWidget {
                   ],
                 ),
                 child: MvpIconLabel(
-                  glyph: AppGlyphs.arrowDown,
+                  glyph: AppGlyphs.scrollToTop, // TODO: 旋转180
                   label: '下载并导入',
                   isLoading: isImporting,
                 ),
