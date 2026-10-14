@@ -1,5 +1,6 @@
 import 'package:fl_clash/common/shape.dart';
 import 'package:fl_clash/icons/icons.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -142,6 +143,143 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
 
   Glyph _selectedGlyph = AppGlyphs.sync;
   String _buttonText = '同步';
+  String _glyphSearchQuery = '';
+
+  static const List<(String, Glyph)> _allGlyphs = [
+    ('dashboard', AppGlyphs.dashboard),
+    ('proxies', AppGlyphs.proxies),
+    ('profiles', AppGlyphs.profiles),
+    ('requests', AppGlyphs.requests),
+    ('clock', AppGlyphs.clock),
+    ('history', AppGlyphs.history),
+    ('connections', AppGlyphs.connections),
+    ('dns', AppGlyphs.dns),
+    ('resources', AppGlyphs.resources),
+    ('logs', AppGlyphs.logs),
+    ('tools', AppGlyphs.tools),
+    ('target', AppGlyphs.target),
+    ('arrowBack', AppGlyphs.arrowBack),
+    ('chevronBack', AppGlyphs.chevronBack),
+    ('chevronForward', AppGlyphs.chevronForward),
+    ('chevronDown', AppGlyphs.chevronDown),
+    ('chevronUp', AppGlyphs.chevronUp),
+    ('picker', AppGlyphs.picker),
+    ('caretDown', AppGlyphs.caretDown),
+    ('arrowUp', AppGlyphs.arrowUp),
+    ('arrowDown', AppGlyphs.arrowDown),
+    ('scrollToTop', AppGlyphs.scrollToTop),
+    ('openExternal', AppGlyphs.openExternal),
+    ('undo', AppGlyphs.undo),
+    ('redo', AppGlyphs.redo),
+    ('sync', AppGlyphs.sync),
+    ('refresh', AppGlyphs.refresh),
+    ('reset', AppGlyphs.reset),
+    ('export', AppGlyphs.export),
+    ('upload', AppGlyphs.upload),
+    ('add', AppGlyphs.add),
+    ('addCircle', AppGlyphs.addCircle),
+    ('removeCircle', AppGlyphs.removeCircle),
+    ('close', AppGlyphs.close),
+    ('check', AppGlyphs.check),
+    ('checkDouble', AppGlyphs.checkDouble),
+    ('checkCircle', AppGlyphs.checkCircle),
+    ('block', AppGlyphs.block),
+    ('info', AppGlyphs.info),
+    ('warning', AppGlyphs.warning),
+    ('error', AppGlyphs.error),
+    ('more', AppGlyphs.more),
+    ('moreCircle', AppGlyphs.moreCircle),
+    ('dragHandle', AppGlyphs.dragHandle),
+    ('sort', AppGlyphs.sort),
+    ('filter', AppGlyphs.filter),
+    ('sortAlpha', AppGlyphs.sortAlpha),
+    ('textShort', AppGlyphs.textShort),
+    ('wrap', AppGlyphs.wrap),
+    ('listAdd', AppGlyphs.listAdd),
+    ('edit', AppGlyphs.edit),
+    ('compose', AppGlyphs.compose),
+    ('delete', AppGlyphs.delete),
+    ('clearAll', AppGlyphs.clearAll),
+    ('copy', AppGlyphs.copy),
+    ('cut', AppGlyphs.cut),
+    ('paste', AppGlyphs.paste),
+    ('selectAll', AppGlyphs.selectAll),
+    ('deselect', AppGlyphs.deselect),
+    ('search', AppGlyphs.search),
+    ('findReplace', AppGlyphs.findReplace),
+    ('save', AppGlyphs.save),
+    ('importFile', AppGlyphs.importFile),
+    ('file', AppGlyphs.file),
+    ('cloud', AppGlyphs.cloud),
+    ('cloudDownload', AppGlyphs.cloudDownload),
+    ('cloudSync', AppGlyphs.cloudSync),
+    ('link', AppGlyphs.link),
+    ('send', AppGlyphs.send),
+    ('rules', AppGlyphs.rules),
+    ('code', AppGlyphs.code),
+    ('settings', AppGlyphs.settings),
+    ('sliders', AppGlyphs.sliders),
+    ('wrench', AppGlyphs.wrench),
+    ('toggle', AppGlyphs.toggle),
+    ('pin', AppGlyphs.pin),
+    ('eye', AppGlyphs.eye),
+    ('eyeOff', AppGlyphs.eyeOff),
+    ('lock', AppGlyphs.lock),
+    ('lockOpen', AppGlyphs.lockOpen),
+    ('key', AppGlyphs.key),
+    ('password', AppGlyphs.password),
+    ('account', AppGlyphs.account),
+    ('sparkle', AppGlyphs.sparkle),
+    ('bolt', AppGlyphs.bolt),
+    ('locate', AppGlyphs.locate),
+    ('star', AppGlyphs.star),
+    ('puzzle', AppGlyphs.puzzle),
+    ('customize', AppGlyphs.customize),
+    ('layers', AppGlyphs.layers),
+    ('sun', AppGlyphs.sun),
+    ('moon', AppGlyphs.moon),
+    ('themeAuto', AppGlyphs.themeAuto),
+    ('pureBlack', AppGlyphs.pureBlack),
+    ('palette', AppGlyphs.palette),
+    ('paintbrush', AppGlyphs.paintbrush),
+    ('eyedropper', AppGlyphs.eyedropper),
+    ('motion', AppGlyphs.motion),
+    ('blur', AppGlyphs.blur),
+    ('font', AppGlyphs.font),
+    ('textSize', AppGlyphs.textSize),
+    ('language', AppGlyphs.language),
+    ('keyboard', AppGlyphs.keyboard),
+    ('photos', AppGlyphs.photos),
+    ('camera', AppGlyphs.camera),
+    ('qrCode', AppGlyphs.qrCode),
+    ('torch', AppGlyphs.torch),
+    ('torchOff', AppGlyphs.torchOff),
+    ('torchAuto', AppGlyphs.torchAuto),
+    ('vpn', AppGlyphs.vpn),
+    ('shuffle', AppGlyphs.shuffle),
+    ('split', AppGlyphs.split),
+    ('speed', AppGlyphs.speed),
+    ('dataUsage', AppGlyphs.dataUsage),
+    ('memory', AppGlyphs.memory),
+    ('cpu', AppGlyphs.cpu),
+    ('devices', AppGlyphs.devices),
+    ('broom', AppGlyphs.broom),
+    ('wifi', AppGlyphs.wifi),
+    ('wifiOff', AppGlyphs.wifiOff),
+    ('networkCheck', AppGlyphs.networkCheck),
+    ('gavel', AppGlyphs.gavel),
+    ('appsList', AppGlyphs.appsList),
+    ('layoutList', AppGlyphs.layoutList),
+    ('layoutTabs', AppGlyphs.layoutTabs),
+    ('columnsThree', AppGlyphs.columnsThree),
+    ('columnsTwo', AppGlyphs.columnsTwo),
+    ('columnsOne', AppGlyphs.columnsOne),
+    ('cardLarge', AppGlyphs.cardLarge),
+    ('cardMedium', AppGlyphs.cardMedium),
+    ('cardSmall', AppGlyphs.cardSmall),
+    ('iconTile', AppGlyphs.iconTile),
+    ('iconPlain', AppGlyphs.iconPlain),
+  ];
 
   final List<(Glyph, String, double, double, String)> _mvpButtons = [
     (AppGlyphs.sync, '同步', 16.0, 12.0, '主操作按钮 (实装: 16/12)'),
@@ -217,6 +355,8 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
                   _buildStageCard(),
                   const SizedBox(height: 16),
                   _buildControlsCard(),
+                  const SizedBox(height: 16),
+                  _buildGlyphsListCard(),
                   const SizedBox(height: 16),
                   _buildAnalysisCard(),
                 ],
@@ -1407,6 +1547,361 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
             ),
           ),
         ],
+      ),
+    );
+  Widget _buildGlyphsListCard() {
+    final filtered = _glyphSearchQuery.isEmpty
+        ? _allGlyphs
+        : _allGlyphs
+            .where(
+              (g) => g.$1
+                  .toLowerCase()
+                  .contains(_glyphSearchQuery.toLowerCase()),
+            )
+            .toList();
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: ShapeDecoration(
+        color: Colors.white,
+        shape: AppShape.md.copyWith(
+          side: BorderSide(
+            color: Colors.black.withValues(alpha: 0.06),
+            width: 0.5,
+          ),
+        ),
+        shadows: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.03),
+            blurRadius: 16,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  const GlyphIcon(
+                    AppGlyphs.iconTile,
+                    size: 16,
+                    color: MvpTheme.activeColor,
+                  ),
+                  const SizedBox(width: 8),
+                  const Text(
+                    'AppGlyphs 图标清单',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: MvpTheme.textPrimary,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 6,
+                      vertical: 2,
+                    ),
+                    decoration: ShapeDecoration(
+                      color: const Color(0xFFF1F5F9),
+                      shape: AppShape.xs,
+                    ),
+                    child: Text(
+                      '${filtered.length} / ${_allGlyphs.length}',
+                      style: const TextStyle(
+                        fontSize: 11,
+                        fontFamily: 'monospace',
+                        fontWeight: FontWeight.w600,
+                        color: MvpTheme.textSecondary,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const Text(
+                '点击行直接装载至上方实验室',
+                style: TextStyle(
+                  fontSize: 11,
+                  color: MvpTheme.textSecondary,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Container(
+            height: 38,
+            decoration: ShapeDecoration(
+              color: const Color(0xFFF8FAFC),
+              shape: AppShape.xs.copyWith(
+                side: BorderSide(
+                  color: Colors.black.withValues(alpha: 0.06),
+                  width: 0.5,
+                ),
+              ),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.search,
+                  size: 16,
+                  color: MvpTheme.textSecondary,
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: TextField(
+                    onChanged: (val) =>
+                        setState(() => _glyphSearchQuery = val.trim()),
+                    style: const TextStyle(
+                      fontSize: 12.5,
+                      color: MvpTheme.textPrimary,
+                    ),
+                    decoration: const InputDecoration(
+                      isDense: true,
+                      border: InputBorder.none,
+                      hintText: '搜索图标名称 (如 sliders, sync, check, arrow)...',
+                      hintStyle: TextStyle(
+                        fontSize: 12,
+                        color: MvpTheme.textSecondary,
+                      ),
+                      contentPadding: EdgeInsets.zero,
+                    ),
+                  ),
+                ),
+                if (_glyphSearchQuery.isNotEmpty)
+                  GestureDetector(
+                    onTap: () => setState(() => _glyphSearchQuery = ''),
+                    child: const Icon(
+                      Icons.cancel,
+                      size: 15,
+                      color: MvpTheme.textSecondary,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+            decoration: ShapeDecoration(
+              color: const Color(0xFFF1F5F9),
+              shape: AppShape.xs,
+            ),
+            child: const Row(
+              children: [
+                SizedBox(
+                  width: 32,
+                  child: Text(
+                    '#',
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                      color: MvpTheme.textSecondary,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    '常量名称',
+                    style: TextStyle(
+                      fontSize: 11.5,
+                      fontWeight: FontWeight.w600,
+                      color: MvpTheme.textPrimary,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 72,
+                  child: Text(
+                    '显示图标',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 11.5,
+                      fontWeight: FontWeight.w600,
+                      color: MvpTheme.textPrimary,
+                    ),
+                  ),
+                ),
+                SizedBox(width: 8),
+                SizedBox(
+                  width: 60,
+                  child: Text(
+                    '操作',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 11.5,
+                      fontWeight: FontWeight.w600,
+                      color: MvpTheme.textSecondary,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 4),
+          if (filtered.isEmpty)
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 24),
+              alignment: Alignment.center,
+              child: const Text(
+                '未找到匹配的图标',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: MvpTheme.textSecondary,
+                ),
+              ),
+            )
+          else
+            for (var i = 0; i < filtered.length; i++)
+              _buildGlyphRow(i, filtered[i].$1, filtered[i].$2),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildGlyphRow(int index, String name, Glyph glyph) {
+    final isSelected = _selectedGlyph == glyph;
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 1.5),
+      child: InkWell(
+        onTap: () {
+          setState(() {
+            _selectedGlyph = glyph;
+            _buttonText = name;
+          });
+        },
+        customBorder: AppShape.xs,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+          decoration: ShapeDecoration(
+            color: isSelected
+                ? MvpTheme.activeColor.withValues(alpha: 0.10)
+                : (index.isEven
+                    ? const Color(0xFFFAFAFC)
+                    : Colors.white),
+            shape: AppShape.xs,
+          ),
+          child: Row(
+            children: [
+              SizedBox(
+                width: 32,
+                child: Text(
+                  '${index + 1}',
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontFamily: 'monospace',
+                    color: isSelected
+                        ? MvpTheme.activeColor
+                        : MvpTheme.textSecondary,
+                    fontWeight:
+                        isSelected ? FontWeight.bold : FontWeight.normal,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Row(
+                  children: [
+                    Flexible(
+                      child: Text(
+                        'AppGlyphs.$name',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'monospace',
+                          fontWeight:
+                              isSelected ? FontWeight.w700 : FontWeight.w500,
+                          color: isSelected
+                              ? MvpTheme.activeColor
+                              : MvpTheme.textPrimary,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    InkWell(
+                      onTap: () {
+                        Clipboard.setData(
+                          ClipboardData(text: 'AppGlyphs.$name'),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('已复制 AppGlyphs.$name 到剪贴板'),
+                            duration: const Duration(milliseconds: 1200),
+                            behavior: SnackBarBehavior.floating,
+                            width: 280,
+                          ),
+                        );
+                      },
+                      customBorder: AppShape.xs,
+                      child: Padding(
+                        padding: const EdgeInsets.all(2),
+                        child: Icon(
+                          Icons.copy,
+                          size: 13,
+                          color: isSelected
+                              ? MvpTheme.activeColor
+                              : MvpTheme.textSecondary.withValues(alpha: 0.7),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                width: 72,
+                child: Center(
+                  child: Container(
+                    width: 30,
+                    height: 30,
+                    alignment: Alignment.center,
+                    decoration: ShapeDecoration(
+                      color: isSelected
+                          ? MvpTheme.activeColor
+                          : const Color(0xFFF1F5F9),
+                      shape: AppShape.all(6),
+                    ),
+                    child: GlyphIcon(
+                      glyph,
+                      size: 16,
+                      color: isSelected ? Colors.white : MvpTheme.textPrimary,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              SizedBox(
+                width: 60,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 6,
+                    vertical: 3,
+                  ),
+                  alignment: Alignment.center,
+                  decoration: ShapeDecoration(
+                    color: isSelected
+                        ? MvpTheme.activeColor
+                        : Colors.transparent,
+                    shape: AppShape.xs,
+                  ),
+                  child: Text(
+                    isSelected ? '观察中' : '测试',
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight:
+                          isSelected ? FontWeight.w600 : FontWeight.normal,
+                      color: isSelected
+                          ? Colors.white
+                          : MvpTheme.textSecondary,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
