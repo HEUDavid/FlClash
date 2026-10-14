@@ -709,8 +709,8 @@ class _MvpQuickInfoCards extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            width: 32,
-            height: 32,
+            width: 34,
+            height: 34,
             decoration: ShapeDecoration(
               color: bgFill,
               shape: AppShape.sm,
@@ -718,7 +718,7 @@ class _MvpQuickInfoCards extends StatelessWidget {
             child: Center(
               child: GlyphIcon(
                 icon,
-                size: 20,
+                size: 18,
                 color: iconColor,
               ),
             ),
