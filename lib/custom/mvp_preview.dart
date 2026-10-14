@@ -144,6 +144,19 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
   Glyph _selectedGlyph = AppGlyphs.sync;
   String _buttonText = '同步';
   String _glyphSearchQuery = '';
+  late final TextEditingController _textController;
+
+  @override
+  void initState() {
+    super.initState();
+    _textController = TextEditingController(text: _buttonText);
+  }
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
+  }
 
   static const List<(String, Glyph)> _allGlyphs = [
     ('dashboard', AppGlyphs.dashboard),
@@ -293,6 +306,7 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
     setState(() {
       _selectedGlyph = item.$1;
       _buttonText = item.$2;
+      _textController.text = item.$2;
       _iconSize = item.$3;
       _fontSize = item.$4;
     });
@@ -969,6 +983,79 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
               );
             }).toList(),
           ),
+          const SizedBox(height: 10),
+          Container(
+            height: 38,
+            decoration: ShapeDecoration(
+              color: const Color(0xFFF8FAFC),
+              shape: AppShape.xs.copyWith(
+                side: BorderSide(
+                  color: Colors.black.withValues(alpha: 0.08),
+                  width: 0.5,
+                ),
+              ),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.edit_note,
+                  size: 18,
+                  color: MvpTheme.activeColor,
+                ),
+                const SizedBox(width: 8),
+                const Text(
+                  '自定义文字:',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: MvpTheme.textPrimary,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: TextField(
+                    controller: _textController,
+                    onChanged: (val) {
+                      setState(() {
+                        _buttonText = val;
+                      });
+                    },
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: MvpTheme.textPrimary,
+                    ),
+                    decoration: const InputDecoration(
+                      isDense: true,
+                      border: InputBorder.none,
+                      hintText: '输入自定义文字 (如: 同步 / 配置文件 / 连接代理)...',
+                      hintStyle: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.normal,
+                        color: MvpTheme.textSecondary,
+                      ),
+                      contentPadding: EdgeInsets.zero,
+                    ),
+                  ),
+                ),
+                if (_buttonText.isNotEmpty)
+                  GestureDetector(
+                    onTap: () {
+                      _textController.clear();
+                      setState(() {
+                        _buttonText = '';
+                      });
+                    },
+                    child: const Icon(
+                      Icons.cancel,
+                      size: 15,
+                      color: MvpTheme.textSecondary,
+                    ),
+                  ),
+              ],
+            ),
+          ),
           const SizedBox(height: 16),
           const Text(
             '2. 对齐预设模式对比',
@@ -1640,6 +1727,79 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
               color: const Color(0xFFF8FAFC),
               shape: AppShape.xs.copyWith(
                 side: BorderSide(
+                  color: Colors.black.withValues(alpha: 0.08),
+                  width: 0.5,
+                ),
+              ),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.edit_note,
+                  size: 18,
+                  color: MvpTheme.activeColor,
+                ),
+                const SizedBox(width: 8),
+                const Text(
+                  '测试文字:',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: MvpTheme.textPrimary,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: TextField(
+                    controller: _textController,
+                    onChanged: (val) {
+                      setState(() {
+                        _buttonText = val;
+                      });
+                    },
+                    style: const TextStyle(
+                      fontSize: 12.5,
+                      fontWeight: FontWeight.w600,
+                      color: MvpTheme.textPrimary,
+                    ),
+                    decoration: const InputDecoration(
+                      isDense: true,
+                      border: InputBorder.none,
+                      hintText: '输入自定义文字，点击下方任意图标实时装载测试...',
+                      hintStyle: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.normal,
+                        color: MvpTheme.textSecondary,
+                      ),
+                      contentPadding: EdgeInsets.zero,
+                    ),
+                  ),
+                ),
+                if (_buttonText.isNotEmpty)
+                  GestureDetector(
+                    onTap: () {
+                      _textController.clear();
+                      setState(() {
+                        _buttonText = '';
+                      });
+                    },
+                    child: const Icon(
+                      Icons.cancel,
+                      size: 15,
+                      color: MvpTheme.textSecondary,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 10),
+          Container(
+            height: 38,
+            decoration: ShapeDecoration(
+              color: const Color(0xFFF8FAFC),
+              shape: AppShape.xs.copyWith(
+                side: BorderSide(
                   color: Colors.black.withValues(alpha: 0.06),
                   width: 0.5,
                 ),
@@ -1773,7 +1933,6 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
         onTap: () {
           setState(() {
             _selectedGlyph = glyph;
-            _buttonText = name;
           });
         },
         customBorder: AppShape.xs,
@@ -1889,7 +2048,7 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
                     shape: AppShape.xs,
                   ),
                   child: Text(
-                    isSelected ? '观察中' : '测试',
+                    isSelected ? '已装载' : '装载',
                     style: TextStyle(
                       fontSize: 11,
                       fontWeight:
