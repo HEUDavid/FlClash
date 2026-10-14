@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 /// MVP 产品 - SharedPreferences 本地 Key 预注入工具
 class MvpPrefInjector {
-  /// 在存储层预注入默认 App 设置（免责声明与数据收集声明标为已接受）
+  /// 在存储层预注入 MVP 设置（免责声明/统计收集标为已接受以跳过弹窗，自动更新设为关闭）
   static Future<void> ensurePreinjected([WidgetRef? ref]) async {
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -23,29 +23,34 @@ class MvpPrefInjector {
 
       final appSettingProps =
           (configMap['appSettingProps'] as Map<String, dynamic>?) ?? {};
+      // 避免首次启动弹窗：免责声明与统计收集提示
       final disclaimerAccepted = appSettingProps['disclaimerAccepted'] == true;
       final crashlyticsTip = appSettingProps['crashlyticsTip'] == true;
+      // 避免检查上游版本：MVP 独立版始终强制关闭自动更新
+      final needDisableAutoUpdate =
+          appSettingProps['autoCheckUpdate'] != false;
 
-      // 若存储层未标记同意，注入标志位并写回 SharedPreferences
-      if (!disclaimerAccepted || !crashlyticsTip) {
+      if (!disclaimerAccepted || !crashlyticsTip || needDisableAutoUpdate) {
         appSettingProps['disclaimerAccepted'] = true;
         appSettingProps['crashlyticsTip'] = true;
+        appSettingProps['autoCheckUpdate'] = false;
         configMap['appSettingProps'] = appSettingProps;
 
         await prefs.setString('config', json.encode(configMap));
       }
 
-      // 如果当前上下文有 Riverpod ref，同步刷新内存中的 State
       if (ref != null) {
         final currentSetting = ref.read(appSettingProvider);
         if (!currentSetting.disclaimerAccepted ||
-            !currentSetting.crashlyticsTip) {
+            !currentSetting.crashlyticsTip ||
+            currentSetting.autoCheckUpdate) {
           ref.read(appSettingProvider.notifier).update(
                 (state) => state.copyWith(
-              disclaimerAccepted: true,
-              crashlyticsTip: true,
-            ),
-          );
+                  disclaimerAccepted: true,
+                  crashlyticsTip: true,
+                  autoCheckUpdate: false,
+                ),
+              );
         }
       }
     } catch (e) {
