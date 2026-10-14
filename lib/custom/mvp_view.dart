@@ -841,7 +841,7 @@ class _MvpProfileCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const MvpIconLabel(
-                  glyph: AppGlyphs.customize,
+                  glyph: AppGlyphs.sparkle,
                   label: '配置文件',
                   iconSize: 16,
                   fontSize: 12,
