@@ -1549,6 +1549,8 @@ class _MvpAlignPreviewViewState extends State<MvpAlignPreviewView> {
         ],
       ),
     );
+  }
+
   Widget _buildGlyphsListCard() {
     final filtered = _glyphSearchQuery.isEmpty
         ? _allGlyphs
