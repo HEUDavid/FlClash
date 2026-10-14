@@ -3,7 +3,7 @@ name: build-android
 on:
   push:
     branches:
-      - beta
+      - upstream-v0.8.99
   workflow_dispatch:
 
 concurrency:
