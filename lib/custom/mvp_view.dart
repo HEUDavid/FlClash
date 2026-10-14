@@ -841,7 +841,7 @@ class _MvpProfileCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const MvpIconLabel(
-                  glyph: AppGlyphs.resources,
+                  glyph: AppGlyphs.layoutTabs,
                   label: '配置文件',
                   iconSize: 16,
                   fontSize: 12,
@@ -850,7 +850,7 @@ class _MvpProfileCard extends StatelessWidget {
                 ),
                 if (isLoadedMode)
                   _buildHeaderButton(
-                    icon: AppGlyphs.delete,
+                    icon: AppGlyphs.broom,
                     label: '重置',
                     color: MvpTheme.dangerText,
                     backgroundColor:
