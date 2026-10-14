@@ -23,12 +23,13 @@ class MvpPrefInjector {
 
       final appSettingProps =
           (configMap['appSettingProps'] as Map<String, dynamic>?) ?? {};
-      final disclaimerAccepted = appSettingProps['disclaimerAccepted'] == true;
+      final acceptedDisclaimerVersion =
+          (appSettingProps['acceptedDisclaimerVersion'] as num?)?.toInt() ?? 0;
       final crashlyticsTip = appSettingProps['crashlyticsTip'] == true;
 
       // 若存储层未标记同意，注入标志位并写回 SharedPreferences
-      if (!disclaimerAccepted || !crashlyticsTip) {
-        appSettingProps['disclaimerAccepted'] = true;
+      if (acceptedDisclaimerVersion < disclaimerVersion || !crashlyticsTip) {
+        appSettingProps['acceptedDisclaimerVersion'] = disclaimerVersion;
         appSettingProps['crashlyticsTip'] = true;
         configMap['appSettingProps'] = appSettingProps;
 
@@ -38,11 +39,11 @@ class MvpPrefInjector {
       // 如果当前上下文有 Riverpod ref，同步刷新内存中的 State
       if (ref != null) {
         final currentSetting = ref.read(appSettingProvider);
-        if (!currentSetting.disclaimerAccepted ||
+        if (currentSetting.acceptedDisclaimerVersion < disclaimerVersion ||
             !currentSetting.crashlyticsTip) {
           ref.read(appSettingProvider.notifier).update(
                 (state) => state.copyWith(
-                  disclaimerAccepted: true,
+                  acceptedDisclaimerVersion: disclaimerVersion,
                   crashlyticsTip: true,
                 ),
               );
