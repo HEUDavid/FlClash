@@ -12,7 +12,7 @@ concurrency:
 
 env:
   IS_STABLE: 'true'
-  FLUTTER_VERSION: '3.47.4'
+  FLUTTER_VERSION: '3.47.6'
   APP_NAME: 'FkAd'
 
 jobs:
@@ -45,7 +45,7 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.26.4'
+          go-version: '1.27.1'
           cache-dependency-path: |
             core/go.sum
 
