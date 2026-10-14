@@ -850,7 +850,7 @@ class _MvpProfileCard extends StatelessWidget {
                 ),
                 if (isLoadedMode)
                   _buildHeaderButton(
-                    icon: AppGlyphs.clearAll,
+                    icon: AppGlyphs.delete,
                     label: '重置',
                     color: MvpTheme.dangerText,
                     backgroundColor:
