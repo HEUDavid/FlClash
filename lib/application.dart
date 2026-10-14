@@ -17,6 +17,9 @@ import 'package:fl_clash/widgets/focus.dart';
 import 'package:fl_clash/widgets/keyboard_inset_hold.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
+import 'package:fl_clash/custom/mvp_pref_injector.dart';
+import 'package:fl_clash/custom/mvp_provider.dart';
+import 'package:fl_clash/custom/mvp_view.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'pages/pages.dart';
@@ -40,10 +43,10 @@ Widget buildManagerStack({
   );
   final platformState = isDesktop
       ? WindowManager(
-          child: TrayManager(
-            child: HotKeyManager(child: ProxyManager(child: state)),
-          ),
-        )
+    child: TrayManager(
+      child: HotKeyManager(child: ProxyManager(child: state)),
+    ),
+  )
       : AndroidManager(child: TileManager(child: state));
   return AppEnvManager(
     child: LocaleManager(
@@ -92,6 +95,7 @@ class ApplicationState extends ConsumerState<Application> {
     super.initState();
     SystemNavigator.setFrameworkHandlesBack(true);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      await MvpPrefInjector.ensurePreinjected(ref);
       if (globalState.navigatorKey.currentContext != null) {
         await bootstrap.attach();
       } else {
@@ -145,8 +149,8 @@ class ApplicationState extends ConsumerState<Application> {
   }
 
   Future<void> _handleConnectivityChanged(
-    List<ConnectivityResult> results,
-  ) async {
+      List<ConnectivityResult> results,
+      ) async {
     commonPrint.log('connectivityChanged ${results.toString()}');
     unawaited(systemDnsCoordinator?.resync() ?? Future.value());
     unawaited(ref.read(systemActionProvider.notifier).updateLocalIp());
@@ -200,7 +204,12 @@ class ApplicationState extends ConsumerState<Application> {
           home: KeyboardInsetHold(child: child!),
         );
       },
-      child: const HomePage(),
+      child: Consumer(
+        builder: (_, ref, child) {
+          final isLightMode = ref.watch(customMvpProvider);
+          return isLightMode ? const CustomMvpView() : const HomePage();
+        },
+      ),
     );
   }
 
