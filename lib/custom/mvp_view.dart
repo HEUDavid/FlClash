@@ -1010,7 +1010,7 @@ class _MvpProfileCard extends StatelessWidget {
                   ],
                 ),
                 child: MvpIconLabel(
-                  glyph: AppGlyphs.sync,
+                  glyph: AppGlyphs.refresh,
                   label: '同步',
                   isLoading: isUpdating,
                 ),
