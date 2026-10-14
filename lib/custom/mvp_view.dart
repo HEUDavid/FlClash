@@ -850,7 +850,7 @@ class _MvpProfileCard extends StatelessWidget {
                 ),
                 if (isLoadedMode)
                   _buildHeaderButton(
-                    icon: AppGlyphs.edit,
+                    icon: AppGlyphs.compose,
                     label: '重置',
                     color: MvpTheme.dangerText,
                     backgroundColor:
@@ -1111,9 +1111,10 @@ class _MvpProfileCard extends StatelessWidget {
                   ],
                 ),
                 child: MvpIconLabel(
-                  glyph: AppGlyphs.scrollToTop, // TODO: 旋转180
+                  glyph: AppGlyphs.scrollToTop,
                   label: '下载并导入',
                   isLoading: isImporting,
+                  iconQuarterTurns: 2,
                 ),
               ),
             ),
@@ -1134,6 +1135,7 @@ class MvpIconLabel extends StatelessWidget {
     this.fontSize = 12,
     this.gap = 6,
     this.color = Colors.white,
+    this.iconQuarterTurns = 0,
   });
 
   final Glyph glyph;
@@ -1143,9 +1145,17 @@ class MvpIconLabel extends StatelessWidget {
   final double fontSize;
   final double gap;
   final Color color;
+  final int iconQuarterTurns;
 
   @override
   Widget build(BuildContext context) {
+    final Widget iconContent = iconQuarterTurns != 0
+        ? RotatedBox(
+            quarterTurns: iconQuarterTurns,
+            child: GlyphIcon(glyph, size: iconSize, color: color),
+          )
+        : GlyphIcon(glyph, size: iconSize, color: color);
+
     final Widget iconWidget = SizedBox.square(
       dimension: iconSize,
       child: isLoading
@@ -1158,7 +1168,7 @@ class MvpIconLabel extends StatelessWidget {
                 ),
               ),
             )
-          : GlyphIcon(glyph, size: iconSize, color: color),
+          : iconContent,
     );
 
     final textStyle = TextStyle(
