@@ -850,11 +850,12 @@ class _MvpProfileCard extends StatelessWidget {
                 ),
                 if (isLoadedMode)
                   _buildHeaderButton(
-                    icon: AppGlyphs.cloud,
+                    icon: AppGlyphs.refresh,
                     label: '重置',
                     color: MvpTheme.dangerText,
                     backgroundColor:
                         MvpTheme.dangerColor.withValues(alpha: 0.07),
+                    iconFlipX: true,
                     onTap: () => onToggleInputArea(true),
                   )
                 else if (hasProfile)
@@ -909,6 +910,8 @@ class _MvpProfileCard extends StatelessWidget {
     required Color color,
     required Color backgroundColor,
     required VoidCallback onTap,
+    bool iconFlipX = false,
+    int iconQuarterTurns = 0,
   }) {
     return GestureDetector(
       onTap: onTap,
@@ -928,6 +931,8 @@ class _MvpProfileCard extends StatelessWidget {
           fontSize: 12,
           gap: 5,
           color: color,
+          iconFlipX: iconFlipX,
+          iconQuarterTurns: iconQuarterTurns,
         ),
       ),
     );
@@ -1136,6 +1141,7 @@ class MvpIconLabel extends StatelessWidget {
     this.gap = 6,
     this.color = Colors.white,
     this.iconQuarterTurns = 0,
+    this.iconFlipX = false,
   });
 
   final Glyph glyph;
@@ -1146,15 +1152,25 @@ class MvpIconLabel extends StatelessWidget {
   final double gap;
   final Color color;
   final int iconQuarterTurns;
+  final bool iconFlipX;
 
   @override
   Widget build(BuildContext context) {
-    final Widget iconContent = iconQuarterTurns != 0
-        ? RotatedBox(
-            quarterTurns: iconQuarterTurns,
-            child: GlyphIcon(glyph, size: iconSize, color: color),
-          )
-        : GlyphIcon(glyph, size: iconSize, color: color);
+    Widget iconContent = GlyphIcon(glyph, size: iconSize, color: color);
+
+    if (iconQuarterTurns != 0) {
+      iconContent = RotatedBox(
+        quarterTurns: iconQuarterTurns,
+        child: iconContent,
+      );
+    }
+
+    if (iconFlipX) {
+      iconContent = Transform.flip(
+        flipX: true,
+        child: iconContent,
+      );
+    }
 
     final Widget iconWidget = SizedBox.square(
       dimension: iconSize,
