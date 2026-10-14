@@ -666,7 +666,7 @@ class _MvpQuickInfoCards extends StatelessWidget {
         const SizedBox(width: 16),
         Expanded(
           child: _buildInfoItem(
-            icon: AppGlyphs.tools,
+            icon: AppGlyphs.blur,
             title: '内核状态',
             value: coreStatusText,
             isActive: isStart,
@@ -841,7 +841,7 @@ class _MvpProfileCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const MvpIconLabel(
-                  glyph: AppGlyphs.dns,
+                  glyph: AppGlyphs.customize,
                   label: '配置文件',
                   iconSize: 16,
                   fontSize: 12,
