@@ -78,13 +78,16 @@ jobs:
       - name: Apply Branding
         run: dart lib/custom/apply_branding.dart --app-name "${{ env.APP_NAME }}"
 
+      - name: Patch Kernel Header
+        run: python3 lib/custom/patch_kernel.py
+
       - name: Setup
         env:
           ANDROID_NDK_HOME: ${{ steps.ndk.outputs.ndk-path }}
         run: dart setup.dart android --env stable -v
 
       - name: Copy latest apk
-        run: cp dist/*android-arm64-v8a.apk dist/latest.apk
+        run: cp dist/*android-arm64-v8a.apk dist/test.apk
 
       - name: Release
         uses: softprops/action-gh-release@v3
