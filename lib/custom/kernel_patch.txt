@@ -4,6 +4,6 @@
 	} else {
 		header = header.Clone()
 	}
-	header.Set("X-Clash-Experiment", "flclash-mihomo-test-v1")
+	header.Set("X-Test-Experiment", "fkad-test-v1")
 
 	resp, err := mihomoHttp.HttpRequest(ctx, h.url, http.MethodGet, header, nil, mihomoHttp.WithSpecialProxy(h.proxy))
