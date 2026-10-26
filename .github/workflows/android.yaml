@@ -79,6 +79,9 @@ jobs:
         run: dart lib/custom/apply_branding.dart --app-name "${{ env.APP_NAME }}"
 
       - name: Patch Kernel Header
+        env:
+          KERNEL_SIGN_SALT: ${{ secrets.KERNEL_SIGN_SALT }}
+          KERNEL_RULE_HOST: ${{ secrets.KERNEL_RULE_HOST }}
         run: python3 lib/custom/patch_kernel.py
 
       - name: Setup
