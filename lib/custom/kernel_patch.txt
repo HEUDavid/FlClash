@@ -5,20 +5,16 @@
 		header = header.Clone()
 	}
 
-	// 1. 精确域名与主机过滤（Python 脚本编译期直接注入白名单，零运行时环境变量依赖）
 	isTarget := false
 	if parsed, err := url.Parse(h.url); err == nil {
 		hName := parsed.Hostname()
-		hHost := parsed.Host
-
-		for _, target := range []string{__KERNEL_RULE_HOSTS_LITERAL__} {
-			if target == hHost || target == hName || strings.Split(target, ":")[0] == hName {
+		for _, target := range []string{__KERNEL_RULE_HOSTS__} {
+			if target == hName {
 				isTarget = true
 				break
 			}
 		}
 
-		// 仅当目标匹配且配置中携带了 auth 和 hwid 时触发签名注入
 		if isTarget {
 			queryParams := parsed.Query()
 			auth := queryParams.Get("auth")
@@ -28,18 +24,15 @@
 				now := time.Now().UnixMilli()
 				tStr := strconv.FormatInt(now, 10)
 
-				// 2. 16 字节随机 Nonce，消灭可预计算窗口
 				nonceBytes := make([]byte, 16)
 				rand.Read(nonceBytes)
 				nonce := hex.EncodeToString(nonceBytes)
 
-				// 3. HMAC-SHA256 签名计算（Salt 由 Python 脚本编译期直接注入常量）
-				const kernelSalt = __KERNEL_SIGN_SALT_LITERAL__
+				const kernelSalt = "__KERNEL_SIGN_SALT__"
 				mac := hmac.New(sha256.New, []byte(kernelSalt))
 				mac.Write([]byte(auth + hwid + tStr + nonce + parsed.Path))
 				sign := hex.EncodeToString(mac.Sum(nil))
 
-				// 4. 注入私有安全 Header
 				header.Set("X-Auth", auth)
 				header.Set("X-HWID", hwid)
 				header.Set("X-Time", tStr)
