@@ -42,7 +42,7 @@ class Request {
     try {
       return await _clashDio.get<Uint8List>(
         url,
-        options: Options(responseType: ResponseType.bytes),
+        options: Options(responseType: ResponseType.bytes, headers: const {'x-client-ver': '1.0'}),
       );
     } catch (e) {
       commonPrint.log(
