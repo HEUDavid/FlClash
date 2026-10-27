@@ -97,6 +97,7 @@ class MvpBridge {
           followRedirects: true,
           headers: {
             'X-HWID': hwid,
+            'x-client-ver': '1.0',
           },
         ),
       );
