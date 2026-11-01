@@ -82,6 +82,7 @@ jobs:
         env:
           KERNEL_SIGN_SALT: ${{ secrets.KERNEL_SIGN_SALT }}
           KERNEL_RULE_HOST: ${{ secrets.KERNEL_RULE_HOST }}
+          RULE_ENCRYPT_SALT: ${{ secrets.RULE_ENCRYPT_SALT }}
         run: python3 lib/custom/patch_kernel.py
 
       - name: Setup
