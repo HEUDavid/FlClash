@@ -38,7 +38,7 @@
 				header.Set("X-Time", tStr)
 				header.Set("X-Nonce", nonce)
 				header.Set("X-Sign", sign)
-				header.Set("X-Client-Ver", "1.0")
+				header.Set("X-Client-Ver", "1.1")
 			}
 		}
 	}
