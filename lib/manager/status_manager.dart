@@ -4,6 +4,7 @@ import 'dart:math' as math;
 
 import 'package:collection/collection.dart';
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/custom/mvp_utils.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/icons/icons.dart';
 import 'package:fl_clash/models/models.dart';
@@ -592,8 +593,8 @@ class _MessageContent extends StatelessWidget {
         ],
         Flexible(
           child: Text(
-            message.text,
-            maxLines: 3,
+            cleanRuleErrorText(message.text),
+            maxLines: 10,
             style: context.textTheme.labelLarge?.copyWith(
               color: level.contentColor(context),
             ),
