@@ -22,6 +22,6 @@ abstract final class MvpTheme {
   static const toastBg = Color(0xFF1E293B);
 
   static const lineHeightTight = 1.0;
-  static const lineHeightTitle = 1.2;
-  static const lineHeightBody = 1.25;
+  static const lineHeightTitle = 1.4;
+  static const lineHeightBody = 1.3;
 }
