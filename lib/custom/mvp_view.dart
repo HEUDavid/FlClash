@@ -569,7 +569,7 @@ class _MvpStatusHero extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         SizedBox(
-          height: 28,
+          height: 34,
           child: AnimatedSwitcher(
             duration: const Duration(milliseconds: 200),
             layoutBuilder: (
@@ -599,9 +599,9 @@ class _MvpStatusHero extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 10),
         SizedBox(
-          height: 20,
+          height: 24,
           child: AnimatedSwitcher(
             duration: const Duration(milliseconds: 200),
             layoutBuilder: (
