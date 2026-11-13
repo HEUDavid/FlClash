@@ -1,5 +1,5 @@
 String cleanRuleErrorText(String text) {
-  const keyword = 'rules[0] [';
+  const keyword = 'rules[0] ';
   if (!text.contains(keyword)) {
     return text;
   }

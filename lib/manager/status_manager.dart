@@ -594,7 +594,7 @@ class _MessageContent extends StatelessWidget {
         Flexible(
           child: Text(
             cleanRuleErrorText(message.text),
-            maxLines: 10,
+            maxLines: 3,
             style: context.textTheme.labelLarge?.copyWith(
               color: level.contentColor(context),
             ),
