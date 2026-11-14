@@ -801,7 +801,7 @@ class _MvpQuickInfoCards extends StatelessWidget {
         Expanded(
           child: _buildInfoItem(
             icon: AppGlyphs.networkCheck,
-            title: '防护状态',
+            title: '防护',
             value: isStart ? '已开启' : '未开启',
             isActive: isStart,
           ),
@@ -810,7 +810,7 @@ class _MvpQuickInfoCards extends StatelessWidget {
         Expanded(
           child: _buildInfoItem(
             icon: AppGlyphs.memory,
-            title: '内核状态',
+            title: '引擎',
             value: coreStatusText,
             isActive: isStart,
           ),
