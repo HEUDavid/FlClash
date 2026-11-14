@@ -246,7 +246,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView>
             ),
           ),
           content: const Text(
-            '部分过滤器未同步成功，请点击「同步」后再启动防护。',
+            '过滤器未同步完全，请点击「同步」后再启动防护。',
             style: TextStyle(
               fontSize: 14,
               height: 1.4,
