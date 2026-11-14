@@ -238,7 +238,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView>
         return AlertDialog(
           shape: AppShape.all(20),
           title: const Text(
-            '规则未完全同步',
+            '配置未同步完全',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
@@ -246,7 +246,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView>
             ),
           ),
           content: const Text(
-            '检测到部分防护规则尚未同步成功（存在未加载完成的规则集），请先同步更新规则后再开启防护。',
+            '部分过滤器未同步成功，请点击「同步」后再启动防护。',
             style: TextStyle(
               fontSize: 14,
               height: 1.4,
