@@ -238,7 +238,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView>
         return AlertDialog(
           shape: AppShape.all(20),
           title: const Text(
-            '配置未同步完全',
+            '未同步完全',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
