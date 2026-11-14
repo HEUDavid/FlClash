@@ -3,11 +3,13 @@ import 'package:fl_clash/icons/icons.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'mvp_bridge.dart';
 import 'mvp_models.dart';
 import 'mvp_provider.dart';
 import 'mvp_theme.dart';
+import 'mvp_version_checker.dart';
 
 class CustomMvpView extends ConsumerStatefulWidget {
   const CustomMvpView({super.key});
@@ -16,7 +18,8 @@ class CustomMvpView extends ConsumerStatefulWidget {
   ConsumerState<CustomMvpView> createState() => _CustomMvpViewState();
 }
 
-class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
+class _CustomMvpViewState extends ConsumerState<CustomMvpView>
+    with WidgetsBindingObserver {
   final TextEditingController _urlController = TextEditingController();
   bool _isImporting = false;
   bool _isUpdating = false;
@@ -28,9 +31,25 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
   DateTime? _lastMinimalTapTime;
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    MvpVersionConfigManager.init();
+    MvpVersionConfigManager.syncFromRemoteIfNeeded();
+  }
+
+  @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _urlController.dispose();
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      MvpVersionConfigManager.syncFromRemoteIfNeeded();
+    }
   }
 
   void _showMvpToast(
@@ -160,7 +179,103 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     }
   }
 
-  void _handleToggleShield(bool currentIsStart, bool hasProfile) {
+  void _showVersionInterceptDialog(MvpVersionRule rule) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          shape: AppShape.all(20),
+          title: Text(
+            rule.title,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: MvpTheme.textPrimary,
+            ),
+          ),
+          content: Text(
+            rule.message,
+            style: const TextStyle(
+              fontSize: 14,
+              height: 1.4,
+              color: MvpTheme.textSecondary,
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(),
+              child: const Text('稍后处理'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop();
+                final targetUrl = rule.targetUrl;
+                if (targetUrl != null && targetUrl.isNotEmpty) {
+                  launchUrl(
+                    Uri.parse(targetUrl),
+                    mode: LaunchMode.externalApplication,
+                  );
+                }
+                if (rule.actionType ==
+                    MvpVersionActionType.updateSubscription) {
+                  setState(() {
+                    _showInputArea = true;
+                  });
+                }
+              },
+              child: Text(rule.actionButtonText),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showIncompleteRulesDialog(MvpProfileItem profile) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          shape: AppShape.all(20),
+          title: const Text(
+            '规则未完全同步',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: MvpTheme.textPrimary,
+            ),
+          ),
+          content: const Text(
+            '检测到部分防护规则尚未同步成功（存在未加载完成的规则集），请先同步更新规则后再开启防护。',
+            style: TextStyle(
+              fontSize: 14,
+              height: 1.4,
+              color: MvpTheme.textSecondary,
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(),
+              child: const Text('稍后处理'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop();
+                _handleUpdateSubscription(profile.url);
+              },
+              child: const Text('立即同步'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _handleToggleShield(
+    bool currentIsStart,
+    bool hasProfile,
+    MvpProfileItem? activeProfile,
+  ) {
     if (_isConnectionToggling || _isUpdating || _isImporting) {
       if (_isUpdating || _isImporting) {
         _showMvpToast('操作处理中，请稍候...', type: MvpToastType.warning);
@@ -168,12 +283,31 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
       return;
     }
 
-    if (!hasProfile) {
+    if (!hasProfile || activeProfile == null) {
       setState(() {
         _showInputArea = true;
       });
       _showMvpToast('请先导入配置文件', type: MvpToastType.info);
       return;
+    }
+
+    if (!currentIsStart) {
+      final versionStr = computeMvpRuleCountStr(activeProfile);
+      final result = MvpVersionChecker.check(versionStr);
+
+      switch (result.status) {
+        case MvpVersionCheckStatus.loading:
+          _showMvpToast('同步中，请稍候...', type: MvpToastType.warning);
+          return;
+        case MvpVersionCheckStatus.intercepted:
+          _showVersionInterceptDialog(result.matchedRule!);
+          return;
+        case MvpVersionCheckStatus.incompleteRules:
+          _showIncompleteRulesDialog(activeProfile);
+          return;
+        case MvpVersionCheckStatus.ready:
+          break;
+      }
     }
 
     _isConnectionToggling = true;
@@ -197,6 +331,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     try {
       await MvpBridge.updateSubscription(ref, url);
       if (!mounted) return;
+      MvpVersionConfigManager.saveApiBaseUrlFromUrl(url);
       _showMvpToast('已同步至最新', type: MvpToastType.success);
     } catch (e) {
       if (!mounted) return;
@@ -241,6 +376,9 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
       await MvpBridge.importBackup(ref, url);
       if (!mounted) return;
 
+      MvpVersionConfigManager.saveApiBaseUrlFromUrl(url);
+      MvpVersionConfigManager.syncFromRemoteIfNeeded(url);
+
       _urlController.clear();
       setState(() {
         _showInputArea = false;
@@ -268,6 +406,10 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
     final MvpCoreStatus coreStatus = MvpBridge.watchCoreStatus(ref);
     final MvpProfileItem? activeProfile = MvpBridge.watchActiveProfile(ref);
     final bool hasProfile = activeProfile != null;
+
+    if (activeProfile != null && activeProfile.url.isNotEmpty) {
+      MvpVersionConfigManager.saveApiBaseUrlFromUrl(activeProfile.url);
+    }
 
     return Scaffold(
       backgroundColor: MvpTheme.bgPrimary,
@@ -307,6 +449,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView> {
                               onToggle: () => _handleToggleShield(
                                 isStart,
                                 hasProfile,
+                                activeProfile,
                               ),
                             ),
                             const SizedBox(height: 36),
@@ -786,27 +929,6 @@ class _MvpProfileCard extends StatelessWidget {
     required this.onPaste,
   });
 
-  String _computeRuleCountStr(MvpProfileItem profile) {
-    final rulesCount = profile.rulesCount;
-    final counts = profile.ruleProvidersCounts;
-
-    if (rulesCount == null) {
-      if (counts != null && counts.isNotEmpty) {
-        return '版本：v${counts.join('.')}';
-      }
-      final totalRules = profile.ruleProvidersTotalRules;
-      if (totalRules != null && totalRules > 0) {
-        return '版本：v$totalRules';
-      }
-      return '版本获取中...';
-    }
-
-    if (counts != null && counts.isNotEmpty) {
-      return '版本：v$rulesCount.${counts.join('.')}';
-    }
-    return '版本：v$rulesCount';
-  }
-
   @override
   Widget build(BuildContext context) {
     final bool isLoadedMode =
@@ -941,7 +1063,7 @@ class _MvpProfileCard extends StatelessWidget {
   Widget _buildLoadedState(BuildContext context, MvpProfileItem profile) {
     final activeTitle = profile.label.isNotEmpty ? profile.label : 'Block Ad';
     final updateDateStr = profile.lastUpdateDate?.formattedUpdateDate ?? '未知';
-    final ruleCountStr = _computeRuleCountStr(profile);
+    final ruleCountStr = computeMvpRuleCountStr(profile);
 
     return SizedBox(
       key: const ValueKey('loaded_state'),
