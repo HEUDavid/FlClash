@@ -146,7 +146,7 @@ class MvpVersionConfigManager {
       id: 'outdated_client',
       matchType: MvpVersionMatchType.regex,
       pattern: r'^1(\.0)*$',
-      title: '客户端版本过旧',
+      title: '客户端版本过低',
       message: '当前版本过低，请访问官网获取最新版。如已下载安装最新App，请点击「同步」后重试。',
       actionButtonText: '前往下载',
       targetUrl: 'https://www.mdavid.cn/download',
