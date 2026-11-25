@@ -104,12 +104,16 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView>
       context: context,
       builder: (context) {
         return AlertDialog(
+          shape: AppShape.all(20),
+          titlePadding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
+          contentPadding: const EdgeInsets.fromLTRB(24, 16, 24, 8),
+          actionsPadding: const EdgeInsets.fromLTRB(8, 4, 8, 16),
           title: const Text('切换高级模式'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text('此功能或导致无法联网，需验证密码'),
-              const SizedBox(height: 16),
+              const Text('此功能或导致无法联网，需验证密码。'),
+              const SizedBox(height: 8),
               TextField(
                 controller: passwordController,
                 obscureText: true,
@@ -185,6 +189,9 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView>
       builder: (dialogContext) {
         return AlertDialog(
           shape: AppShape.all(20),
+          titlePadding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
+          contentPadding: const EdgeInsets.fromLTRB(24, 16, 24, 8),
+          actionsPadding: const EdgeInsets.fromLTRB(8, 4, 8, 16),
           title: Text(
             rule.title,
             style: const TextStyle(
@@ -237,6 +244,9 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView>
       builder: (dialogContext) {
         return AlertDialog(
           shape: AppShape.all(20),
+          titlePadding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
+          contentPadding: const EdgeInsets.fromLTRB(24, 16, 24, 8),
+          actionsPadding: const EdgeInsets.fromLTRB(8, 4, 8, 16),
           title: const Text(
             '未同步完全',
             style: TextStyle(
