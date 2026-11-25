@@ -18,7 +18,7 @@ class _WebProfileNotifier extends Notifier<MvpProfileItem?> {
     final now = DateTime.now();
     return MvpProfileItem(
       id: 'web_preview_profile',
-      label: '在线配置 (${now.month}/${now.day})',
+      label: '测试配置 (${now.month}/${now.day})',
       url: 'https://example.com/config.yaml',
       lastUpdateDate: now,
       rulesCount: 15,
