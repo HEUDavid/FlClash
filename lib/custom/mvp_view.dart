@@ -113,7 +113,7 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView>
             mainAxisSize: MainAxisSize.min,
             children: [
               const Text('此功能或导致无法联网，需验证密码。'),
-              const SizedBox(height: 8),
+              const SizedBox(height: 12),
               TextField(
                 controller: passwordController,
                 obscureText: true,
