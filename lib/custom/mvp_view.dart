@@ -106,8 +106,8 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView>
         return AlertDialog(
           shape: AppShape.all(20),
           titlePadding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
-          contentPadding: const EdgeInsets.fromLTRB(24, 16, 24, 8),
-          actionsPadding: const EdgeInsets.fromLTRB(8, 4, 8, 16),
+          contentPadding: const EdgeInsets.fromLTRB(24, 24, 24, 8),
+          actionsPadding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
           title: const Text('切换高级模式'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -190,8 +190,8 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView>
         return AlertDialog(
           shape: AppShape.all(20),
           titlePadding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
-          contentPadding: const EdgeInsets.fromLTRB(24, 16, 24, 8),
-          actionsPadding: const EdgeInsets.fromLTRB(8, 4, 8, 16),
+          contentPadding: const EdgeInsets.fromLTRB(24, 24, 24, 8),
+          actionsPadding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
           title: Text(
             rule.title,
             style: const TextStyle(
@@ -245,8 +245,8 @@ class _CustomMvpViewState extends ConsumerState<CustomMvpView>
         return AlertDialog(
           shape: AppShape.all(20),
           titlePadding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
-          contentPadding: const EdgeInsets.fromLTRB(24, 16, 24, 8),
-          actionsPadding: const EdgeInsets.fromLTRB(8, 4, 8, 16),
+          contentPadding: const EdgeInsets.fromLTRB(24, 24, 24, 8),
+          actionsPadding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
           title: const Text(
             '未同步完全',
             style: TextStyle(
