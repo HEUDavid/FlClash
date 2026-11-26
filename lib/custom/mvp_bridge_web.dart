@@ -24,7 +24,7 @@ class _WebProfileNotifier extends Notifier<MvpProfileItem?> {
       rulesCount: 15,
       ruleProvidersCount: 3,
       ruleProvidersTotalRules: 45280,
-      ruleProvidersCounts: const [9, 2, 44],
+      ruleProvidersCounts: const [9, 0, 44],
     );
   }
 
